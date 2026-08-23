@@ -10,7 +10,7 @@
     <!-- Version = the wire-protocol CRC (= ProtocolSettings.PROTOCOL_CRC). Distinct per protocol
          line, so 0.5.x and 0.6.x never collide in .m2. A game version resolves to this CRC.
          Standalone repo, regenerated from shared-source on every Hytale build. -->
-    <version>1316766548</version>
+    <version>245610536</version>
     <packaging>jar</packaging>
 
     <properties>
