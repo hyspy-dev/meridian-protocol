@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>meridian</groupId>
+    <artifactId>meridian-protocol</artifactId>
+    <!-- Version = the wire-protocol CRC (= ProtocolSettings.PROTOCOL_CRC). Distinct per protocol
+         line, so 0.5.x and 0.6.x never collide in .m2. A game version resolves to this CRC.
+         Standalone repo, regenerated from shared-source on every Hytale build. -->
+    <version>1316766548</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>22</maven.compiler.source>
+        <maven.compiler.target>22</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <netty.version>4.1.100.Final</netty.version>
+        <slf4j.version>2.0.9</slf4j.version>
+        <meridian.api.version>1.0.0-SNAPSHOT</meridian.api.version>
+    </properties>
+
+    <!-- Consume meridian-api from its GitHub Packages registry (CI); locally it resolves from
+         ~/.m2 after `mvn install` on the meridian-api repo. Auth for private packages comes from
+         the workflow's GITHUB_TOKEN (settings.xml) / a local PAT. -->
+    <repositories>
+        <repository>
+            <id>github-meridian-api</id>
+            <url>https://maven.pkg.github.com/hyspy-dev/meridian-api</url>
+            <releases><enabled>true</enabled></releases>
+            <snapshots><enabled>true</enabled></snapshots>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>meridian</groupId>
+            <artifactId>meridian-api</artifactId>
+            <version>${meridian.api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>${netty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.luben</groupId>
+            <artifactId>zstd-jni</artifactId>
+            <version>1.5.6-9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.joml</groupId>
+            <artifactId>joml</artifactId>
+            <version>1.10.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>it.unimi.dsi</groupId>
+            <artifactId>fastutil</artifactId>
+            <version>8.5.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.30</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages — hyspy-dev/meridian-protocol</name>
+            <url>https://maven.pkg.github.com/hyspy-dev/meridian-protocol</url>
+        </repository>
+    </distributionManagement>
+
+    <!-- Guard: the artifact version MUST equal the wire CRC baked into the generated source, so a
+         regen that changed PROTOCOL_CRC without bumping the version (or vice versa) fails loudly
+         instead of shipping a mislabeled protocol. Runs at validate (even with -DskipTests). -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>check-protocol-crc-matches-version</id>
+                        <phase>validate</phase>
+                        <goals><goal>run</goal></goals>
+                        <configuration>
+                            <target>
+                                <loadfile property="protocol.src"
+                                          srcFile="${project.basedir}/src/main/java/meridian/protocol/ProtocolSettings.java"/>
+                                <condition property="protocol.crc.ok">
+                                    <matches string="${protocol.src}" multiline="true"
+                                             pattern="PROTOCOL_CRC\s*=\s*${project.version}\b"/>
+                                </condition>
+                                <fail unless="protocol.crc.ok"
+                                      message="meridian-protocol version (${project.version}) != PROTOCOL_CRC in ProtocolSettings.java — regen and version are out of sync. Set the version to the new CRC (and the meridian.protocol.version property in consumers)."/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

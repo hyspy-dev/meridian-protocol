@@ -1,0 +1,87 @@
+package meridian.protocol.packets.buildertools;
+
+import meridian.protocol.NetworkChannel;
+import meridian.protocol.Packet;
+import meridian.protocol.ToServerPacket;
+import meridian.protocol.io.ProtocolException;
+import meridian.protocol.io.ValidationResult;
+import io.netty.buffer.ByteBuf;
+import java.lang.foreign.MemorySegment;
+import javax.annotation.Nonnull;
+
+public class PrefabUnselectPrefab implements Packet, ToServerPacket {
+   public static final int PACKET_ID = 417;
+   public static final boolean IS_COMPRESSED = false;
+   public static final int NULLABLE_BIT_FIELD_SIZE = 0;
+   public static final int FIXED_BLOCK_SIZE = 0;
+   public static final int VARIABLE_FIELD_COUNT = 0;
+   public static final int VARIABLE_BLOCK_START = 0;
+   public static final int MAX_SIZE = 0;
+
+   @Override
+   public int getId() {
+      return 417;
+   }
+
+   @Override
+   public NetworkChannel getChannel() {
+      return NetworkChannel.Default;
+   }
+
+   @Nonnull
+   public static PrefabUnselectPrefab deserialize(@Nonnull ByteBuf buf, int offset) {
+      return new PrefabUnselectPrefab();
+   }
+
+   public static int computeBytesConsumed(@Nonnull ByteBuf buf, int offset) {
+      return 0;
+   }
+
+   public static boolean isBufferTooSmall(MemorySegment mem) {
+      return mem.byteSize() < 0L;
+   }
+
+   public static PrefabUnselectPrefab toObject(MemorySegment mem) {
+      return toObject(mem, 0);
+   }
+
+   public static PrefabUnselectPrefab toObject(MemorySegment mem, int offset) {
+      if (offset + 0 > mem.byteSize()) {
+         throw ProtocolException.bufferTooSmall("PrefabUnselectPrefab", offset + 0, (int)mem.byteSize());
+      } else {
+         return new PrefabUnselectPrefab();
+      }
+   }
+
+   @Override
+   public void serialize(@Nonnull ByteBuf buf) {
+   }
+
+   @Override
+   public int serialize(@Nonnull MemorySegment mem, int offset) {
+      return 0;
+   }
+
+   @Override
+   public int computeSize() {
+      return 0;
+   }
+
+   public static ValidationResult validateStructure(@Nonnull ByteBuf buffer, int offset) {
+      return buffer.readableBytes() - offset < 0 ? ValidationResult.error("Buffer too small: expected at least 0 bytes") : ValidationResult.OK;
+   }
+
+   public PrefabUnselectPrefab clone() {
+      return new PrefabUnselectPrefab();
+   }
+
+   @Override
+   public boolean equals(Object obj) {
+      return this == obj ? true : obj instanceof PrefabUnselectPrefab other;
+   }
+
+   @Override
+   public int hashCode() {
+      return 0;
+   }
+}
