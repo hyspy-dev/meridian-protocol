@@ -74,6 +74,12 @@ public class ProtocolException extends RuntimeException {
         return new ProtocolException(typeName + ": unknown polymorphic type ID " + typeId);
     }
 
+    /** Creates an exception for a value nested deeper than the decoder allows. */
+    @Nonnull
+    public static ProtocolException nestingTooDeep(@Nonnull String typeName, int max) {
+        return new ProtocolException(typeName + ": nesting exceeds maximum depth " + max);
+    }
+
     /** Creates an exception for duplicate dictionary key. */
     @Nonnull
     public static ProtocolException duplicateKey(@Nonnull String fieldName, @Nonnull Object key) {

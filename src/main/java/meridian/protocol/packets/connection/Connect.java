@@ -21,7 +21,7 @@ public class Connect implements Packet, ToServerPacket {
     public static final int FIXED_BLOCK_SIZE = 30;
     public static final int VARIABLE_FIELD_COUNT = 4;
     public static final int VARIABLE_BLOCK_START = 46;
-    public static final int MAX_SIZE = 37972;
+    public static final int MAX_SIZE = 38056;
 
     @Override
     public int getId() {
@@ -124,7 +124,7 @@ public class Connect implements Packet, ToServerPacket {
     }
     
     public static String getLanguage(MemorySegment mem, int offset) {
-        return PacketIO.readValidatedAsciiString("Language", mem, offset + getValidatedOffset(mem, offset, 34, 46, "Language"), 16);
+        return PacketIO.readValidatedAsciiString("Language", mem, offset + getValidatedOffset(mem, offset, 34, 46, "Language"), 100);
     }
     
     @Nullable
@@ -225,7 +225,7 @@ public class Connect implements Packet, ToServerPacket {
         {
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
-            v5 = PacketIO.readValidatedAsciiString("Language", mem, off, 0, 16, sp);
+            v5 = PacketIO.readValidatedAsciiString("Language", mem, off, 0, 100, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         }
         
@@ -289,7 +289,7 @@ public class Connect implements Packet, ToServerPacket {
             mem.set(PacketIO.PROTO_INT, offset + 30, -1);
         }
         mem.set(PacketIO.PROTO_INT, offset + 34, varOffset - offset - 46);
-        varOffset += PacketIO.writeVarAsciiString(mem, varOffset, this.language, 16);
+        varOffset += PacketIO.writeVarAsciiString(mem, varOffset, this.language, 100);
         if (this.referralData != null) {
             mem.set(PacketIO.PROTO_INT, offset + 38, varOffset - offset - 46);
             if (referralData.length > 4096) throw ProtocolException.arrayTooLong("ReferralData", referralData.length, 4096);

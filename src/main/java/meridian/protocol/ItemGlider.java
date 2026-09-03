@@ -13,24 +13,36 @@ import meridian.protocol.io.VarInt;
 
 public class ItemGlider {
     public static final int NULLABLE_BIT_FIELD_SIZE = 0;
-    public static final int FIXED_BLOCK_SIZE = 16;
+    public static final int FIXED_BLOCK_SIZE = 40;
     public static final int VARIABLE_FIELD_COUNT = 0;
-    public static final int VARIABLE_BLOCK_START = 16;
-    public static final int MAX_SIZE = 16;
+    public static final int VARIABLE_BLOCK_START = 40;
+    public static final int MAX_SIZE = 40;
 
     public float terminalVelocity;
     public float fallSpeedMultiplier;
     public float horizontalSpeedMultiplier;
     public float speed;
+    public float diveTerminalVelocity;
+    public float diveSpeed;
+    public float diveFallSpeedMultiplier;
+    public float diveHorizontalSpeedMultiplier;
+    public float energyClimbRate;
+    public float diveSpeedToEnergyRatio;
 
     public ItemGlider() {
     }
 
-    public ItemGlider(float terminalVelocity, float fallSpeedMultiplier, float horizontalSpeedMultiplier, float speed) {
+    public ItemGlider(float terminalVelocity, float fallSpeedMultiplier, float horizontalSpeedMultiplier, float speed, float diveTerminalVelocity, float diveSpeed, float diveFallSpeedMultiplier, float diveHorizontalSpeedMultiplier, float energyClimbRate, float diveSpeedToEnergyRatio) {
         this.terminalVelocity = terminalVelocity;
         this.fallSpeedMultiplier = fallSpeedMultiplier;
         this.horizontalSpeedMultiplier = horizontalSpeedMultiplier;
         this.speed = speed;
+        this.diveTerminalVelocity = diveTerminalVelocity;
+        this.diveSpeed = diveSpeed;
+        this.diveFallSpeedMultiplier = diveFallSpeedMultiplier;
+        this.diveHorizontalSpeedMultiplier = diveHorizontalSpeedMultiplier;
+        this.energyClimbRate = energyClimbRate;
+        this.diveSpeedToEnergyRatio = diveSpeedToEnergyRatio;
     }
 
     public ItemGlider(@Nonnull ItemGlider other) {
@@ -38,6 +50,12 @@ public class ItemGlider {
         this.fallSpeedMultiplier = other.fallSpeedMultiplier;
         this.horizontalSpeedMultiplier = other.horizontalSpeedMultiplier;
         this.speed = other.speed;
+        this.diveTerminalVelocity = other.diveTerminalVelocity;
+        this.diveSpeed = other.diveSpeed;
+        this.diveFallSpeedMultiplier = other.diveFallSpeedMultiplier;
+        this.diveHorizontalSpeedMultiplier = other.diveHorizontalSpeedMultiplier;
+        this.energyClimbRate = other.energyClimbRate;
+        this.diveSpeedToEnergyRatio = other.diveSpeedToEnergyRatio;
     }
 
     /**
@@ -46,7 +64,7 @@ public class ItemGlider {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("ItemGlider", offset, (int) mem.byteSize());
-        long needed = (long) offset + 16;
+        long needed = (long) offset + 40;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("ItemGlider", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -82,6 +100,54 @@ public class ItemGlider {
         return PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 12), "Speed");
     }
     
+    public static float getDiveTerminalVelocity(MemorySegment mem) {
+        return getDiveTerminalVelocity(mem, 0);
+    }
+    
+    public static float getDiveTerminalVelocity(MemorySegment mem, int offset) {
+        return PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 16), "DiveTerminalVelocity");
+    }
+    
+    public static float getDiveSpeed(MemorySegment mem) {
+        return getDiveSpeed(mem, 0);
+    }
+    
+    public static float getDiveSpeed(MemorySegment mem, int offset) {
+        return PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 20), "DiveSpeed");
+    }
+    
+    public static float getDiveFallSpeedMultiplier(MemorySegment mem) {
+        return getDiveFallSpeedMultiplier(mem, 0);
+    }
+    
+    public static float getDiveFallSpeedMultiplier(MemorySegment mem, int offset) {
+        return PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 24), "DiveFallSpeedMultiplier");
+    }
+    
+    public static float getDiveHorizontalSpeedMultiplier(MemorySegment mem) {
+        return getDiveHorizontalSpeedMultiplier(mem, 0);
+    }
+    
+    public static float getDiveHorizontalSpeedMultiplier(MemorySegment mem, int offset) {
+        return PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 28), "DiveHorizontalSpeedMultiplier");
+    }
+    
+    public static float getEnergyClimbRate(MemorySegment mem) {
+        return getEnergyClimbRate(mem, 0);
+    }
+    
+    public static float getEnergyClimbRate(MemorySegment mem, int offset) {
+        return PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 32), "EnergyClimbRate");
+    }
+    
+    public static float getDiveSpeedToEnergyRatio(MemorySegment mem) {
+        return getDiveSpeedToEnergyRatio(mem, 0);
+    }
+    
+    public static float getDiveSpeedToEnergyRatio(MemorySegment mem, int offset) {
+        return PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 36), "DiveSpeedToEnergyRatio");
+    }
+    
     
     
     
@@ -106,9 +172,15 @@ public class ItemGlider {
             PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 0), "TerminalVelocity"),
             PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 4), "FallSpeedMultiplier"),
             PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 8), "HorizontalSpeedMultiplier"),
-            PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 12), "Speed")
+            PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 12), "Speed"),
+            PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 16), "DiveTerminalVelocity"),
+            PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 20), "DiveSpeed"),
+            PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 24), "DiveFallSpeedMultiplier"),
+            PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 28), "DiveHorizontalSpeedMultiplier"),
+            PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 32), "EnergyClimbRate"),
+            PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 36), "DiveSpeedToEnergyRatio")
         );
-        if (cursor != null) cursor.position = offset + 16;
+        if (cursor != null) cursor.position = offset + 40;
         return result;
     }
     public int serialize(@Nonnull MemorySegment mem, int offset) {
@@ -117,13 +189,19 @@ public class ItemGlider {
         PacketIO.requireFinite(this.fallSpeedMultiplier, "FallSpeedMultiplier"); mem.set(PacketIO.PROTO_FLOAT, offset + 4, this.fallSpeedMultiplier);
         PacketIO.requireFinite(this.horizontalSpeedMultiplier, "HorizontalSpeedMultiplier"); mem.set(PacketIO.PROTO_FLOAT, offset + 8, this.horizontalSpeedMultiplier);
         PacketIO.requireFinite(this.speed, "Speed"); mem.set(PacketIO.PROTO_FLOAT, offset + 12, this.speed);
+        PacketIO.requireFinite(this.diveTerminalVelocity, "DiveTerminalVelocity"); mem.set(PacketIO.PROTO_FLOAT, offset + 16, this.diveTerminalVelocity);
+        PacketIO.requireFinite(this.diveSpeed, "DiveSpeed"); mem.set(PacketIO.PROTO_FLOAT, offset + 20, this.diveSpeed);
+        PacketIO.requireFinite(this.diveFallSpeedMultiplier, "DiveFallSpeedMultiplier"); mem.set(PacketIO.PROTO_FLOAT, offset + 24, this.diveFallSpeedMultiplier);
+        PacketIO.requireFinite(this.diveHorizontalSpeedMultiplier, "DiveHorizontalSpeedMultiplier"); mem.set(PacketIO.PROTO_FLOAT, offset + 28, this.diveHorizontalSpeedMultiplier);
+        PacketIO.requireFinite(this.energyClimbRate, "EnergyClimbRate"); mem.set(PacketIO.PROTO_FLOAT, offset + 32, this.energyClimbRate);
+        PacketIO.requireFinite(this.diveSpeedToEnergyRatio, "DiveSpeedToEnergyRatio"); mem.set(PacketIO.PROTO_FLOAT, offset + 36, this.diveSpeedToEnergyRatio);
         
         
     
-       return 16;
+       return 40;
     }
     public int computeSize() {
-        return 16;
+        return 40;
     }
 
     public ItemGlider clone() {
@@ -132,6 +210,12 @@ public class ItemGlider {
         copy.fallSpeedMultiplier = this.fallSpeedMultiplier;
         copy.horizontalSpeedMultiplier = this.horizontalSpeedMultiplier;
         copy.speed = this.speed;
+        copy.diveTerminalVelocity = this.diveTerminalVelocity;
+        copy.diveSpeed = this.diveSpeed;
+        copy.diveFallSpeedMultiplier = this.diveFallSpeedMultiplier;
+        copy.diveHorizontalSpeedMultiplier = this.diveHorizontalSpeedMultiplier;
+        copy.energyClimbRate = this.energyClimbRate;
+        copy.diveSpeedToEnergyRatio = this.diveSpeedToEnergyRatio;
         return copy;
     }
 
@@ -140,12 +224,12 @@ public class ItemGlider {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof ItemGlider other)) return false;
-        return this.terminalVelocity == other.terminalVelocity && this.fallSpeedMultiplier == other.fallSpeedMultiplier && this.horizontalSpeedMultiplier == other.horizontalSpeedMultiplier && this.speed == other.speed;
+        return this.terminalVelocity == other.terminalVelocity && this.fallSpeedMultiplier == other.fallSpeedMultiplier && this.horizontalSpeedMultiplier == other.horizontalSpeedMultiplier && this.speed == other.speed && this.diveTerminalVelocity == other.diveTerminalVelocity && this.diveSpeed == other.diveSpeed && this.diveFallSpeedMultiplier == other.diveFallSpeedMultiplier && this.diveHorizontalSpeedMultiplier == other.diveHorizontalSpeedMultiplier && this.energyClimbRate == other.energyClimbRate && this.diveSpeedToEnergyRatio == other.diveSpeedToEnergyRatio;
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(terminalVelocity, fallSpeedMultiplier, horizontalSpeedMultiplier, speed);
+        return java.util.Objects.hash(terminalVelocity, fallSpeedMultiplier, horizontalSpeedMultiplier, speed, diveTerminalVelocity, diveSpeed, diveFallSpeedMultiplier, diveHorizontalSpeedMultiplier, energyClimbRate, diveSpeedToEnergyRatio);
     }
 
 }

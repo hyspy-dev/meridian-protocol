@@ -14,9 +14,9 @@ import java.util.HashMap;
 
 public class ItemBase {
     public static final int NULLABLE_BIT_FIELD_SIZE = 5;
-    public static final int FIXED_BLOCK_SIZE = 146;
-    public static final int VARIABLE_FIELD_COUNT = 30;
-    public static final int VARIABLE_BLOCK_START = 266;
+    public static final int FIXED_BLOCK_SIZE = 170;
+    public static final int VARIABLE_FIELD_COUNT = 31;
+    public static final int VARIABLE_BLOCK_START = 294;
     public static final int MAX_SIZE = 1677721600;
 
     @Nullable public String id;
@@ -68,11 +68,12 @@ public class ItemBase {
     public boolean clipsGeometry;
     public boolean renderDeployablePreview;
     @Nullable public ItemHudUI[] hudUI;
+    @Nullable public ItemAbility ability;
 
     public ItemBase() {
     }
 
-    public ItemBase(@Nullable String id, @Nullable String model, float scale, @Nullable String texture, @Nullable String animation, @Nullable String playerAnimationsId, boolean usePlayerAnimations, int maxStack, int reticleIndex, @Nullable String icon, @Nullable AssetIconProperties iconProperties, @Nullable ItemTranslationProperties translationProperties, int itemLevel, int qualityIndex, @Nullable ItemResourceType[] resourceTypes, boolean consumable, boolean variant, int blockId, @Nullable ItemTool tool, @Nullable ItemWeapon weapon, @Nullable ItemArmor armor, @Nullable ItemGlider gliderConfig, @Nullable ItemUtility utility, @Nullable BlockSelectorToolData blockSelectorTool, @Nullable BuilderToolState builderToolData, @Nullable ItemEntityConfig itemEntity, @Nullable String set, @Nullable String[] categories, @Nullable String subCategory, @Nullable ModelParticle[] particles, @Nullable ModelParticle[] firstPersonParticles, @Nullable ModelTrail[] trails, @Nullable ColorLight light, double durability, int soundEventIndex, int itemSoundSetIndex, @Nullable java.util.Map<InteractionType, Integer> interactions, @Nullable java.util.Map<InteractionType, Integer> carryInteractions, @Nullable java.util.Map<InteractionType, String> carryHudInputBindings, @Nullable java.util.Map<String, Integer> interactionVars, @Nullable InteractionConfiguration interactionConfig, @Nullable String droppedItemAnimation, @Nullable int[] tagIndexes, @Nullable java.util.Map<Integer, ItemAppearanceCondition[]> itemAppearanceConditions, @Nullable int[] displayEntityStatsHUD, @Nullable ItemPullbackConfiguration pullbackConfig, boolean clipsGeometry, boolean renderDeployablePreview, @Nullable ItemHudUI[] hudUI) {
+    public ItemBase(@Nullable String id, @Nullable String model, float scale, @Nullable String texture, @Nullable String animation, @Nullable String playerAnimationsId, boolean usePlayerAnimations, int maxStack, int reticleIndex, @Nullable String icon, @Nullable AssetIconProperties iconProperties, @Nullable ItemTranslationProperties translationProperties, int itemLevel, int qualityIndex, @Nullable ItemResourceType[] resourceTypes, boolean consumable, boolean variant, int blockId, @Nullable ItemTool tool, @Nullable ItemWeapon weapon, @Nullable ItemArmor armor, @Nullable ItemGlider gliderConfig, @Nullable ItemUtility utility, @Nullable BlockSelectorToolData blockSelectorTool, @Nullable BuilderToolState builderToolData, @Nullable ItemEntityConfig itemEntity, @Nullable String set, @Nullable String[] categories, @Nullable String subCategory, @Nullable ModelParticle[] particles, @Nullable ModelParticle[] firstPersonParticles, @Nullable ModelTrail[] trails, @Nullable ColorLight light, double durability, int soundEventIndex, int itemSoundSetIndex, @Nullable java.util.Map<InteractionType, Integer> interactions, @Nullable java.util.Map<InteractionType, Integer> carryInteractions, @Nullable java.util.Map<InteractionType, String> carryHudInputBindings, @Nullable java.util.Map<String, Integer> interactionVars, @Nullable InteractionConfiguration interactionConfig, @Nullable String droppedItemAnimation, @Nullable int[] tagIndexes, @Nullable java.util.Map<Integer, ItemAppearanceCondition[]> itemAppearanceConditions, @Nullable int[] displayEntityStatsHUD, @Nullable ItemPullbackConfiguration pullbackConfig, boolean clipsGeometry, boolean renderDeployablePreview, @Nullable ItemHudUI[] hudUI, @Nullable ItemAbility ability) {
         this.id = id;
         this.model = model;
         this.scale = scale;
@@ -122,6 +123,7 @@ public class ItemBase {
         this.clipsGeometry = clipsGeometry;
         this.renderDeployablePreview = renderDeployablePreview;
         this.hudUI = hudUI;
+        this.ability = ability;
     }
 
     public ItemBase(@Nonnull ItemBase other) {
@@ -174,6 +176,7 @@ public class ItemBase {
         this.clipsGeometry = other.clipsGeometry;
         this.renderDeployablePreview = other.renderDeployablePreview;
         this.hudUI = other.hudUI;
+        this.ability = other.ability;
     }
 
     /**
@@ -182,7 +185,7 @@ public class ItemBase {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("ItemBase", offset, (int) mem.byteSize());
-        long needed = (long) offset + 266;
+        long needed = (long) offset + 294;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("ItemBase", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -193,7 +196,7 @@ public class ItemBase {
     
     @Nullable
     public static String getId(MemorySegment mem, int offset) {
-        return hasId(mem, offset) ? PacketIO.readVarString("Id", mem, offset + getValidatedOffset(mem, offset, 146, 266, "Id"), 4096000): null;
+        return hasId(mem, offset) ? PacketIO.readVarString("Id", mem, offset + getValidatedOffset(mem, offset, 170, 294, "Id"), 4096000): null;
     }
     
     @Nullable
@@ -203,7 +206,7 @@ public class ItemBase {
     
     @Nullable
     public static String getModel(MemorySegment mem, int offset) {
-        return hasModel(mem, offset) ? PacketIO.readVarString("Model", mem, offset + getValidatedOffset(mem, offset, 150, 266, "Model"), 4096000): null;
+        return hasModel(mem, offset) ? PacketIO.readVarString("Model", mem, offset + getValidatedOffset(mem, offset, 174, 294, "Model"), 4096000): null;
     }
     
     public static float getScale(MemorySegment mem) {
@@ -221,7 +224,7 @@ public class ItemBase {
     
     @Nullable
     public static String getTexture(MemorySegment mem, int offset) {
-        return hasTexture(mem, offset) ? PacketIO.readVarString("Texture", mem, offset + getValidatedOffset(mem, offset, 154, 266, "Texture"), 4096000): null;
+        return hasTexture(mem, offset) ? PacketIO.readVarString("Texture", mem, offset + getValidatedOffset(mem, offset, 178, 294, "Texture"), 4096000): null;
     }
     
     @Nullable
@@ -231,7 +234,7 @@ public class ItemBase {
     
     @Nullable
     public static String getAnimation(MemorySegment mem, int offset) {
-        return hasAnimation(mem, offset) ? PacketIO.readVarString("Animation", mem, offset + getValidatedOffset(mem, offset, 158, 266, "Animation"), 4096000): null;
+        return hasAnimation(mem, offset) ? PacketIO.readVarString("Animation", mem, offset + getValidatedOffset(mem, offset, 182, 294, "Animation"), 4096000): null;
     }
     
     @Nullable
@@ -241,7 +244,7 @@ public class ItemBase {
     
     @Nullable
     public static String getPlayerAnimationsId(MemorySegment mem, int offset) {
-        return hasPlayerAnimationsId(mem, offset) ? PacketIO.readVarString("PlayerAnimationsId", mem, offset + getValidatedOffset(mem, offset, 162, 266, "PlayerAnimationsId"), 4096000): null;
+        return hasPlayerAnimationsId(mem, offset) ? PacketIO.readVarString("PlayerAnimationsId", mem, offset + getValidatedOffset(mem, offset, 186, 294, "PlayerAnimationsId"), 4096000): null;
     }
     
     public static boolean getUsePlayerAnimations(MemorySegment mem) {
@@ -275,7 +278,7 @@ public class ItemBase {
     
     @Nullable
     public static String getIcon(MemorySegment mem, int offset) {
-        return hasIcon(mem, offset) ? PacketIO.readVarString("Icon", mem, offset + getValidatedOffset(mem, offset, 166, 266, "Icon"), 4096000): null;
+        return hasIcon(mem, offset) ? PacketIO.readVarString("Icon", mem, offset + getValidatedOffset(mem, offset, 190, 294, "Icon"), 4096000): null;
     }
     
     @Nullable
@@ -295,7 +298,7 @@ public class ItemBase {
     
     @Nullable
     public static ItemTranslationProperties getTranslationProperties(MemorySegment mem, int offset) {
-        return hasTranslationProperties(mem, offset) ? ItemTranslationProperties.toObject(mem, offset + getValidatedOffset(mem, offset, 170, 266, "TranslationProperties")): null;
+        return hasTranslationProperties(mem, offset) ? ItemTranslationProperties.toObject(mem, offset + getValidatedOffset(mem, offset, 194, 294, "TranslationProperties")): null;
     }
     
     public static int getItemLevel(MemorySegment mem) {
@@ -323,7 +326,7 @@ public class ItemBase {
     public static ItemResourceType[] getResourceTypes(MemorySegment mem, int offset) {
         if (!hasResourceTypes(mem, offset)) return null;
         var walkCursor = new ReadCursor();
-        var off = offset + getValidatedOffset(mem, offset, 174, 266, "ResourceTypes");
+        var off = offset + getValidatedOffset(mem, offset, 198, 294, "ResourceTypes");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("ResourceTypes");
         var len = (int) packed;
@@ -370,7 +373,7 @@ public class ItemBase {
     
     @Nullable
     public static ItemTool getTool(MemorySegment mem, int offset) {
-        return hasTool(mem, offset) ? ItemTool.toObject(mem, offset + getValidatedOffset(mem, offset, 178, 266, "Tool")): null;
+        return hasTool(mem, offset) ? ItemTool.toObject(mem, offset + getValidatedOffset(mem, offset, 202, 294, "Tool")): null;
     }
     
     @Nullable
@@ -380,7 +383,7 @@ public class ItemBase {
     
     @Nullable
     public static ItemWeapon getWeapon(MemorySegment mem, int offset) {
-        return hasWeapon(mem, offset) ? ItemWeapon.toObject(mem, offset + getValidatedOffset(mem, offset, 182, 266, "Weapon")): null;
+        return hasWeapon(mem, offset) ? ItemWeapon.toObject(mem, offset + getValidatedOffset(mem, offset, 206, 294, "Weapon")): null;
     }
     
     @Nullable
@@ -390,7 +393,7 @@ public class ItemBase {
     
     @Nullable
     public static ItemArmor getArmor(MemorySegment mem, int offset) {
-        return hasArmor(mem, offset) ? ItemArmor.toObject(mem, offset + getValidatedOffset(mem, offset, 186, 266, "Armor")): null;
+        return hasArmor(mem, offset) ? ItemArmor.toObject(mem, offset + getValidatedOffset(mem, offset, 210, 294, "Armor")): null;
     }
     
     @Nullable
@@ -410,7 +413,7 @@ public class ItemBase {
     
     @Nullable
     public static ItemUtility getUtility(MemorySegment mem, int offset) {
-        return hasUtility(mem, offset) ? ItemUtility.toObject(mem, offset + getValidatedOffset(mem, offset, 190, 266, "Utility")): null;
+        return hasUtility(mem, offset) ? ItemUtility.toObject(mem, offset + getValidatedOffset(mem, offset, 214, 294, "Utility")): null;
     }
     
     @Nullable
@@ -420,7 +423,7 @@ public class ItemBase {
     
     @Nullable
     public static BlockSelectorToolData getBlockSelectorTool(MemorySegment mem, int offset) {
-        return hasBlockSelectorTool(mem, offset) ? BlockSelectorToolData.toObject(mem, offset + 72): null;
+        return hasBlockSelectorTool(mem, offset) ? BlockSelectorToolData.toObject(mem, offset + 96): null;
     }
     
     @Nullable
@@ -430,7 +433,7 @@ public class ItemBase {
     
     @Nullable
     public static BuilderToolState getBuilderToolData(MemorySegment mem, int offset) {
-        return hasBuilderToolData(mem, offset) ? BuilderToolState.toObject(mem, offset + getValidatedOffset(mem, offset, 194, 266, "BuilderToolData")): null;
+        return hasBuilderToolData(mem, offset) ? BuilderToolState.toObject(mem, offset + getValidatedOffset(mem, offset, 218, 294, "BuilderToolData")): null;
     }
     
     @Nullable
@@ -440,7 +443,7 @@ public class ItemBase {
     
     @Nullable
     public static ItemEntityConfig getItemEntity(MemorySegment mem, int offset) {
-        return hasItemEntity(mem, offset) ? ItemEntityConfig.toObject(mem, offset + getValidatedOffset(mem, offset, 198, 266, "ItemEntity")): null;
+        return hasItemEntity(mem, offset) ? ItemEntityConfig.toObject(mem, offset + getValidatedOffset(mem, offset, 222, 294, "ItemEntity")): null;
     }
     
     @Nullable
@@ -450,7 +453,7 @@ public class ItemBase {
     
     @Nullable
     public static String getSet(MemorySegment mem, int offset) {
-        return hasSet(mem, offset) ? PacketIO.readVarString("Set", mem, offset + getValidatedOffset(mem, offset, 202, 266, "Set"), 4096000): null;
+        return hasSet(mem, offset) ? PacketIO.readVarString("Set", mem, offset + getValidatedOffset(mem, offset, 226, 294, "Set"), 4096000): null;
     }
     
     @Nullable
@@ -461,7 +464,7 @@ public class ItemBase {
     @Nullable
     public static String[] getCategories(MemorySegment mem, int offset) {
         if (!hasCategories(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 206, 266, "Categories");
+        var off = offset + getValidatedOffset(mem, offset, 230, 294, "Categories");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("Categories");
         var len = (int) packed;
@@ -485,7 +488,7 @@ public class ItemBase {
     
     @Nullable
     public static String getSubCategory(MemorySegment mem, int offset) {
-        return hasSubCategory(mem, offset) ? PacketIO.readVarString("SubCategory", mem, offset + getValidatedOffset(mem, offset, 210, 266, "SubCategory"), 4096000): null;
+        return hasSubCategory(mem, offset) ? PacketIO.readVarString("SubCategory", mem, offset + getValidatedOffset(mem, offset, 234, 294, "SubCategory"), 4096000): null;
     }
     
     @Nullable
@@ -497,7 +500,7 @@ public class ItemBase {
     public static ModelParticle[] getParticles(MemorySegment mem, int offset) {
         if (!hasParticles(mem, offset)) return null;
         var walkCursor = new ReadCursor();
-        var off = offset + getValidatedOffset(mem, offset, 214, 266, "Particles");
+        var off = offset + getValidatedOffset(mem, offset, 238, 294, "Particles");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("Particles");
         var len = (int) packed;
@@ -522,7 +525,7 @@ public class ItemBase {
     public static ModelParticle[] getFirstPersonParticles(MemorySegment mem, int offset) {
         if (!hasFirstPersonParticles(mem, offset)) return null;
         var walkCursor = new ReadCursor();
-        var off = offset + getValidatedOffset(mem, offset, 218, 266, "FirstPersonParticles");
+        var off = offset + getValidatedOffset(mem, offset, 242, 294, "FirstPersonParticles");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("FirstPersonParticles");
         var len = (int) packed;
@@ -547,7 +550,7 @@ public class ItemBase {
     public static ModelTrail[] getTrails(MemorySegment mem, int offset) {
         if (!hasTrails(mem, offset)) return null;
         var walkCursor = new ReadCursor();
-        var off = offset + getValidatedOffset(mem, offset, 222, 266, "Trails");
+        var off = offset + getValidatedOffset(mem, offset, 246, 294, "Trails");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("Trails");
         var len = (int) packed;
@@ -570,7 +573,7 @@ public class ItemBase {
     
     @Nullable
     public static ColorLight getLight(MemorySegment mem, int offset) {
-        return hasLight(mem, offset) ? ColorLight.toObject(mem, offset + 76): null;
+        return hasLight(mem, offset) ? ColorLight.toObject(mem, offset + 100): null;
     }
     
     public static double getDurability(MemorySegment mem) {
@@ -578,7 +581,7 @@ public class ItemBase {
     }
     
     public static double getDurability(MemorySegment mem, int offset) {
-        return PacketIO.requireFinite(mem.get(PacketIO.PROTO_DOUBLE, offset + 80), "Durability");
+        return PacketIO.requireFinite(mem.get(PacketIO.PROTO_DOUBLE, offset + 104), "Durability");
     }
     
     public static int getSoundEventIndex(MemorySegment mem) {
@@ -586,7 +589,7 @@ public class ItemBase {
     }
     
     public static int getSoundEventIndex(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_INT, offset + 88);
+        return mem.get(PacketIO.PROTO_INT, offset + 112);
     }
     
     public static int getItemSoundSetIndex(MemorySegment mem) {
@@ -594,7 +597,7 @@ public class ItemBase {
     }
     
     public static int getItemSoundSetIndex(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_INT, offset + 92);
+        return mem.get(PacketIO.PROTO_INT, offset + 116);
     }
     
     @Nullable
@@ -605,7 +608,7 @@ public class ItemBase {
     @Nullable
     public static java.util.Map<InteractionType, Integer> getInteractions(MemorySegment mem, int offset) {
         if (!hasInteractions(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 226, 266, "Interactions");
+        var off = offset + getValidatedOffset(mem, offset, 250, 294, "Interactions");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("Interactions");
         var len = (int) packed;
@@ -634,7 +637,7 @@ public class ItemBase {
     @Nullable
     public static java.util.Map<InteractionType, Integer> getCarryInteractions(MemorySegment mem, int offset) {
         if (!hasCarryInteractions(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 230, 266, "CarryInteractions");
+        var off = offset + getValidatedOffset(mem, offset, 254, 294, "CarryInteractions");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("CarryInteractions");
         var len = (int) packed;
@@ -663,7 +666,7 @@ public class ItemBase {
     @Nullable
     public static java.util.Map<InteractionType, String> getCarryHudInputBindings(MemorySegment mem, int offset) {
         if (!hasCarryHudInputBindings(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 234, 266, "CarryHudInputBindings");
+        var off = offset + getValidatedOffset(mem, offset, 258, 294, "CarryHudInputBindings");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("CarryHudInputBindings");
         var len = (int) packed;
@@ -693,7 +696,7 @@ public class ItemBase {
     @Nullable
     public static java.util.Map<String, Integer> getInteractionVars(MemorySegment mem, int offset) {
         if (!hasInteractionVars(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 238, 266, "InteractionVars");
+        var off = offset + getValidatedOffset(mem, offset, 262, 294, "InteractionVars");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("InteractionVars");
         var len = (int) packed;
@@ -722,7 +725,7 @@ public class ItemBase {
     
     @Nullable
     public static InteractionConfiguration getInteractionConfig(MemorySegment mem, int offset) {
-        return hasInteractionConfig(mem, offset) ? InteractionConfiguration.toObject(mem, offset + getValidatedOffset(mem, offset, 242, 266, "InteractionConfig")): null;
+        return hasInteractionConfig(mem, offset) ? InteractionConfiguration.toObject(mem, offset + getValidatedOffset(mem, offset, 266, 294, "InteractionConfig")): null;
     }
     
     @Nullable
@@ -732,7 +735,7 @@ public class ItemBase {
     
     @Nullable
     public static String getDroppedItemAnimation(MemorySegment mem, int offset) {
-        return hasDroppedItemAnimation(mem, offset) ? PacketIO.readVarString("DroppedItemAnimation", mem, offset + getValidatedOffset(mem, offset, 246, 266, "DroppedItemAnimation"), 4096000): null;
+        return hasDroppedItemAnimation(mem, offset) ? PacketIO.readVarString("DroppedItemAnimation", mem, offset + getValidatedOffset(mem, offset, 270, 294, "DroppedItemAnimation"), 4096000): null;
     }
     
     @Nullable
@@ -743,7 +746,7 @@ public class ItemBase {
     @Nullable
     public static int[] getTagIndexes(MemorySegment mem, int offset) {
         if (!hasTagIndexes(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 250, 266, "TagIndexes");
+        var off = offset + getValidatedOffset(mem, offset, 274, 294, "TagIndexes");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("TagIndexes");
         var len = (int) packed;
@@ -765,7 +768,7 @@ public class ItemBase {
     public static java.util.Map<Integer, ItemAppearanceCondition[]> getItemAppearanceConditions(MemorySegment mem, int offset) {
         if (!hasItemAppearanceConditions(mem, offset)) return null;
         var walkCursor = new ReadCursor();
-        var off = offset + getValidatedOffset(mem, offset, 254, 266, "ItemAppearanceConditions");
+        var off = offset + getValidatedOffset(mem, offset, 278, 294, "ItemAppearanceConditions");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("ItemAppearanceConditions");
         var len = (int) packed;
@@ -805,7 +808,7 @@ public class ItemBase {
     @Nullable
     public static int[] getDisplayEntityStatsHUD(MemorySegment mem, int offset) {
         if (!hasDisplayEntityStatsHUD(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 258, 266, "DisplayEntityStatsHUD");
+        var off = offset + getValidatedOffset(mem, offset, 282, 294, "DisplayEntityStatsHUD");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("DisplayEntityStatsHUD");
         var len = (int) packed;
@@ -825,7 +828,7 @@ public class ItemBase {
     
     @Nullable
     public static ItemPullbackConfiguration getPullbackConfig(MemorySegment mem, int offset) {
-        return hasPullbackConfig(mem, offset) ? ItemPullbackConfiguration.toObject(mem, offset + 96): null;
+        return hasPullbackConfig(mem, offset) ? ItemPullbackConfiguration.toObject(mem, offset + 120): null;
     }
     
     public static boolean getClipsGeometry(MemorySegment mem) {
@@ -833,7 +836,7 @@ public class ItemBase {
     }
     
     public static boolean getClipsGeometry(MemorySegment mem, int offset) {
-        return (mem.get(PacketIO.PROTO_BYTE, offset + 145) & 0x01) != 0;
+        return (mem.get(PacketIO.PROTO_BYTE, offset + 169) & 0x01) != 0;
     }
     
     public static boolean getRenderDeployablePreview(MemorySegment mem) {
@@ -841,7 +844,7 @@ public class ItemBase {
     }
     
     public static boolean getRenderDeployablePreview(MemorySegment mem, int offset) {
-        return (mem.get(PacketIO.PROTO_BYTE, offset + 145) & 0x02) != 0;
+        return (mem.get(PacketIO.PROTO_BYTE, offset + 169) & 0x02) != 0;
     }
     
     @Nullable
@@ -853,7 +856,7 @@ public class ItemBase {
     public static ItemHudUI[] getHudUI(MemorySegment mem, int offset) {
         if (!hasHudUI(mem, offset)) return null;
         var walkCursor = new ReadCursor();
-        var off = offset + getValidatedOffset(mem, offset, 262, 266, "HudUI");
+        var off = offset + getValidatedOffset(mem, offset, 286, 294, "HudUI");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("HudUI");
         var len = (int) packed;
@@ -867,6 +870,16 @@ public class ItemBase {
             off = walkCursor.position;
         }
         return data;
+    }
+    
+    @Nullable
+    public static ItemAbility getAbility(MemorySegment mem) {
+        return getAbility(mem, 0);
+    }
+    
+    @Nullable
+    public static ItemAbility getAbility(MemorySegment mem, int offset) {
+        return hasAbility(mem, offset) ? ItemAbility.toObject(mem, offset + getValidatedOffset(mem, offset, 290, 294, "Ability")): null;
     }
     
     public static boolean hasIconProperties(MemorySegment mem, int offset) {
@@ -1044,6 +1057,11 @@ public class ItemBase {
         return (b & 0x04) != 0;
     }
     
+    public static boolean hasAbility(MemorySegment mem, int offset) {
+        var b = mem.get(PacketIO.PROTO_BYTE, offset + 4);
+        return (b & 0x08) != 0;
+    }
+    
     private static int getValidatedOffset(MemorySegment buffer, int base, int slotPosition, int varBlockStart, String fieldName) {
         int offset = buffer.get(PacketIO.PROTO_INT, base + slotPosition);
         if (offset < 0 || offset > buffer.byteSize() - base - varBlockStart)
@@ -1077,87 +1095,87 @@ public class ItemBase {
     public static ItemBase toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
-        var varBase = offset + 266;
+        var varBase = offset + 294;
         var varPos = 0;
         var walkCursor = cursor != null ? cursor : new ReadCursor();
         String v0 = null;
         if (hasId(mem, offset)) {
-            requireSlot(mem, offset + 146, varPos, "Id");
+            requireSlot(mem, offset + 170, varPos, "Id");
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
             v0 = PacketIO.readVarString("Id", mem, off, 0, 4096000, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         } else {
-            requireSlot(mem, offset + 146, -1, "Id");
+            requireSlot(mem, offset + 170, -1, "Id");
         }
         
         String v1 = null;
         if (hasModel(mem, offset)) {
-            requireSlot(mem, offset + 150, varPos, "Model");
+            requireSlot(mem, offset + 174, varPos, "Model");
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
             v1 = PacketIO.readVarString("Model", mem, off, 0, 4096000, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         } else {
-            requireSlot(mem, offset + 150, -1, "Model");
+            requireSlot(mem, offset + 174, -1, "Model");
         }
         
         String v3 = null;
         if (hasTexture(mem, offset)) {
-            requireSlot(mem, offset + 154, varPos, "Texture");
+            requireSlot(mem, offset + 178, varPos, "Texture");
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
             v3 = PacketIO.readVarString("Texture", mem, off, 0, 4096000, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         } else {
-            requireSlot(mem, offset + 154, -1, "Texture");
+            requireSlot(mem, offset + 178, -1, "Texture");
         }
         
         String v4 = null;
         if (hasAnimation(mem, offset)) {
-            requireSlot(mem, offset + 158, varPos, "Animation");
+            requireSlot(mem, offset + 182, varPos, "Animation");
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
             v4 = PacketIO.readVarString("Animation", mem, off, 0, 4096000, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         } else {
-            requireSlot(mem, offset + 158, -1, "Animation");
+            requireSlot(mem, offset + 182, -1, "Animation");
         }
         
         String v5 = null;
         if (hasPlayerAnimationsId(mem, offset)) {
-            requireSlot(mem, offset + 162, varPos, "PlayerAnimationsId");
+            requireSlot(mem, offset + 186, varPos, "PlayerAnimationsId");
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
             v5 = PacketIO.readVarString("PlayerAnimationsId", mem, off, 0, 4096000, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         } else {
-            requireSlot(mem, offset + 162, -1, "PlayerAnimationsId");
+            requireSlot(mem, offset + 186, -1, "PlayerAnimationsId");
         }
         
         String v9 = null;
         if (hasIcon(mem, offset)) {
-            requireSlot(mem, offset + 166, varPos, "Icon");
+            requireSlot(mem, offset + 190, varPos, "Icon");
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
             v9 = PacketIO.readVarString("Icon", mem, off, 0, 4096000, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         } else {
-            requireSlot(mem, offset + 166, -1, "Icon");
+            requireSlot(mem, offset + 190, -1, "Icon");
         }
         
         ItemTranslationProperties v11 = null;
         if (hasTranslationProperties(mem, offset)) {
-            requireSlot(mem, offset + 170, varPos, "TranslationProperties");
+            requireSlot(mem, offset + 194, varPos, "TranslationProperties");
             v11 = ItemTranslationProperties.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
         } else {
-            requireSlot(mem, offset + 170, -1, "TranslationProperties");
+            requireSlot(mem, offset + 194, -1, "TranslationProperties");
         }
         
         ItemResourceType[] v14 = null;
         if (hasResourceTypes(mem, offset)) {
-            requireSlot(mem, offset + 174, varPos, "ResourceTypes");
+            requireSlot(mem, offset + 198, varPos, "ResourceTypes");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("ResourceTypes");
@@ -1173,77 +1191,77 @@ public class ItemBase {
             }
             varPos = off - varBase;
         } else {
-            requireSlot(mem, offset + 174, -1, "ResourceTypes");
+            requireSlot(mem, offset + 198, -1, "ResourceTypes");
         }
         
         ItemTool v18 = null;
         if (hasTool(mem, offset)) {
-            requireSlot(mem, offset + 178, varPos, "Tool");
+            requireSlot(mem, offset + 202, varPos, "Tool");
             v18 = ItemTool.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
         } else {
-            requireSlot(mem, offset + 178, -1, "Tool");
+            requireSlot(mem, offset + 202, -1, "Tool");
         }
         
         ItemWeapon v19 = null;
         if (hasWeapon(mem, offset)) {
-            requireSlot(mem, offset + 182, varPos, "Weapon");
+            requireSlot(mem, offset + 206, varPos, "Weapon");
             v19 = ItemWeapon.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
         } else {
-            requireSlot(mem, offset + 182, -1, "Weapon");
+            requireSlot(mem, offset + 206, -1, "Weapon");
         }
         
         ItemArmor v20 = null;
         if (hasArmor(mem, offset)) {
-            requireSlot(mem, offset + 186, varPos, "Armor");
+            requireSlot(mem, offset + 210, varPos, "Armor");
             v20 = ItemArmor.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
         } else {
-            requireSlot(mem, offset + 186, -1, "Armor");
+            requireSlot(mem, offset + 210, -1, "Armor");
         }
         
         ItemUtility v22 = null;
         if (hasUtility(mem, offset)) {
-            requireSlot(mem, offset + 190, varPos, "Utility");
+            requireSlot(mem, offset + 214, varPos, "Utility");
             v22 = ItemUtility.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
         } else {
-            requireSlot(mem, offset + 190, -1, "Utility");
+            requireSlot(mem, offset + 214, -1, "Utility");
         }
         
         BuilderToolState v24 = null;
         if (hasBuilderToolData(mem, offset)) {
-            requireSlot(mem, offset + 194, varPos, "BuilderToolData");
+            requireSlot(mem, offset + 218, varPos, "BuilderToolData");
             v24 = BuilderToolState.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
         } else {
-            requireSlot(mem, offset + 194, -1, "BuilderToolData");
+            requireSlot(mem, offset + 218, -1, "BuilderToolData");
         }
         
         ItemEntityConfig v25 = null;
         if (hasItemEntity(mem, offset)) {
-            requireSlot(mem, offset + 198, varPos, "ItemEntity");
+            requireSlot(mem, offset + 222, varPos, "ItemEntity");
             v25 = ItemEntityConfig.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
         } else {
-            requireSlot(mem, offset + 198, -1, "ItemEntity");
+            requireSlot(mem, offset + 222, -1, "ItemEntity");
         }
         
         String v26 = null;
         if (hasSet(mem, offset)) {
-            requireSlot(mem, offset + 202, varPos, "Set");
+            requireSlot(mem, offset + 226, varPos, "Set");
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
             v26 = PacketIO.readVarString("Set", mem, off, 0, 4096000, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         } else {
-            requireSlot(mem, offset + 202, -1, "Set");
+            requireSlot(mem, offset + 226, -1, "Set");
         }
         
         String[] v27 = null;
         if (hasCategories(mem, offset)) {
-            requireSlot(mem, offset + 206, varPos, "Categories");
+            requireSlot(mem, offset + 230, varPos, "Categories");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("Categories");
@@ -1260,23 +1278,23 @@ public class ItemBase {
             }
             varPos = off - varBase;
         } else {
-            requireSlot(mem, offset + 206, -1, "Categories");
+            requireSlot(mem, offset + 230, -1, "Categories");
         }
         
         String v28 = null;
         if (hasSubCategory(mem, offset)) {
-            requireSlot(mem, offset + 210, varPos, "SubCategory");
+            requireSlot(mem, offset + 234, varPos, "SubCategory");
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
             v28 = PacketIO.readVarString("SubCategory", mem, off, 0, 4096000, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         } else {
-            requireSlot(mem, offset + 210, -1, "SubCategory");
+            requireSlot(mem, offset + 234, -1, "SubCategory");
         }
         
         ModelParticle[] v29 = null;
         if (hasParticles(mem, offset)) {
-            requireSlot(mem, offset + 214, varPos, "Particles");
+            requireSlot(mem, offset + 238, varPos, "Particles");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("Particles");
@@ -1292,12 +1310,12 @@ public class ItemBase {
             }
             varPos = off - varBase;
         } else {
-            requireSlot(mem, offset + 214, -1, "Particles");
+            requireSlot(mem, offset + 238, -1, "Particles");
         }
         
         ModelParticle[] v30 = null;
         if (hasFirstPersonParticles(mem, offset)) {
-            requireSlot(mem, offset + 218, varPos, "FirstPersonParticles");
+            requireSlot(mem, offset + 242, varPos, "FirstPersonParticles");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("FirstPersonParticles");
@@ -1313,12 +1331,12 @@ public class ItemBase {
             }
             varPos = off - varBase;
         } else {
-            requireSlot(mem, offset + 218, -1, "FirstPersonParticles");
+            requireSlot(mem, offset + 242, -1, "FirstPersonParticles");
         }
         
         ModelTrail[] v31 = null;
         if (hasTrails(mem, offset)) {
-            requireSlot(mem, offset + 222, varPos, "Trails");
+            requireSlot(mem, offset + 246, varPos, "Trails");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("Trails");
@@ -1334,12 +1352,12 @@ public class ItemBase {
             }
             varPos = off - varBase;
         } else {
-            requireSlot(mem, offset + 222, -1, "Trails");
+            requireSlot(mem, offset + 246, -1, "Trails");
         }
         
         java.util.Map<InteractionType, Integer> v36 = null;
         if (hasInteractions(mem, offset)) {
-            requireSlot(mem, offset + 226, varPos, "Interactions");
+            requireSlot(mem, offset + 250, varPos, "Interactions");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("Interactions");
@@ -1360,12 +1378,12 @@ public class ItemBase {
             }
             varPos = off - varBase;
         } else {
-            requireSlot(mem, offset + 226, -1, "Interactions");
+            requireSlot(mem, offset + 250, -1, "Interactions");
         }
         
         java.util.Map<InteractionType, Integer> v37 = null;
         if (hasCarryInteractions(mem, offset)) {
-            requireSlot(mem, offset + 230, varPos, "CarryInteractions");
+            requireSlot(mem, offset + 254, varPos, "CarryInteractions");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("CarryInteractions");
@@ -1386,12 +1404,12 @@ public class ItemBase {
             }
             varPos = off - varBase;
         } else {
-            requireSlot(mem, offset + 230, -1, "CarryInteractions");
+            requireSlot(mem, offset + 254, -1, "CarryInteractions");
         }
         
         java.util.Map<InteractionType, String> v38 = null;
         if (hasCarryHudInputBindings(mem, offset)) {
-            requireSlot(mem, offset + 234, varPos, "CarryHudInputBindings");
+            requireSlot(mem, offset + 258, varPos, "CarryHudInputBindings");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("CarryHudInputBindings");
@@ -1413,12 +1431,12 @@ public class ItemBase {
             }
             varPos = off - varBase;
         } else {
-            requireSlot(mem, offset + 234, -1, "CarryHudInputBindings");
+            requireSlot(mem, offset + 258, -1, "CarryHudInputBindings");
         }
         
         java.util.Map<String, Integer> v39 = null;
         if (hasInteractionVars(mem, offset)) {
-            requireSlot(mem, offset + 238, varPos, "InteractionVars");
+            requireSlot(mem, offset + 262, varPos, "InteractionVars");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("InteractionVars");
@@ -1440,32 +1458,32 @@ public class ItemBase {
             }
             varPos = off - varBase;
         } else {
-            requireSlot(mem, offset + 238, -1, "InteractionVars");
+            requireSlot(mem, offset + 262, -1, "InteractionVars");
         }
         
         InteractionConfiguration v40 = null;
         if (hasInteractionConfig(mem, offset)) {
-            requireSlot(mem, offset + 242, varPos, "InteractionConfig");
+            requireSlot(mem, offset + 266, varPos, "InteractionConfig");
             v40 = InteractionConfiguration.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
         } else {
-            requireSlot(mem, offset + 242, -1, "InteractionConfig");
+            requireSlot(mem, offset + 266, -1, "InteractionConfig");
         }
         
         String v41 = null;
         if (hasDroppedItemAnimation(mem, offset)) {
-            requireSlot(mem, offset + 246, varPos, "DroppedItemAnimation");
+            requireSlot(mem, offset + 270, varPos, "DroppedItemAnimation");
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
             v41 = PacketIO.readVarString("DroppedItemAnimation", mem, off, 0, 4096000, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         } else {
-            requireSlot(mem, offset + 246, -1, "DroppedItemAnimation");
+            requireSlot(mem, offset + 270, -1, "DroppedItemAnimation");
         }
         
         int[] v42 = null;
         if (hasTagIndexes(mem, offset)) {
-            requireSlot(mem, offset + 250, varPos, "TagIndexes");
+            requireSlot(mem, offset + 274, varPos, "TagIndexes");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("TagIndexes");
@@ -1478,12 +1496,12 @@ public class ItemBase {
             MemorySegment.copy(mem, PacketIO.PROTO_INT, off, v42, 0, len);
             varPos = off + len * 4 - varBase;
         } else {
-            requireSlot(mem, offset + 250, -1, "TagIndexes");
+            requireSlot(mem, offset + 274, -1, "TagIndexes");
         }
         
         java.util.Map<Integer, ItemAppearanceCondition[]> v43 = null;
         if (hasItemAppearanceConditions(mem, offset)) {
-            requireSlot(mem, offset + 254, varPos, "ItemAppearanceConditions");
+            requireSlot(mem, offset + 278, varPos, "ItemAppearanceConditions");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("ItemAppearanceConditions");
@@ -1515,12 +1533,12 @@ public class ItemBase {
             }
             varPos = off - varBase;
         } else {
-            requireSlot(mem, offset + 254, -1, "ItemAppearanceConditions");
+            requireSlot(mem, offset + 278, -1, "ItemAppearanceConditions");
         }
         
         int[] v44 = null;
         if (hasDisplayEntityStatsHUD(mem, offset)) {
-            requireSlot(mem, offset + 258, varPos, "DisplayEntityStatsHUD");
+            requireSlot(mem, offset + 282, varPos, "DisplayEntityStatsHUD");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("DisplayEntityStatsHUD");
@@ -1533,12 +1551,12 @@ public class ItemBase {
             MemorySegment.copy(mem, PacketIO.PROTO_INT, off, v44, 0, len);
             varPos = off + len * 4 - varBase;
         } else {
-            requireSlot(mem, offset + 258, -1, "DisplayEntityStatsHUD");
+            requireSlot(mem, offset + 282, -1, "DisplayEntityStatsHUD");
         }
         
         ItemHudUI[] v48 = null;
         if (hasHudUI(mem, offset)) {
-            requireSlot(mem, offset + 262, varPos, "HudUI");
+            requireSlot(mem, offset + 286, varPos, "HudUI");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("HudUI");
@@ -1554,7 +1572,16 @@ public class ItemBase {
             }
             varPos = off - varBase;
         } else {
-            requireSlot(mem, offset + 262, -1, "HudUI");
+            requireSlot(mem, offset + 286, -1, "HudUI");
+        }
+        
+        ItemAbility v49 = null;
+        if (hasAbility(mem, offset)) {
+            requireSlot(mem, offset + 290, varPos, "Ability");
+            v49 = ItemAbility.toObject(mem, varBase + varPos, walkCursor);
+            varPos = walkCursor.position - varBase;
+        } else {
+            requireSlot(mem, offset + 290, -1, "Ability");
         }
         var result = new ItemBase(
             v0,
@@ -1580,7 +1607,7 @@ public class ItemBase {
             v20,
             hasGliderConfig(mem, offset) ? ItemGlider.toObject(mem, offset + 56) : null,
             v22,
-            hasBlockSelectorTool(mem, offset) ? BlockSelectorToolData.toObject(mem, offset + 72) : null,
+            hasBlockSelectorTool(mem, offset) ? BlockSelectorToolData.toObject(mem, offset + 96) : null,
             v24,
             v25,
             v26,
@@ -1589,10 +1616,10 @@ public class ItemBase {
             v29,
             v30,
             v31,
-            hasLight(mem, offset) ? ColorLight.toObject(mem, offset + 76) : null,
-            PacketIO.requireFinite(mem.get(PacketIO.PROTO_DOUBLE, offset + 80), "Durability"),
-            mem.get(PacketIO.PROTO_INT, offset + 88),
-            mem.get(PacketIO.PROTO_INT, offset + 92),
+            hasLight(mem, offset) ? ColorLight.toObject(mem, offset + 100) : null,
+            PacketIO.requireFinite(mem.get(PacketIO.PROTO_DOUBLE, offset + 104), "Durability"),
+            mem.get(PacketIO.PROTO_INT, offset + 112),
+            mem.get(PacketIO.PROTO_INT, offset + 116),
             v36,
             v37,
             v38,
@@ -1602,10 +1629,11 @@ public class ItemBase {
             v42,
             v43,
             v44,
-            hasPullbackConfig(mem, offset) ? ItemPullbackConfiguration.toObject(mem, offset + 96) : null,
-            (mem.get(PacketIO.PROTO_BYTE, offset + 145) & 0x01) != 0,
-            (mem.get(PacketIO.PROTO_BYTE, offset + 145) & 0x02) != 0,
-            v48
+            hasPullbackConfig(mem, offset) ? ItemPullbackConfiguration.toObject(mem, offset + 120) : null,
+            (mem.get(PacketIO.PROTO_BYTE, offset + 169) & 0x01) != 0,
+            (mem.get(PacketIO.PROTO_BYTE, offset + 169) & 0x02) != 0,
+            v48,
+            v49
         );
         if (cursor != null) cursor.position = varBase + varPos;
         return result;
@@ -1656,6 +1684,7 @@ public class ItemBase {
         if (this.itemAppearanceConditions != null) nullBits |= 0x01;
         if (this.displayEntityStatsHUD != null) nullBits |= 0x02;
         if (this.hudUI != null) nullBits |= 0x04;
+        if (this.ability != null) nullBits |= 0x08;
         mem.set(PacketIO.PROTO_BYTE, offset + 4, nullBits);
         
         PacketIO.requireFinite(this.scale, "Scale"); mem.set(PacketIO.PROTO_FLOAT, offset + 5, this.scale);
@@ -1677,75 +1706,75 @@ public class ItemBase {
         if (this.gliderConfig != null) {
             this.gliderConfig.serialize(mem, offset + 56);
         } else {
-            mem.asSlice(offset + 56, 16).fill((byte) 0); 
+            mem.asSlice(offset + 56, 40).fill((byte) 0); 
         }
         if (this.blockSelectorTool != null) {
-            this.blockSelectorTool.serialize(mem, offset + 72);
+            this.blockSelectorTool.serialize(mem, offset + 96);
         } else {
-            mem.asSlice(offset + 72, 4).fill((byte) 0); 
+            mem.asSlice(offset + 96, 4).fill((byte) 0); 
         }
         if (this.light != null) {
-            this.light.serialize(mem, offset + 76);
+            this.light.serialize(mem, offset + 100);
         } else {
-            mem.asSlice(offset + 76, 4).fill((byte) 0); 
+            mem.asSlice(offset + 100, 4).fill((byte) 0); 
         }
-        PacketIO.requireFinite(this.durability, "Durability"); mem.set(PacketIO.PROTO_DOUBLE, offset + 80, this.durability);
-        mem.set(PacketIO.PROTO_INT, offset + 88, this.soundEventIndex);
-        mem.set(PacketIO.PROTO_INT, offset + 92, this.itemSoundSetIndex);
+        PacketIO.requireFinite(this.durability, "Durability"); mem.set(PacketIO.PROTO_DOUBLE, offset + 104, this.durability);
+        mem.set(PacketIO.PROTO_INT, offset + 112, this.soundEventIndex);
+        mem.set(PacketIO.PROTO_INT, offset + 116, this.itemSoundSetIndex);
         if (this.pullbackConfig != null) {
-            this.pullbackConfig.serialize(mem, offset + 96);
+            this.pullbackConfig.serialize(mem, offset + 120);
         } else {
-            mem.asSlice(offset + 96, 49).fill((byte) 0); 
+            mem.asSlice(offset + 120, 49).fill((byte) 0); 
         }
         byte boolBits1_0 = 0;
         if (this.clipsGeometry) boolBits1_0 |= 0x01;
         if (this.renderDeployablePreview) boolBits1_0 |= 0x02;
-        mem.set(PacketIO.PROTO_BYTE, offset + 145 + 0, boolBits1_0);
-        var varOffset = offset + 266;
+        mem.set(PacketIO.PROTO_BYTE, offset + 169 + 0, boolBits1_0);
+        var varOffset = offset + 294;
         if (this.id != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 146, varOffset - offset - 266);
+            mem.set(PacketIO.PROTO_INT, offset + 170, varOffset - offset - 294);
             varOffset += PacketIO.writeVarString(mem, varOffset, this.id, 4096000);
-        } else {
-            mem.set(PacketIO.PROTO_INT, offset + 146, -1);
-        }
-        if (this.model != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 150, varOffset - offset - 266);
-            varOffset += PacketIO.writeVarString(mem, varOffset, this.model, 4096000);
-        } else {
-            mem.set(PacketIO.PROTO_INT, offset + 150, -1);
-        }
-        if (this.texture != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 154, varOffset - offset - 266);
-            varOffset += PacketIO.writeVarString(mem, varOffset, this.texture, 4096000);
-        } else {
-            mem.set(PacketIO.PROTO_INT, offset + 154, -1);
-        }
-        if (this.animation != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 158, varOffset - offset - 266);
-            varOffset += PacketIO.writeVarString(mem, varOffset, this.animation, 4096000);
-        } else {
-            mem.set(PacketIO.PROTO_INT, offset + 158, -1);
-        }
-        if (this.playerAnimationsId != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 162, varOffset - offset - 266);
-            varOffset += PacketIO.writeVarString(mem, varOffset, this.playerAnimationsId, 4096000);
-        } else {
-            mem.set(PacketIO.PROTO_INT, offset + 162, -1);
-        }
-        if (this.icon != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 166, varOffset - offset - 266);
-            varOffset += PacketIO.writeVarString(mem, varOffset, this.icon, 4096000);
-        } else {
-            mem.set(PacketIO.PROTO_INT, offset + 166, -1);
-        }
-        if (this.translationProperties != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 170, varOffset - offset - 266);
-            varOffset += this.translationProperties.serialize(mem, varOffset);
         } else {
             mem.set(PacketIO.PROTO_INT, offset + 170, -1);
         }
+        if (this.model != null) {
+            mem.set(PacketIO.PROTO_INT, offset + 174, varOffset - offset - 294);
+            varOffset += PacketIO.writeVarString(mem, varOffset, this.model, 4096000);
+        } else {
+            mem.set(PacketIO.PROTO_INT, offset + 174, -1);
+        }
+        if (this.texture != null) {
+            mem.set(PacketIO.PROTO_INT, offset + 178, varOffset - offset - 294);
+            varOffset += PacketIO.writeVarString(mem, varOffset, this.texture, 4096000);
+        } else {
+            mem.set(PacketIO.PROTO_INT, offset + 178, -1);
+        }
+        if (this.animation != null) {
+            mem.set(PacketIO.PROTO_INT, offset + 182, varOffset - offset - 294);
+            varOffset += PacketIO.writeVarString(mem, varOffset, this.animation, 4096000);
+        } else {
+            mem.set(PacketIO.PROTO_INT, offset + 182, -1);
+        }
+        if (this.playerAnimationsId != null) {
+            mem.set(PacketIO.PROTO_INT, offset + 186, varOffset - offset - 294);
+            varOffset += PacketIO.writeVarString(mem, varOffset, this.playerAnimationsId, 4096000);
+        } else {
+            mem.set(PacketIO.PROTO_INT, offset + 186, -1);
+        }
+        if (this.icon != null) {
+            mem.set(PacketIO.PROTO_INT, offset + 190, varOffset - offset - 294);
+            varOffset += PacketIO.writeVarString(mem, varOffset, this.icon, 4096000);
+        } else {
+            mem.set(PacketIO.PROTO_INT, offset + 190, -1);
+        }
+        if (this.translationProperties != null) {
+            mem.set(PacketIO.PROTO_INT, offset + 194, varOffset - offset - 294);
+            varOffset += this.translationProperties.serialize(mem, varOffset);
+        } else {
+            mem.set(PacketIO.PROTO_INT, offset + 194, -1);
+        }
         if (this.resourceTypes != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 174, varOffset - offset - 266);
+            mem.set(PacketIO.PROTO_INT, offset + 198, varOffset - offset - 294);
             if (resourceTypes.length > 4096000) throw ProtocolException.arrayTooLong("ResourceTypes", resourceTypes.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.resourceTypes.length);
             
@@ -1755,52 +1784,52 @@ public class ItemBase {
             }
             varOffset += resourceTypesValueOffset;
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 174, -1);
-        }
-        if (this.tool != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 178, varOffset - offset - 266);
-            varOffset += this.tool.serialize(mem, varOffset);
-        } else {
-            mem.set(PacketIO.PROTO_INT, offset + 178, -1);
-        }
-        if (this.weapon != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 182, varOffset - offset - 266);
-            varOffset += this.weapon.serialize(mem, varOffset);
-        } else {
-            mem.set(PacketIO.PROTO_INT, offset + 182, -1);
-        }
-        if (this.armor != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 186, varOffset - offset - 266);
-            varOffset += this.armor.serialize(mem, varOffset);
-        } else {
-            mem.set(PacketIO.PROTO_INT, offset + 186, -1);
-        }
-        if (this.utility != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 190, varOffset - offset - 266);
-            varOffset += this.utility.serialize(mem, varOffset);
-        } else {
-            mem.set(PacketIO.PROTO_INT, offset + 190, -1);
-        }
-        if (this.builderToolData != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 194, varOffset - offset - 266);
-            varOffset += this.builderToolData.serialize(mem, varOffset);
-        } else {
-            mem.set(PacketIO.PROTO_INT, offset + 194, -1);
-        }
-        if (this.itemEntity != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 198, varOffset - offset - 266);
-            varOffset += this.itemEntity.serialize(mem, varOffset);
-        } else {
             mem.set(PacketIO.PROTO_INT, offset + 198, -1);
         }
-        if (this.set != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 202, varOffset - offset - 266);
-            varOffset += PacketIO.writeVarString(mem, varOffset, this.set, 4096000);
+        if (this.tool != null) {
+            mem.set(PacketIO.PROTO_INT, offset + 202, varOffset - offset - 294);
+            varOffset += this.tool.serialize(mem, varOffset);
         } else {
             mem.set(PacketIO.PROTO_INT, offset + 202, -1);
         }
+        if (this.weapon != null) {
+            mem.set(PacketIO.PROTO_INT, offset + 206, varOffset - offset - 294);
+            varOffset += this.weapon.serialize(mem, varOffset);
+        } else {
+            mem.set(PacketIO.PROTO_INT, offset + 206, -1);
+        }
+        if (this.armor != null) {
+            mem.set(PacketIO.PROTO_INT, offset + 210, varOffset - offset - 294);
+            varOffset += this.armor.serialize(mem, varOffset);
+        } else {
+            mem.set(PacketIO.PROTO_INT, offset + 210, -1);
+        }
+        if (this.utility != null) {
+            mem.set(PacketIO.PROTO_INT, offset + 214, varOffset - offset - 294);
+            varOffset += this.utility.serialize(mem, varOffset);
+        } else {
+            mem.set(PacketIO.PROTO_INT, offset + 214, -1);
+        }
+        if (this.builderToolData != null) {
+            mem.set(PacketIO.PROTO_INT, offset + 218, varOffset - offset - 294);
+            varOffset += this.builderToolData.serialize(mem, varOffset);
+        } else {
+            mem.set(PacketIO.PROTO_INT, offset + 218, -1);
+        }
+        if (this.itemEntity != null) {
+            mem.set(PacketIO.PROTO_INT, offset + 222, varOffset - offset - 294);
+            varOffset += this.itemEntity.serialize(mem, varOffset);
+        } else {
+            mem.set(PacketIO.PROTO_INT, offset + 222, -1);
+        }
+        if (this.set != null) {
+            mem.set(PacketIO.PROTO_INT, offset + 226, varOffset - offset - 294);
+            varOffset += PacketIO.writeVarString(mem, varOffset, this.set, 4096000);
+        } else {
+            mem.set(PacketIO.PROTO_INT, offset + 226, -1);
+        }
         if (this.categories != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 206, varOffset - offset - 266);
+            mem.set(PacketIO.PROTO_INT, offset + 230, varOffset - offset - 294);
             if (categories.length > 4096000) throw ProtocolException.arrayTooLong("Categories", categories.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.categories.length);
             
@@ -1810,16 +1839,16 @@ public class ItemBase {
             }
             varOffset += categoriesValueOffset;
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 206, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 230, -1);
         }
         if (this.subCategory != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 210, varOffset - offset - 266);
+            mem.set(PacketIO.PROTO_INT, offset + 234, varOffset - offset - 294);
             varOffset += PacketIO.writeVarString(mem, varOffset, this.subCategory, 4096000);
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 210, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 234, -1);
         }
         if (this.particles != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 214, varOffset - offset - 266);
+            mem.set(PacketIO.PROTO_INT, offset + 238, varOffset - offset - 294);
             if (particles.length > 4096000) throw ProtocolException.arrayTooLong("Particles", particles.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.particles.length);
             
@@ -1829,10 +1858,10 @@ public class ItemBase {
             }
             varOffset += particlesValueOffset;
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 214, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 238, -1);
         }
         if (this.firstPersonParticles != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 218, varOffset - offset - 266);
+            mem.set(PacketIO.PROTO_INT, offset + 242, varOffset - offset - 294);
             if (firstPersonParticles.length > 4096000) throw ProtocolException.arrayTooLong("FirstPersonParticles", firstPersonParticles.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.firstPersonParticles.length);
             
@@ -1842,10 +1871,10 @@ public class ItemBase {
             }
             varOffset += firstPersonParticlesValueOffset;
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 218, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 242, -1);
         }
         if (this.trails != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 222, varOffset - offset - 266);
+            mem.set(PacketIO.PROTO_INT, offset + 246, varOffset - offset - 294);
             if (trails.length > 4096000) throw ProtocolException.arrayTooLong("Trails", trails.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.trails.length);
             
@@ -1855,10 +1884,10 @@ public class ItemBase {
             }
             varOffset += trailsValueOffset;
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 222, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 246, -1);
         }
         if (this.interactions != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 226, varOffset - offset - 266);
+            mem.set(PacketIO.PROTO_INT, offset + 250, varOffset - offset - 294);
             if (this.interactions.size() > 4096000) throw ProtocolException.dictionaryTooLarge("Interactions", interactions.size(), 4096000);
             varOffset += VarInt.set(mem, varOffset, this.interactions.size());
             for (var e : this.interactions.entrySet()) {
@@ -1868,10 +1897,10 @@ public class ItemBase {
                 varOffset += 4;
             }
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 226, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 250, -1);
         }
         if (this.carryInteractions != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 230, varOffset - offset - 266);
+            mem.set(PacketIO.PROTO_INT, offset + 254, varOffset - offset - 294);
             if (this.carryInteractions.size() > 4096000) throw ProtocolException.dictionaryTooLarge("CarryInteractions", carryInteractions.size(), 4096000);
             varOffset += VarInt.set(mem, varOffset, this.carryInteractions.size());
             for (var e : this.carryInteractions.entrySet()) {
@@ -1881,10 +1910,10 @@ public class ItemBase {
                 varOffset += 4;
             }
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 230, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 254, -1);
         }
         if (this.carryHudInputBindings != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 234, varOffset - offset - 266);
+            mem.set(PacketIO.PROTO_INT, offset + 258, varOffset - offset - 294);
             if (this.carryHudInputBindings.size() > 4096000) throw ProtocolException.dictionaryTooLarge("CarryHudInputBindings", carryHudInputBindings.size(), 4096000);
             varOffset += VarInt.set(mem, varOffset, this.carryHudInputBindings.size());
             for (var e : this.carryHudInputBindings.entrySet()) {
@@ -1893,10 +1922,10 @@ public class ItemBase {
                 varOffset += PacketIO.writeVarString(mem, varOffset, e.getValue(), 4096000);
             }
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 234, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 258, -1);
         }
         if (this.interactionVars != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 238, varOffset - offset - 266);
+            mem.set(PacketIO.PROTO_INT, offset + 262, varOffset - offset - 294);
             if (this.interactionVars.size() > 4096000) throw ProtocolException.dictionaryTooLarge("InteractionVars", interactionVars.size(), 4096000);
             varOffset += VarInt.set(mem, varOffset, this.interactionVars.size());
             for (var e : this.interactionVars.entrySet()) {
@@ -1905,32 +1934,32 @@ public class ItemBase {
                 varOffset += 4;
             }
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 238, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 262, -1);
         }
         if (this.interactionConfig != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 242, varOffset - offset - 266);
+            mem.set(PacketIO.PROTO_INT, offset + 266, varOffset - offset - 294);
             varOffset += this.interactionConfig.serialize(mem, varOffset);
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 242, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 266, -1);
         }
         if (this.droppedItemAnimation != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 246, varOffset - offset - 266);
+            mem.set(PacketIO.PROTO_INT, offset + 270, varOffset - offset - 294);
             varOffset += PacketIO.writeVarString(mem, varOffset, this.droppedItemAnimation, 4096000);
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 246, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 270, -1);
         }
         if (this.tagIndexes != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 250, varOffset - offset - 266);
+            mem.set(PacketIO.PROTO_INT, offset + 274, varOffset - offset - 294);
             if (tagIndexes.length > 4096000) throw ProtocolException.arrayTooLong("TagIndexes", tagIndexes.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.tagIndexes.length);
             
             MemorySegment.copy(this.tagIndexes, 0, mem, PacketIO.PROTO_INT, varOffset, this.tagIndexes.length);
             varOffset += this.tagIndexes.length * 4;
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 250, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 274, -1);
         }
         if (this.itemAppearanceConditions != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 254, varOffset - offset - 266);
+            mem.set(PacketIO.PROTO_INT, offset + 278, varOffset - offset - 294);
             if (this.itemAppearanceConditions.size() > 4096000) throw ProtocolException.dictionaryTooLarge("ItemAppearanceConditions", itemAppearanceConditions.size(), 4096000);
             varOffset += VarInt.set(mem, varOffset, this.itemAppearanceConditions.size());
             for (var e : this.itemAppearanceConditions.entrySet()) {
@@ -1942,20 +1971,20 @@ public class ItemBase {
                 }
             }
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 254, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 278, -1);
         }
         if (this.displayEntityStatsHUD != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 258, varOffset - offset - 266);
+            mem.set(PacketIO.PROTO_INT, offset + 282, varOffset - offset - 294);
             if (displayEntityStatsHUD.length > 4096000) throw ProtocolException.arrayTooLong("DisplayEntityStatsHUD", displayEntityStatsHUD.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.displayEntityStatsHUD.length);
             
             MemorySegment.copy(this.displayEntityStatsHUD, 0, mem, PacketIO.PROTO_INT, varOffset, this.displayEntityStatsHUD.length);
             varOffset += this.displayEntityStatsHUD.length * 4;
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 258, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 282, -1);
         }
         if (this.hudUI != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 262, varOffset - offset - 266);
+            mem.set(PacketIO.PROTO_INT, offset + 286, varOffset - offset - 294);
             if (hudUI.length > 4096000) throw ProtocolException.arrayTooLong("HudUI", hudUI.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.hudUI.length);
             
@@ -1965,13 +1994,19 @@ public class ItemBase {
             }
             varOffset += hudUIValueOffset;
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 262, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 286, -1);
+        }
+        if (this.ability != null) {
+            mem.set(PacketIO.PROTO_INT, offset + 290, varOffset - offset - 294);
+            varOffset += this.ability.serialize(mem, varOffset);
+        } else {
+            mem.set(PacketIO.PROTO_INT, offset + 290, -1);
         }
     
        return varOffset - offset;
     }
     public int computeSize() {
-        int size = 266;
+        int size = 294;
         if (id != null) size += PacketIO.stringSize(id);
     if (model != null) size += PacketIO.stringSize(model);
     if (texture != null) size += PacketIO.stringSize(texture);
@@ -2038,6 +2073,7 @@ size += VarInt.size(itemAppearanceConditions.size()) + itemAppearanceConditionsS
 for (var elem : hudUI) hudUISize += elem.computeSize();
 size += VarInt.size(hudUI.length) + hudUISize;
     }
+    if (ability != null) size += ability.computeSize();
 
         return size;
     }
@@ -2097,6 +2133,7 @@ size += VarInt.size(hudUI.length) + hudUISize;
         copy.clipsGeometry = this.clipsGeometry;
         copy.renderDeployablePreview = this.renderDeployablePreview;
         copy.hudUI = this.hudUI != null ? java.util.Arrays.stream(this.hudUI).map(e -> e.clone()).toArray(ItemHudUI[]::new) : null;
+        copy.ability = this.ability != null ? this.ability.clone() : null;
         return copy;
     }
 
@@ -2105,7 +2142,7 @@ size += VarInt.size(hudUI.length) + hudUISize;
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof ItemBase other)) return false;
-        return java.util.Objects.equals(this.id, other.id) && java.util.Objects.equals(this.model, other.model) && this.scale == other.scale && java.util.Objects.equals(this.texture, other.texture) && java.util.Objects.equals(this.animation, other.animation) && java.util.Objects.equals(this.playerAnimationsId, other.playerAnimationsId) && this.usePlayerAnimations == other.usePlayerAnimations && this.maxStack == other.maxStack && this.reticleIndex == other.reticleIndex && java.util.Objects.equals(this.icon, other.icon) && java.util.Objects.equals(this.iconProperties, other.iconProperties) && java.util.Objects.equals(this.translationProperties, other.translationProperties) && this.itemLevel == other.itemLevel && this.qualityIndex == other.qualityIndex && java.util.Arrays.equals(this.resourceTypes, other.resourceTypes) && this.consumable == other.consumable && this.variant == other.variant && this.blockId == other.blockId && java.util.Objects.equals(this.tool, other.tool) && java.util.Objects.equals(this.weapon, other.weapon) && java.util.Objects.equals(this.armor, other.armor) && java.util.Objects.equals(this.gliderConfig, other.gliderConfig) && java.util.Objects.equals(this.utility, other.utility) && java.util.Objects.equals(this.blockSelectorTool, other.blockSelectorTool) && java.util.Objects.equals(this.builderToolData, other.builderToolData) && java.util.Objects.equals(this.itemEntity, other.itemEntity) && java.util.Objects.equals(this.set, other.set) && java.util.Arrays.equals(this.categories, other.categories) && java.util.Objects.equals(this.subCategory, other.subCategory) && java.util.Arrays.equals(this.particles, other.particles) && java.util.Arrays.equals(this.firstPersonParticles, other.firstPersonParticles) && java.util.Arrays.equals(this.trails, other.trails) && java.util.Objects.equals(this.light, other.light) && this.durability == other.durability && this.soundEventIndex == other.soundEventIndex && this.itemSoundSetIndex == other.itemSoundSetIndex && java.util.Objects.equals(this.interactions, other.interactions) && java.util.Objects.equals(this.carryInteractions, other.carryInteractions) && java.util.Objects.equals(this.carryHudInputBindings, other.carryHudInputBindings) && java.util.Objects.equals(this.interactionVars, other.interactionVars) && java.util.Objects.equals(this.interactionConfig, other.interactionConfig) && java.util.Objects.equals(this.droppedItemAnimation, other.droppedItemAnimation) && java.util.Arrays.equals(this.tagIndexes, other.tagIndexes) && java.util.Objects.equals(this.itemAppearanceConditions, other.itemAppearanceConditions) && java.util.Arrays.equals(this.displayEntityStatsHUD, other.displayEntityStatsHUD) && java.util.Objects.equals(this.pullbackConfig, other.pullbackConfig) && this.clipsGeometry == other.clipsGeometry && this.renderDeployablePreview == other.renderDeployablePreview && java.util.Arrays.equals(this.hudUI, other.hudUI);
+        return java.util.Objects.equals(this.id, other.id) && java.util.Objects.equals(this.model, other.model) && this.scale == other.scale && java.util.Objects.equals(this.texture, other.texture) && java.util.Objects.equals(this.animation, other.animation) && java.util.Objects.equals(this.playerAnimationsId, other.playerAnimationsId) && this.usePlayerAnimations == other.usePlayerAnimations && this.maxStack == other.maxStack && this.reticleIndex == other.reticleIndex && java.util.Objects.equals(this.icon, other.icon) && java.util.Objects.equals(this.iconProperties, other.iconProperties) && java.util.Objects.equals(this.translationProperties, other.translationProperties) && this.itemLevel == other.itemLevel && this.qualityIndex == other.qualityIndex && java.util.Arrays.equals(this.resourceTypes, other.resourceTypes) && this.consumable == other.consumable && this.variant == other.variant && this.blockId == other.blockId && java.util.Objects.equals(this.tool, other.tool) && java.util.Objects.equals(this.weapon, other.weapon) && java.util.Objects.equals(this.armor, other.armor) && java.util.Objects.equals(this.gliderConfig, other.gliderConfig) && java.util.Objects.equals(this.utility, other.utility) && java.util.Objects.equals(this.blockSelectorTool, other.blockSelectorTool) && java.util.Objects.equals(this.builderToolData, other.builderToolData) && java.util.Objects.equals(this.itemEntity, other.itemEntity) && java.util.Objects.equals(this.set, other.set) && java.util.Arrays.equals(this.categories, other.categories) && java.util.Objects.equals(this.subCategory, other.subCategory) && java.util.Arrays.equals(this.particles, other.particles) && java.util.Arrays.equals(this.firstPersonParticles, other.firstPersonParticles) && java.util.Arrays.equals(this.trails, other.trails) && java.util.Objects.equals(this.light, other.light) && this.durability == other.durability && this.soundEventIndex == other.soundEventIndex && this.itemSoundSetIndex == other.itemSoundSetIndex && java.util.Objects.equals(this.interactions, other.interactions) && java.util.Objects.equals(this.carryInteractions, other.carryInteractions) && java.util.Objects.equals(this.carryHudInputBindings, other.carryHudInputBindings) && java.util.Objects.equals(this.interactionVars, other.interactionVars) && java.util.Objects.equals(this.interactionConfig, other.interactionConfig) && java.util.Objects.equals(this.droppedItemAnimation, other.droppedItemAnimation) && java.util.Arrays.equals(this.tagIndexes, other.tagIndexes) && java.util.Objects.equals(this.itemAppearanceConditions, other.itemAppearanceConditions) && java.util.Arrays.equals(this.displayEntityStatsHUD, other.displayEntityStatsHUD) && java.util.Objects.equals(this.pullbackConfig, other.pullbackConfig) && this.clipsGeometry == other.clipsGeometry && this.renderDeployablePreview == other.renderDeployablePreview && java.util.Arrays.equals(this.hudUI, other.hudUI) && java.util.Objects.equals(this.ability, other.ability);
     }
 
     @Override
@@ -2160,6 +2197,7 @@ size += VarInt.size(hudUI.length) + hudUISize;
         result = 31 * result + Boolean.hashCode(clipsGeometry);
         result = 31 * result + Boolean.hashCode(renderDeployablePreview);
         result = 31 * result + java.util.Arrays.hashCode(hudUI);
+        result = 31 * result + java.util.Objects.hashCode(ability);
         return result;
     }
 

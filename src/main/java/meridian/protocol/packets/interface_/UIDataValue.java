@@ -30,25 +30,33 @@ public abstract class UIDataValue {
         int typeId = (int) typeIdPacked;
         int typeIdLen = (int) (typeIdPacked >>> 32);
 
-        return switch (typeId) {
-            case 0 -> UIStringDataValue.toObject(mem, offset + typeIdLen, cursor);
-                case 1 -> UIFloatDataValue.toObject(mem, offset + typeIdLen, cursor);
-                case 2 -> UIIntDataValue.toObject(mem, offset + typeIdLen, cursor);
-                case 3 -> UIBoolDataValue.toObject(mem, offset + typeIdLen, cursor);
-                case 4 -> UICommandDataValue.toObject(mem, offset + typeIdLen, cursor);
-                case 5 -> UIObjectDataValue.toObject(mem, offset + typeIdLen, cursor);
-                case 6 -> UIEnumDataValue.toObject(mem, offset + typeIdLen, cursor);
-                case 7 -> UIListDataValue.toObject(mem, offset + typeIdLen, cursor);
-                case 8 -> UIByteDataValue.toObject(mem, offset + typeIdLen, cursor);
-                case 9 -> UISByteDataValue.toObject(mem, offset + typeIdLen, cursor);
-                case 10 -> UIShortDataValue.toObject(mem, offset + typeIdLen, cursor);
-                case 11 -> UIUShortDataValue.toObject(mem, offset + typeIdLen, cursor);
-                case 12 -> UIUIntDataValue.toObject(mem, offset + typeIdLen, cursor);
-                case 13 -> UILongDataValue.toObject(mem, offset + typeIdLen, cursor);
-                case 14 -> UIULongDataValue.toObject(mem, offset + typeIdLen, cursor);
-                case 15 -> UIDoubleDataValue.toObject(mem, offset + typeIdLen, cursor);
-            default -> throw ProtocolException.unknownPolymorphicType("UIDataValue", typeId);
-        };
+        // A subtype may hold further values of this type, and decoding such a chain recurses
+        // once per link. The cursor counts the links so the chain cannot outrun the stack.
+        var walkCursor = cursor != null ? cursor : new ReadCursor();
+        walkCursor.enterNested("UIDataValue");
+        try {
+            return switch (typeId) {
+                case 0 -> UIStringDataValue.toObject(mem, offset + typeIdLen, walkCursor);
+                case 1 -> UIFloatDataValue.toObject(mem, offset + typeIdLen, walkCursor);
+                case 2 -> UIIntDataValue.toObject(mem, offset + typeIdLen, walkCursor);
+                case 3 -> UIBoolDataValue.toObject(mem, offset + typeIdLen, walkCursor);
+                case 4 -> UICommandDataValue.toObject(mem, offset + typeIdLen, walkCursor);
+                case 5 -> UIObjectDataValue.toObject(mem, offset + typeIdLen, walkCursor);
+                case 6 -> UIEnumDataValue.toObject(mem, offset + typeIdLen, walkCursor);
+                case 7 -> UIListDataValue.toObject(mem, offset + typeIdLen, walkCursor);
+                case 8 -> UIByteDataValue.toObject(mem, offset + typeIdLen, walkCursor);
+                case 9 -> UISByteDataValue.toObject(mem, offset + typeIdLen, walkCursor);
+                case 10 -> UIShortDataValue.toObject(mem, offset + typeIdLen, walkCursor);
+                case 11 -> UIUShortDataValue.toObject(mem, offset + typeIdLen, walkCursor);
+                case 12 -> UIUIntDataValue.toObject(mem, offset + typeIdLen, walkCursor);
+                case 13 -> UILongDataValue.toObject(mem, offset + typeIdLen, walkCursor);
+                case 14 -> UIULongDataValue.toObject(mem, offset + typeIdLen, walkCursor);
+                case 15 -> UIDoubleDataValue.toObject(mem, offset + typeIdLen, walkCursor);
+                default -> throw ProtocolException.unknownPolymorphicType("UIDataValue", typeId);
+            };
+        } finally {
+            walkCursor.exitNested();
+        }
     }
 
 

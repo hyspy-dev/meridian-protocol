@@ -20,12 +20,12 @@ public class DurabilityConditionInteraction extends SimpleInteraction {
 
     public float threshold;
     @Nonnull public ValueType valueType = ValueType.Percent;
-    @Nonnull public DurabilityOperator operator = DurabilityOperator.LessThan;
+    @Nonnull public ComparisonOperator operator = ComparisonOperator.LessThan;
 
     public DurabilityConditionInteraction() {
     }
 
-    public DurabilityConditionInteraction(@Nonnull WaitForDataFrom waitForDataFrom, @Nullable InteractionEffects effects, float horizontalSpeedMultiplier, float runTime, @Nonnull InteractionItemChangeBehavior onItemChangeBehavior, @Nullable java.util.Map<GameMode, InteractionSettings> settings, @Nonnull InteractionRules rules, @Nullable int[] tags, @Nullable InteractionCameraSettings camera, int next, int failed, float threshold, @Nonnull ValueType valueType, @Nonnull DurabilityOperator operator) {
+    public DurabilityConditionInteraction(@Nonnull WaitForDataFrom waitForDataFrom, @Nullable InteractionEffects effects, float horizontalSpeedMultiplier, float runTime, @Nonnull InteractionItemChangeBehavior onItemChangeBehavior, @Nullable java.util.Map<GameMode, InteractionSettings> settings, @Nonnull InteractionRules rules, @Nullable int[] tags, @Nullable InteractionCameraSettings camera, int next, int failed, float threshold, @Nonnull ValueType valueType, @Nonnull ComparisonOperator operator) {
         this.waitForDataFrom = waitForDataFrom;
         this.effects = effects;
         this.horizontalSpeedMultiplier = horizontalSpeedMultiplier;
@@ -211,12 +211,12 @@ public class DurabilityConditionInteraction extends SimpleInteraction {
         return ValueType.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 26));
     }
     
-    public static DurabilityOperator getOperator(MemorySegment mem) {
+    public static ComparisonOperator getOperator(MemorySegment mem) {
         return getOperator(mem, 0);
     }
     
-    public static DurabilityOperator getOperator(MemorySegment mem, int offset) {
-        return DurabilityOperator.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 27));
+    public static ComparisonOperator getOperator(MemorySegment mem, int offset) {
+        return ComparisonOperator.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 27));
     }
     
     public static boolean hasEffects(MemorySegment mem, int offset) {
@@ -357,7 +357,7 @@ public class DurabilityConditionInteraction extends SimpleInteraction {
             mem.get(PacketIO.PROTO_INT, offset + 18),
             PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 22), "Threshold"),
             ValueType.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 26)),
-            DurabilityOperator.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 27))
+            ComparisonOperator.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 27))
         );
         if (cursor != null) cursor.position = varBase + varPos;
         return result;

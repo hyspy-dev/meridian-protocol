@@ -49,14 +49,22 @@ public abstract class MusicContainer {
         int typeId = (int) typeIdPacked;
         int typeIdLen = (int) (typeIdPacked >>> 32);
 
-        return switch (typeId) {
-            case 0 -> SingleTrackMusicContainer.toObject(mem, offset + typeIdLen, cursor);
-                case 1 -> RandomMusicContainer.toObject(mem, offset + typeIdLen, cursor);
-                case 2 -> SequenceMusicContainer.toObject(mem, offset + typeIdLen, cursor);
-                case 3 -> HorizontalMusicContainer.toObject(mem, offset + typeIdLen, cursor);
-                case 4 -> SegmentMusicContainer.toObject(mem, offset + typeIdLen, cursor);
-            default -> throw ProtocolException.unknownPolymorphicType("MusicContainer", typeId);
-        };
+        // A subtype may hold further values of this type, and decoding such a chain recurses
+        // once per link. The cursor counts the links so the chain cannot outrun the stack.
+        var walkCursor = cursor != null ? cursor : new ReadCursor();
+        walkCursor.enterNested("MusicContainer");
+        try {
+            return switch (typeId) {
+                case 0 -> SingleTrackMusicContainer.toObject(mem, offset + typeIdLen, walkCursor);
+                case 1 -> RandomMusicContainer.toObject(mem, offset + typeIdLen, walkCursor);
+                case 2 -> SequenceMusicContainer.toObject(mem, offset + typeIdLen, walkCursor);
+                case 3 -> HorizontalMusicContainer.toObject(mem, offset + typeIdLen, walkCursor);
+                case 4 -> SegmentMusicContainer.toObject(mem, offset + typeIdLen, walkCursor);
+                default -> throw ProtocolException.unknownPolymorphicType("MusicContainer", typeId);
+            };
+        } finally {
+            walkCursor.exitNested();
+        }
     }
 
 

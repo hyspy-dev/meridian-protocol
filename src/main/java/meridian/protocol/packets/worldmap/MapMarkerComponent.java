@@ -30,13 +30,21 @@ public abstract class MapMarkerComponent {
         int typeId = (int) typeIdPacked;
         int typeIdLen = (int) (typeIdPacked >>> 32);
 
-        return switch (typeId) {
-            case 0 -> PlayerMarkerComponent.toObject(mem, offset + typeIdLen, cursor);
-                case 1 -> PlacedByMarkerComponent.toObject(mem, offset + typeIdLen, cursor);
-                case 2 -> HeightDeltaIconComponent.toObject(mem, offset + typeIdLen, cursor);
-                case 3 -> TintComponent.toObject(mem, offset + typeIdLen, cursor);
-            default -> throw ProtocolException.unknownPolymorphicType("MapMarkerComponent", typeId);
-        };
+        // A subtype may hold further values of this type, and decoding such a chain recurses
+        // once per link. The cursor counts the links so the chain cannot outrun the stack.
+        var walkCursor = cursor != null ? cursor : new ReadCursor();
+        walkCursor.enterNested("MapMarkerComponent");
+        try {
+            return switch (typeId) {
+                case 0 -> PlayerMarkerComponent.toObject(mem, offset + typeIdLen, walkCursor);
+                case 1 -> PlacedByMarkerComponent.toObject(mem, offset + typeIdLen, walkCursor);
+                case 2 -> HeightDeltaIconComponent.toObject(mem, offset + typeIdLen, walkCursor);
+                case 3 -> TintComponent.toObject(mem, offset + typeIdLen, walkCursor);
+                default -> throw ProtocolException.unknownPolymorphicType("MapMarkerComponent", typeId);
+            };
+        } finally {
+            walkCursor.exitNested();
+        }
     }
 
 

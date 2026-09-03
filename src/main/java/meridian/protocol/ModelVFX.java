@@ -13,10 +13,10 @@ import org.joml.*;
 
 public class ModelVFX {
     public static final int NULLABLE_BIT_FIELD_SIZE = 1;
-    public static final int FIXED_BLOCK_SIZE = 48;
+    public static final int FIXED_BLOCK_SIZE = 52;
     public static final int VARIABLE_FIELD_COUNT = 1;
-    public static final int VARIABLE_BLOCK_START = 48;
-    public static final int MAX_SIZE = 16384053;
+    public static final int VARIABLE_BLOCK_START = 52;
+    public static final int MAX_SIZE = 16384057;
 
     @Nullable public String id;
     @Nonnull public SwitchTo switchTo = SwitchTo.Disappear;
@@ -33,11 +33,12 @@ public class ModelVFX {
     @Nullable public Vector2fc noiseScrollSpeed;
     @Nullable public Color postColor;
     public float postColorOpacity;
+    public float opacity;
 
     public ModelVFX() {
     }
 
-    public ModelVFX(@Nullable String id, @Nonnull SwitchTo switchTo, @Nonnull EffectDirection effectDirection, float animationDuration, @Nullable Vector2fc animationRange, @Nonnull LoopOption loopOption, @Nonnull CurveType curveType, @Nullable Color highlightColor, float highlightThickness, boolean useBloomOnHighlight, boolean useProgessiveHighlight, @Nullable Vector2fc noiseScale, @Nullable Vector2fc noiseScrollSpeed, @Nullable Color postColor, float postColorOpacity) {
+    public ModelVFX(@Nullable String id, @Nonnull SwitchTo switchTo, @Nonnull EffectDirection effectDirection, float animationDuration, @Nullable Vector2fc animationRange, @Nonnull LoopOption loopOption, @Nonnull CurveType curveType, @Nullable Color highlightColor, float highlightThickness, boolean useBloomOnHighlight, boolean useProgessiveHighlight, @Nullable Vector2fc noiseScale, @Nullable Vector2fc noiseScrollSpeed, @Nullable Color postColor, float postColorOpacity, float opacity) {
         this.id = id;
         this.switchTo = switchTo;
         this.effectDirection = effectDirection;
@@ -53,6 +54,7 @@ public class ModelVFX {
         this.noiseScrollSpeed = noiseScrollSpeed;
         this.postColor = postColor;
         this.postColorOpacity = postColorOpacity;
+        this.opacity = opacity;
     }
 
     public ModelVFX(@Nonnull ModelVFX other) {
@@ -71,6 +73,7 @@ public class ModelVFX {
         this.noiseScrollSpeed = other.noiseScrollSpeed;
         this.postColor = other.postColor;
         this.postColorOpacity = other.postColorOpacity;
+        this.opacity = other.opacity;
     }
 
     /**
@@ -79,7 +82,7 @@ public class ModelVFX {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("ModelVFX", offset, (int) mem.byteSize());
-        long needed = (long) offset + 48;
+        long needed = (long) offset + 52;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("ModelVFX", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -90,7 +93,7 @@ public class ModelVFX {
     
     @Nullable
     public static String getId(MemorySegment mem, int offset) {
-        return hasId(mem, offset) ? PacketIO.readVarString("Id", mem, offset + 48, 4096000): null;
+        return hasId(mem, offset) ? PacketIO.readVarString("Id", mem, offset + 52, 4096000): null;
     }
     
     public static SwitchTo getSwitchTo(MemorySegment mem) {
@@ -215,6 +218,14 @@ public class ModelVFX {
         return PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 44), "PostColorOpacity");
     }
     
+    public static float getOpacity(MemorySegment mem) {
+        return getOpacity(mem, 0);
+    }
+    
+    public static float getOpacity(MemorySegment mem, int offset) {
+        return PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 48), "Opacity");
+    }
+    
     public static boolean hasAnimationRange(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
         return (b & 0x01) != 0;
@@ -263,7 +274,7 @@ public class ModelVFX {
     public static ModelVFX toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
-        var varBase = offset + 48;
+        var varBase = offset + 52;
         var varPos = 0;
         String v0 = null;
         if (hasId(mem, offset)) {
@@ -287,7 +298,8 @@ public class ModelVFX {
             hasNoiseScale(mem, offset) ? PacketIO.requireFinite(PacketIO.readVector2f(mem, offset + 25), "NoiseScale") : null,
             hasNoiseScrollSpeed(mem, offset) ? PacketIO.requireFinite(PacketIO.readVector2f(mem, offset + 33), "NoiseScrollSpeed") : null,
             hasPostColor(mem, offset) ? Color.toObject(mem, offset + 41) : null,
-            PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 44), "PostColorOpacity")
+            PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 44), "PostColorOpacity"),
+            PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 48), "Opacity")
         );
         if (cursor != null) cursor.position = varBase + varPos;
         return result;
@@ -339,7 +351,8 @@ public class ModelVFX {
             mem.asSlice(offset + 41, 3).fill((byte) 0); 
         }
         PacketIO.requireFinite(this.postColorOpacity, "PostColorOpacity"); mem.set(PacketIO.PROTO_FLOAT, offset + 44, this.postColorOpacity);
-        var varOffset = offset + 48;
+        PacketIO.requireFinite(this.opacity, "Opacity"); mem.set(PacketIO.PROTO_FLOAT, offset + 48, this.opacity);
+        var varOffset = offset + 52;
         if (this.id != null) {
             
             varOffset += PacketIO.writeVarString(mem, varOffset, this.id, 4096000);
@@ -348,7 +361,7 @@ public class ModelVFX {
        return varOffset - offset;
     }
     public int computeSize() {
-        int size = 48;
+        int size = 52;
         if (id != null) size += PacketIO.stringSize(id);
 
         return size;
@@ -371,6 +384,7 @@ public class ModelVFX {
         copy.noiseScrollSpeed = this.noiseScrollSpeed;
         copy.postColor = this.postColor != null ? this.postColor.clone() : null;
         copy.postColorOpacity = this.postColorOpacity;
+        copy.opacity = this.opacity;
         return copy;
     }
 
@@ -379,12 +393,12 @@ public class ModelVFX {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof ModelVFX other)) return false;
-        return java.util.Objects.equals(this.id, other.id) && java.util.Objects.equals(this.switchTo, other.switchTo) && java.util.Objects.equals(this.effectDirection, other.effectDirection) && this.animationDuration == other.animationDuration && java.util.Objects.equals(this.animationRange, other.animationRange) && java.util.Objects.equals(this.loopOption, other.loopOption) && java.util.Objects.equals(this.curveType, other.curveType) && java.util.Objects.equals(this.highlightColor, other.highlightColor) && this.highlightThickness == other.highlightThickness && this.useBloomOnHighlight == other.useBloomOnHighlight && this.useProgessiveHighlight == other.useProgessiveHighlight && java.util.Objects.equals(this.noiseScale, other.noiseScale) && java.util.Objects.equals(this.noiseScrollSpeed, other.noiseScrollSpeed) && java.util.Objects.equals(this.postColor, other.postColor) && this.postColorOpacity == other.postColorOpacity;
+        return java.util.Objects.equals(this.id, other.id) && java.util.Objects.equals(this.switchTo, other.switchTo) && java.util.Objects.equals(this.effectDirection, other.effectDirection) && this.animationDuration == other.animationDuration && java.util.Objects.equals(this.animationRange, other.animationRange) && java.util.Objects.equals(this.loopOption, other.loopOption) && java.util.Objects.equals(this.curveType, other.curveType) && java.util.Objects.equals(this.highlightColor, other.highlightColor) && this.highlightThickness == other.highlightThickness && this.useBloomOnHighlight == other.useBloomOnHighlight && this.useProgessiveHighlight == other.useProgessiveHighlight && java.util.Objects.equals(this.noiseScale, other.noiseScale) && java.util.Objects.equals(this.noiseScrollSpeed, other.noiseScrollSpeed) && java.util.Objects.equals(this.postColor, other.postColor) && this.postColorOpacity == other.postColorOpacity && this.opacity == other.opacity;
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(id, switchTo, effectDirection, animationDuration, animationRange, loopOption, curveType, highlightColor, highlightThickness, useBloomOnHighlight, useProgessiveHighlight, noiseScale, noiseScrollSpeed, postColor, postColorOpacity);
+        return java.util.Objects.hash(id, switchTo, effectDirection, animationDuration, animationRange, loopOption, curveType, highlightColor, highlightThickness, useBloomOnHighlight, useProgessiveHighlight, noiseScale, noiseScrollSpeed, postColor, postColorOpacity, opacity);
     }
 
 }

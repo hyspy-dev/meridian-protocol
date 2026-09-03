@@ -14,24 +14,27 @@ import org.joml.*;
 public class AOECircleSelector extends Selector {
     public static final int NULLABLE_BIT_FIELD_SIZE = 1;
     public static final int FIXED_BLOCK_SIZE = 17;
-    public static final int VARIABLE_FIELD_COUNT = 0;
+    public static final int VARIABLE_FIELD_COUNT = 1;
     public static final int VARIABLE_BLOCK_START = 17;
-    public static final int MAX_SIZE = 17;
+    public static final int MAX_SIZE = 16384022;
 
     public float range;
     @Nullable public Vector3fc offset;
+    @Nullable public String sizeAttribute;
 
     public AOECircleSelector() {
     }
 
-    public AOECircleSelector(float range, @Nullable Vector3fc offset) {
+    public AOECircleSelector(float range, @Nullable Vector3fc offset, @Nullable String sizeAttribute) {
         this.range = range;
         this.offset = offset;
+        this.sizeAttribute = sizeAttribute;
     }
 
     public AOECircleSelector(@Nonnull AOECircleSelector other) {
         this.range = other.range;
         this.offset = other.offset;
+        this.sizeAttribute = other.sizeAttribute;
     }
 
     /**
@@ -62,9 +65,24 @@ public class AOECircleSelector extends Selector {
         return hasOffset(mem, offset) ? PacketIO.requireFinite(PacketIO.readVector3f(mem, offset + 5), "Offset"): null;
     }
     
+    @Nullable
+    public static String getSizeAttribute(MemorySegment mem) {
+        return getSizeAttribute(mem, 0);
+    }
+    
+    @Nullable
+    public static String getSizeAttribute(MemorySegment mem, int offset) {
+        return hasSizeAttribute(mem, offset) ? PacketIO.readVarString("SizeAttribute", mem, offset + 17, 4096000): null;
+    }
+    
     public static boolean hasOffset(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
         return (b & 0x01) != 0;
+    }
+    
+    public static boolean hasSizeAttribute(MemorySegment mem, int offset) {
+        var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
+        return (b & 0x02) != 0;
     }
     
     
@@ -85,11 +103,21 @@ public class AOECircleSelector extends Selector {
     public static AOECircleSelector toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
+        var varBase = offset + 17;
+        var varPos = 0;
+        String v2 = null;
+        if (hasSizeAttribute(mem, offset)) {
+            var off = varBase + varPos;
+            var sp = VarInt.getWithLength(mem, off);
+            v2 = PacketIO.readVarString("SizeAttribute", mem, off, 0, 4096000, sp);
+            varPos += (int) sp + (int) (sp >>> 32);
+        }
         var result = new AOECircleSelector(
             PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 1), "Range"),
-            hasOffset(mem, offset) ? PacketIO.requireFinite(PacketIO.readVector3f(mem, offset + 5), "Offset") : null
+            hasOffset(mem, offset) ? PacketIO.requireFinite(PacketIO.readVector3f(mem, offset + 5), "Offset") : null,
+            v2
         );
-        if (cursor != null) cursor.position = offset + 17;
+        if (cursor != null) cursor.position = varBase + varPos;
         return result;
     }
     @Override
@@ -97,6 +125,7 @@ public class AOECircleSelector extends Selector {
         byte nullBits;
         nullBits = 0;
         if (this.offset != null) nullBits |= 0x01;
+        if (this.sizeAttribute != null) nullBits |= 0x02;
         mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         
         PacketIO.requireFinite(this.range, "Range"); mem.set(PacketIO.PROTO_FLOAT, offset + 1, this.range);
@@ -105,20 +134,27 @@ public class AOECircleSelector extends Selector {
         } else {
             mem.asSlice(offset + 5, 12).fill((byte) 0); 
         }
-        
-        
+        var varOffset = offset + 17;
+        if (this.sizeAttribute != null) {
+            
+            varOffset += PacketIO.writeVarString(mem, varOffset, this.sizeAttribute, 4096000);
+        }
     
-       return 17;
+       return varOffset - offset;
     }
     @Override
     public int computeSize() {
-        return 17;
+        int size = 17;
+        if (sizeAttribute != null) size += PacketIO.stringSize(sizeAttribute);
+
+        return size;
     }
 
     public AOECircleSelector clone() {
         AOECircleSelector copy = new AOECircleSelector();
         copy.range = this.range;
         copy.offset = this.offset;
+        copy.sizeAttribute = this.sizeAttribute;
         return copy;
     }
 
@@ -127,12 +163,12 @@ public class AOECircleSelector extends Selector {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof AOECircleSelector other)) return false;
-        return this.range == other.range && java.util.Objects.equals(this.offset, other.offset);
+        return this.range == other.range && java.util.Objects.equals(this.offset, other.offset) && java.util.Objects.equals(this.sizeAttribute, other.sizeAttribute);
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(range, offset);
+        return java.util.Objects.hash(range, offset, sizeAttribute);
     }
 
 }

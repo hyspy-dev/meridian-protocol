@@ -19,7 +19,7 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToServer, NetworkChannel.Default,
             0, "Connect", meridian.protocol.packets.connection.Connect.class,
-            30, 37972, false,
+            30, 38056, false,
             meridian.protocol.packets.connection.Connect::toObject);
         register(
             PacketDirection.ToServer, NetworkChannel.Default,
@@ -428,6 +428,11 @@ public final class PacketRegistry {
             meridian.protocol.packets.assets.UpdateStingers::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
+            93, "UpdateBeamConfigs", meridian.protocol.packets.assets.UpdateBeamConfigs.class,
+            6, 1677721600, true,
+            meridian.protocol.packets.assets.UpdateBeamConfigs::toObject);
+        register(
+            PacketDirection.ToClient, NetworkChannel.Default,
             100, "SetClientId", meridian.protocol.packets.player.SetClientId.class,
             4, 4, false,
             meridian.protocol.packets.player.SetClientId::toObject);
@@ -536,6 +541,11 @@ public final class PacketRegistry {
             122, "RequestNoClip", meridian.protocol.packets.player.RequestNoClip.class,
             1, 1, false,
             meridian.protocol.packets.player.RequestNoClip::toObject);
+        register(
+            PacketDirection.ToClient, NetworkChannel.Default,
+            123, "SelfGrantEntitlement", meridian.protocol.packets.player.SelfGrantEntitlement.class,
+            0, 517, false,
+            meridian.protocol.packets.player.SelfGrantEntitlement::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Chunks,
             131, "SetChunk", meridian.protocol.packets.world.SetChunk.class,
@@ -798,6 +808,11 @@ public final class PacketRegistry {
             meridian.protocol.packets.world.UnloadChunks::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
+            185, "WorldGameplayConfig", meridian.protocol.packets.world.WorldGameplayConfig.class,
+            8, 8, false,
+            meridian.protocol.packets.world.WorldGameplayConfig::toObject);
+        register(
+            PacketDirection.ToClient, NetworkChannel.Default,
             200, "OpenWindow", meridian.protocol.packets.window.OpenWindow.class,
             6, 1677721600, true,
             meridian.protocol.packets.window.OpenWindow::toObject);
@@ -844,7 +859,7 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             214, "ShowEventTitle", meridian.protocol.packets.interface_.ShowEventTitle.class,
-            14, 1677721600, false,
+            17, 1677721600, false,
             meridian.protocol.packets.interface_.ShowEventTitle::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
@@ -924,7 +939,7 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToServer, NetworkChannel.Default,
             232, "UpdateLanguage", meridian.protocol.packets.interface_.UpdateLanguage.class,
-            1, 16384006, false,
+            0, 105, false,
             meridian.protocol.packets.interface_.UpdateLanguage::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,

@@ -12,12 +12,12 @@ import meridian.protocol.io.PacketIO;
 import meridian.protocol.io.ProtocolException;
 import meridian.protocol.io.ReadCursor;
 import meridian.protocol.io.VarInt;
-import meridian.protocol.ModelVFX;
+import meridian.protocol.BeamConfig;
 import meridian.protocol.UpdateType;
 import java.util.HashMap;
 
-public class UpdateModelvfxs implements Packet, ToClientPacket {
-    public static final int PACKET_ID = 53;
+public class UpdateBeamConfigs implements Packet, ToClientPacket {
+    public static final int PACKET_ID = 93;
     public static final boolean IS_COMPRESSED = true;
     public static final int NULLABLE_BIT_FIELD_SIZE = 1;
     public static final int FIXED_BLOCK_SIZE = 6;
@@ -37,21 +37,21 @@ public class UpdateModelvfxs implements Packet, ToClientPacket {
 
     @Nonnull public UpdateType type = UpdateType.Init;
     public int maxId;
-    @Nullable public java.util.Map<Integer, ModelVFX> modelVFXs;
+    @Nullable public java.util.Map<Integer, BeamConfig> beamConfigs;
 
-    public UpdateModelvfxs() {
+    public UpdateBeamConfigs() {
     }
 
-    public UpdateModelvfxs(@Nonnull UpdateType type, int maxId, @Nullable java.util.Map<Integer, ModelVFX> modelVFXs) {
+    public UpdateBeamConfigs(@Nonnull UpdateType type, int maxId, @Nullable java.util.Map<Integer, BeamConfig> beamConfigs) {
         this.type = type;
         this.maxId = maxId;
-        this.modelVFXs = modelVFXs;
+        this.beamConfigs = beamConfigs;
     }
 
-    public UpdateModelvfxs(@Nonnull UpdateModelvfxs other) {
+    public UpdateBeamConfigs(@Nonnull UpdateBeamConfigs other) {
         this.type = other.type;
         this.maxId = other.maxId;
-        this.modelVFXs = other.modelVFXs;
+        this.beamConfigs = other.beamConfigs;
     }
 
     /**
@@ -59,9 +59,9 @@ public class UpdateModelvfxs implements Packet, ToClientPacket {
      * check, so call this once before reading fields out of an untrusted segment.
      */
     public static void requireBounds(MemorySegment mem, int offset) {
-        if (offset < 0) throw ProtocolException.invalidOffset("UpdateModelvfxs", offset, (int) mem.byteSize());
+        if (offset < 0) throw ProtocolException.invalidOffset("UpdateBeamConfigs", offset, (int) mem.byteSize());
         long needed = (long) offset + 6;
-        if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("UpdateModelvfxs", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
+        if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("UpdateBeamConfigs", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
     public static UpdateType getType(MemorySegment mem) {
@@ -81,84 +81,84 @@ public class UpdateModelvfxs implements Packet, ToClientPacket {
     }
     
     @Nullable
-    public static java.util.Map<Integer, ModelVFX> getModelVFXs(MemorySegment mem) {
-        return getModelVFXs(mem, 0);
+    public static java.util.Map<Integer, BeamConfig> getBeamConfigs(MemorySegment mem) {
+        return getBeamConfigs(mem, 0);
     }
     
     @Nullable
-    public static java.util.Map<Integer, ModelVFX> getModelVFXs(MemorySegment mem, int offset) {
-        if (!hasModelVFXs(mem, offset)) return null;
+    public static java.util.Map<Integer, BeamConfig> getBeamConfigs(MemorySegment mem, int offset) {
+        if (!hasBeamConfigs(mem, offset)) return null;
         var walkCursor = new ReadCursor();
         var off = offset + 6;
         var packed = VarInt.getWithLength(mem, off);
-        if (packed == -1L) throw ProtocolException.invalidVarInt("ModelVFXs");
+        if (packed == -1L) throw ProtocolException.invalidVarInt("BeamConfigs");
         var len = (int) packed;
-        if (len > 4096000) throw ProtocolException.dictionaryTooLarge("ModelVFXs", len, 4096000);
+        if (len > 4096000) throw ProtocolException.dictionaryTooLarge("BeamConfigs", len, 4096000);
         
         off += (int) (packed >>> 32);
-        if (off + (long) len * 56 > mem.byteSize()) throw ProtocolException.bufferTooSmall("ModelVFXs", (int) java.lang.Math.min(off + (long) len * 56, Integer.MAX_VALUE), (int) mem.byteSize());
-        java.util.Map<Integer, ModelVFX> data = new HashMap<>(len);
+        if (off + (long) len * 5 > mem.byteSize()) throw ProtocolException.bufferTooSmall("BeamConfigs", (int) java.lang.Math.min(off + (long) len * 5, Integer.MAX_VALUE), (int) mem.byteSize());
+        java.util.Map<Integer, BeamConfig> data = new HashMap<>(len);
         for (var i = 0; i < len; i++) {
             var key = mem.get(PacketIO.PROTO_INT, off);
                 off += 4;
-            var value = ModelVFX.toObject(mem, off, walkCursor);
+            var value = BeamConfig.toObject(mem, off, walkCursor);
                 off = walkCursor.position;
             if (data.put(key, value) != null) {
-                throw ProtocolException.duplicateKey("ModelVFXs", key);
+                throw ProtocolException.duplicateKey("BeamConfigs", key);
             }
         }
         return data;
     }
     
-    public static boolean hasModelVFXs(MemorySegment mem, int offset) {
+    public static boolean hasBeamConfigs(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
         return (b & 0x01) != 0;
     }
     
     
     
-    public static UpdateModelvfxs toObject(MemorySegment mem) {
+    public static UpdateBeamConfigs toObject(MemorySegment mem) {
         return toObject(mem, 0, null);
     }
     
-    public static UpdateModelvfxs toObject(MemorySegment mem, int offset) {
+    public static UpdateBeamConfigs toObject(MemorySegment mem, int offset) {
         return toObject(mem, offset, null);
     }
     
     /**
-     * Decodes one UpdateModelvfxs and reports the end of its encoding through the cursor.
+     * Decodes one UpdateBeamConfigs and reports the end of its encoding through the cursor.
      * The variable block is decoded in field order against a running position, and each
      * offset slot must name that position, so the fields decoded are the bytes walked.
      */
-    public static UpdateModelvfxs toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
+    public static UpdateBeamConfigs toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
         var varBase = offset + 6;
         var varPos = 0;
         var walkCursor = cursor != null ? cursor : new ReadCursor();
-        java.util.Map<Integer, ModelVFX> v2 = null;
-        if (hasModelVFXs(mem, offset)) {
+        java.util.Map<Integer, BeamConfig> v2 = null;
+        if (hasBeamConfigs(mem, offset)) {
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
-            if (packed == -1L) throw ProtocolException.invalidVarInt("ModelVFXs");
+            if (packed == -1L) throw ProtocolException.invalidVarInt("BeamConfigs");
             var len = (int) packed;
-            if (len > 4096000) throw ProtocolException.dictionaryTooLarge("ModelVFXs", len, 4096000);
+            if (len > 4096000) throw ProtocolException.dictionaryTooLarge("BeamConfigs", len, 4096000);
             
             off += (int) (packed >>> 32);
-            if (off + (long) len * 56 > mem.byteSize()) throw ProtocolException.bufferTooSmall("ModelVFXs", (int) java.lang.Math.min(off + (long) len * 56, Integer.MAX_VALUE), (int) mem.byteSize());
+            if (off + (long) len * 5 > mem.byteSize()) throw ProtocolException.bufferTooSmall("BeamConfigs", (int) java.lang.Math.min(off + (long) len * 5, Integer.MAX_VALUE), (int) mem.byteSize());
             v2 = new HashMap<>(len);
             for (var i = 0; i < len; i++) {
                 var key = mem.get(PacketIO.PROTO_INT, off);
                     off += 4;
-                var value = ModelVFX.toObject(mem, off, walkCursor);
+                var value = BeamConfig.toObject(mem, off, walkCursor);
                     off = walkCursor.position;
                 if (v2.put(key, value) != null) {
-                    throw ProtocolException.duplicateKey("ModelVFXs", key);
+                    throw ProtocolException.duplicateKey("BeamConfigs", key);
                 }
             }
             varPos = off - varBase;
         }
-        var result = new UpdateModelvfxs(
+        var result = new UpdateBeamConfigs(
             UpdateType.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 1)),
             mem.get(PacketIO.PROTO_INT, offset + 2),
             v2
@@ -170,17 +170,17 @@ public class UpdateModelvfxs implements Packet, ToClientPacket {
     public int serialize(@Nonnull MemorySegment mem, int offset) {
         byte nullBits;
         nullBits = 0;
-        if (this.modelVFXs != null) nullBits |= 0x01;
+        if (this.beamConfigs != null) nullBits |= 0x01;
         mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         
         mem.set(PacketIO.PROTO_BYTE, offset + 1, (byte) this.type.getValue());
         mem.set(PacketIO.PROTO_INT, offset + 2, this.maxId);
         var varOffset = offset + 6;
-        if (this.modelVFXs != null) {
+        if (this.beamConfigs != null) {
             
-            if (this.modelVFXs.size() > 4096000) throw ProtocolException.dictionaryTooLarge("ModelVFXs", modelVFXs.size(), 4096000);
-            varOffset += VarInt.set(mem, varOffset, this.modelVFXs.size());
-            for (var e : this.modelVFXs.entrySet()) {
+            if (this.beamConfigs.size() > 4096000) throw ProtocolException.dictionaryTooLarge("BeamConfigs", beamConfigs.size(), 4096000);
+            varOffset += VarInt.set(mem, varOffset, this.beamConfigs.size());
+            for (var e : this.beamConfigs.entrySet()) {
                 mem.set(PacketIO.PROTO_INT, varOffset, e.getKey());
                 varOffset += 4;
                 varOffset += e.getValue().serialize(mem, varOffset);
@@ -191,23 +191,23 @@ public class UpdateModelvfxs implements Packet, ToClientPacket {
     }
     public int computeSize() {
         int size = 6;
-        if (modelVFXs != null) {
-        int modelVFXsSize = 0;
-for (var kvp : modelVFXs.entrySet()) modelVFXsSize += 4 + kvp.getValue().computeSize();
-size += VarInt.size(modelVFXs.size()) + modelVFXsSize;
+        if (beamConfigs != null) {
+        int beamConfigsSize = 0;
+for (var kvp : beamConfigs.entrySet()) beamConfigsSize += 4 + kvp.getValue().computeSize();
+size += VarInt.size(beamConfigs.size()) + beamConfigsSize;
     }
 
         return size;
     }
 
-    public UpdateModelvfxs clone() {
-        UpdateModelvfxs copy = new UpdateModelvfxs();
+    public UpdateBeamConfigs clone() {
+        UpdateBeamConfigs copy = new UpdateBeamConfigs();
         copy.type = this.type;
         copy.maxId = this.maxId;
-        if (this.modelVFXs != null) {
-            java.util.Map<Integer, ModelVFX> m = new java.util.HashMap<>();
-            for (var e : this.modelVFXs.entrySet()) { m.put(e.getKey(), e.getValue().clone()); }
-            copy.modelVFXs = m;
+        if (this.beamConfigs != null) {
+            java.util.Map<Integer, BeamConfig> m = new java.util.HashMap<>();
+            for (var e : this.beamConfigs.entrySet()) { m.put(e.getKey(), e.getValue().clone()); }
+            copy.beamConfigs = m;
         }
         return copy;
     }
@@ -216,13 +216,13 @@ size += VarInt.size(modelVFXs.size()) + modelVFXsSize;
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof UpdateModelvfxs other)) return false;
-        return java.util.Objects.equals(this.type, other.type) && this.maxId == other.maxId && java.util.Objects.equals(this.modelVFXs, other.modelVFXs);
+        if (!(obj instanceof UpdateBeamConfigs other)) return false;
+        return java.util.Objects.equals(this.type, other.type) && this.maxId == other.maxId && java.util.Objects.equals(this.beamConfigs, other.beamConfigs);
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(type, maxId, modelVFXs);
+        return java.util.Objects.hash(type, maxId, beamConfigs);
     }
 
 }

@@ -3,18 +3,15 @@ package meridian.protocol;
 
 import meridian.protocol.io.ProtocolException;
 
-public enum SwitchTo {
-    Disappear(0),
-    PostColor(1),
-    Distortion(2),
-    Transparency(3),
-    AlphaTransparency(4);
+public enum AbilitySlot {
+    Primary(0),
+    Support(1);
 
-    public static final SwitchTo[] VALUES = values();
+    public static final AbilitySlot[] VALUES = values();
 
     private final int value;
 
-    SwitchTo(int value) {
+    AbilitySlot(int value) {
         this.value = value;
     }
 
@@ -22,10 +19,10 @@ public enum SwitchTo {
         return value;
     }
 
-    public static SwitchTo fromValue(int value) {
+    public static AbilitySlot fromValue(int value) {
         if (value >= 0 && value < VALUES.length) {
             return VALUES[value];
         }
-        throw ProtocolException.invalidEnumValue("SwitchTo", value);
+        throw ProtocolException.invalidEnumValue("AbilitySlot", value);
     }
 }

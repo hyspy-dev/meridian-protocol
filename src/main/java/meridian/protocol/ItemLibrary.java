@@ -59,7 +59,7 @@ public class ItemLibrary {
         var len = (int) packed;
         if (len > 4096000) throw ProtocolException.arrayTooLong("Items", len, 4096000);
         var lenOffset = (int) (packed >>> 32);
-        if (off + lenOffset + (long) len * 266 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Items", (int) java.lang.Math.min(off + lenOffset + (long) len * 266, Integer.MAX_VALUE), (int) mem.byteSize());
+        if (off + lenOffset + (long) len * 294 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Items", (int) java.lang.Math.min(off + lenOffset + (long) len * 294, Integer.MAX_VALUE), (int) mem.byteSize());
         off += lenOffset;
         var data = new ItemBase[len];
         for (var i = 0; i < len; i++) {
@@ -164,7 +164,7 @@ public class ItemLibrary {
             var len = (int) packed;
             if (len > 4096000) throw ProtocolException.arrayTooLong("Items", len, 4096000);
             var lenOffset = (int) (packed >>> 32);
-            if (off + lenOffset + (long) len * 266 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Items", (int) java.lang.Math.min(off + lenOffset + (long) len * 266, Integer.MAX_VALUE), (int) mem.byteSize());
+            if (off + lenOffset + (long) len * 294 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Items", (int) java.lang.Math.min(off + lenOffset + (long) len * 294, Integer.MAX_VALUE), (int) mem.byteSize());
             off += lenOffset;
             v0 = new ItemBase[len];
             for (var i = 0; i < len; i++) {

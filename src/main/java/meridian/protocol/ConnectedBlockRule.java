@@ -30,14 +30,22 @@ public abstract class ConnectedBlockRule {
         int typeId = (int) typeIdPacked;
         int typeIdLen = (int) (typeIdPacked >>> 32);
 
-        return switch (typeId) {
-            case 0 -> FaceTagConnectedBlockRule.toObject(mem, offset + typeIdLen, cursor);
-                case 1 -> AndConnectedBlockRule.toObject(mem, offset + typeIdLen, cursor);
-                case 2 -> OrConnectedBlockRule.toObject(mem, offset + typeIdLen, cursor);
-                case 3 -> NotConnectedBlockRule.toObject(mem, offset + typeIdLen, cursor);
-                case 4 -> ShapeConnectedBlockRule.toObject(mem, offset + typeIdLen, cursor);
-            default -> throw ProtocolException.unknownPolymorphicType("ConnectedBlockRule", typeId);
-        };
+        // A subtype may hold further values of this type, and decoding such a chain recurses
+        // once per link. The cursor counts the links so the chain cannot outrun the stack.
+        var walkCursor = cursor != null ? cursor : new ReadCursor();
+        walkCursor.enterNested("ConnectedBlockRule");
+        try {
+            return switch (typeId) {
+                case 0 -> FaceTagConnectedBlockRule.toObject(mem, offset + typeIdLen, walkCursor);
+                case 1 -> AndConnectedBlockRule.toObject(mem, offset + typeIdLen, walkCursor);
+                case 2 -> OrConnectedBlockRule.toObject(mem, offset + typeIdLen, walkCursor);
+                case 3 -> NotConnectedBlockRule.toObject(mem, offset + typeIdLen, walkCursor);
+                case 4 -> ShapeConnectedBlockRule.toObject(mem, offset + typeIdLen, walkCursor);
+                default -> throw ProtocolException.unknownPolymorphicType("ConnectedBlockRule", typeId);
+            };
+        } finally {
+            walkCursor.exitNested();
+        }
     }
 
 

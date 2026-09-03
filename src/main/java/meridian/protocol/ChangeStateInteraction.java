@@ -13,17 +13,18 @@ import java.util.HashMap;
 
 public class ChangeStateInteraction extends SimpleBlockInteraction {
     public static final int NULLABLE_BIT_FIELD_SIZE = 1;
-    public static final int FIXED_BLOCK_SIZE = 23;
+    public static final int FIXED_BLOCK_SIZE = 24;
     public static final int VARIABLE_FIELD_COUNT = 6;
-    public static final int VARIABLE_BLOCK_START = 47;
+    public static final int VARIABLE_BLOCK_START = 48;
     public static final int MAX_SIZE = 1677721600;
 
     @Nullable public java.util.Map<String, String> stateChanges;
+    public boolean requireBlockPlacement;
 
     public ChangeStateInteraction() {
     }
 
-    public ChangeStateInteraction(@Nonnull WaitForDataFrom waitForDataFrom, @Nullable InteractionEffects effects, float horizontalSpeedMultiplier, float runTime, @Nonnull InteractionItemChangeBehavior onItemChangeBehavior, @Nullable java.util.Map<GameMode, InteractionSettings> settings, @Nonnull InteractionRules rules, @Nullable int[] tags, @Nullable InteractionCameraSettings camera, int next, int failed, boolean useLatestTarget, @Nullable java.util.Map<String, String> stateChanges) {
+    public ChangeStateInteraction(@Nonnull WaitForDataFrom waitForDataFrom, @Nullable InteractionEffects effects, float horizontalSpeedMultiplier, float runTime, @Nonnull InteractionItemChangeBehavior onItemChangeBehavior, @Nullable java.util.Map<GameMode, InteractionSettings> settings, @Nonnull InteractionRules rules, @Nullable int[] tags, @Nullable InteractionCameraSettings camera, int next, int failed, boolean useLatestTarget, @Nullable java.util.Map<String, String> stateChanges, boolean requireBlockPlacement) {
         this.waitForDataFrom = waitForDataFrom;
         this.effects = effects;
         this.horizontalSpeedMultiplier = horizontalSpeedMultiplier;
@@ -37,6 +38,7 @@ public class ChangeStateInteraction extends SimpleBlockInteraction {
         this.failed = failed;
         this.useLatestTarget = useLatestTarget;
         this.stateChanges = stateChanges;
+        this.requireBlockPlacement = requireBlockPlacement;
     }
 
     public ChangeStateInteraction(@Nonnull ChangeStateInteraction other) {
@@ -53,6 +55,7 @@ public class ChangeStateInteraction extends SimpleBlockInteraction {
         this.failed = other.failed;
         this.useLatestTarget = other.useLatestTarget;
         this.stateChanges = other.stateChanges;
+        this.requireBlockPlacement = other.requireBlockPlacement;
     }
 
     /**
@@ -61,7 +64,7 @@ public class ChangeStateInteraction extends SimpleBlockInteraction {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("ChangeStateInteraction", offset, (int) mem.byteSize());
-        long needed = (long) offset + 47;
+        long needed = (long) offset + 48;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("ChangeStateInteraction", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -80,7 +83,7 @@ public class ChangeStateInteraction extends SimpleBlockInteraction {
     
     @Nullable
     public static InteractionEffects getEffects(MemorySegment mem, int offset) {
-        return hasEffects(mem, offset) ? InteractionEffects.toObject(mem, offset + getValidatedOffset(mem, offset, 23, 47, "Effects")): null;
+        return hasEffects(mem, offset) ? InteractionEffects.toObject(mem, offset + getValidatedOffset(mem, offset, 24, 48, "Effects")): null;
     }
     
     public static float getHorizontalSpeedMultiplier(MemorySegment mem) {
@@ -115,7 +118,7 @@ public class ChangeStateInteraction extends SimpleBlockInteraction {
     @Nullable
     public static java.util.Map<GameMode, InteractionSettings> getSettings(MemorySegment mem, int offset) {
         if (!hasSettings(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 27, 47, "Settings");
+        var off = offset + getValidatedOffset(mem, offset, 28, 48, "Settings");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("Settings");
         var len = (int) packed;
@@ -141,7 +144,7 @@ public class ChangeStateInteraction extends SimpleBlockInteraction {
     }
     
     public static InteractionRules getRules(MemorySegment mem, int offset) {
-        return InteractionRules.toObject(mem, offset + getValidatedOffset(mem, offset, 31, 47, "Rules"));
+        return InteractionRules.toObject(mem, offset + getValidatedOffset(mem, offset, 32, 48, "Rules"));
     }
     
     @Nullable
@@ -152,7 +155,7 @@ public class ChangeStateInteraction extends SimpleBlockInteraction {
     @Nullable
     public static int[] getTags(MemorySegment mem, int offset) {
         if (!hasTags(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 35, 47, "Tags");
+        var off = offset + getValidatedOffset(mem, offset, 36, 48, "Tags");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("Tags");
         var len = (int) packed;
@@ -172,7 +175,7 @@ public class ChangeStateInteraction extends SimpleBlockInteraction {
     
     @Nullable
     public static InteractionCameraSettings getCamera(MemorySegment mem, int offset) {
-        return hasCamera(mem, offset) ? InteractionCameraSettings.toObject(mem, offset + getValidatedOffset(mem, offset, 39, 47, "Camera")): null;
+        return hasCamera(mem, offset) ? InteractionCameraSettings.toObject(mem, offset + getValidatedOffset(mem, offset, 40, 48, "Camera")): null;
     }
     
     public static int getNext(MemorySegment mem) {
@@ -207,7 +210,7 @@ public class ChangeStateInteraction extends SimpleBlockInteraction {
     @Nullable
     public static java.util.Map<String, String> getStateChanges(MemorySegment mem, int offset) {
         if (!hasStateChanges(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 43, 47, "StateChanges");
+        var off = offset + getValidatedOffset(mem, offset, 44, 48, "StateChanges");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("StateChanges");
         var len = (int) packed;
@@ -228,6 +231,14 @@ public class ChangeStateInteraction extends SimpleBlockInteraction {
             }
         }
         return data;
+    }
+    
+    public static boolean getRequireBlockPlacement(MemorySegment mem) {
+        return getRequireBlockPlacement(mem, 0);
+    }
+    
+    public static boolean getRequireBlockPlacement(MemorySegment mem, int offset) {
+        return mem.get(PacketIO.PROTO_BOOL, offset + 23);
     }
     
     public static boolean hasEffects(MemorySegment mem, int offset) {
@@ -288,21 +299,21 @@ public class ChangeStateInteraction extends SimpleBlockInteraction {
     public static ChangeStateInteraction toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
-        var varBase = offset + 47;
+        var varBase = offset + 48;
         var varPos = 0;
         var walkCursor = cursor != null ? cursor : new ReadCursor();
         InteractionEffects v1 = null;
         if (hasEffects(mem, offset)) {
-            requireSlot(mem, offset + 23, varPos, "Effects");
+            requireSlot(mem, offset + 24, varPos, "Effects");
             v1 = InteractionEffects.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
         } else {
-            requireSlot(mem, offset + 23, -1, "Effects");
+            requireSlot(mem, offset + 24, -1, "Effects");
         }
         
         java.util.Map<GameMode, InteractionSettings> v5 = null;
         if (hasSettings(mem, offset)) {
-            requireSlot(mem, offset + 27, varPos, "Settings");
+            requireSlot(mem, offset + 28, varPos, "Settings");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("Settings");
@@ -323,11 +334,11 @@ public class ChangeStateInteraction extends SimpleBlockInteraction {
             }
             varPos = off - varBase;
         } else {
-            requireSlot(mem, offset + 27, -1, "Settings");
+            requireSlot(mem, offset + 28, -1, "Settings");
         }
         
         InteractionRules v6;
-        requireSlot(mem, offset + 31, varPos, "Rules");
+        requireSlot(mem, offset + 32, varPos, "Rules");
         {
             v6 = InteractionRules.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
@@ -335,7 +346,7 @@ public class ChangeStateInteraction extends SimpleBlockInteraction {
         
         int[] v7 = null;
         if (hasTags(mem, offset)) {
-            requireSlot(mem, offset + 35, varPos, "Tags");
+            requireSlot(mem, offset + 36, varPos, "Tags");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("Tags");
@@ -348,21 +359,21 @@ public class ChangeStateInteraction extends SimpleBlockInteraction {
             MemorySegment.copy(mem, PacketIO.PROTO_INT, off, v7, 0, len);
             varPos = off + len * 4 - varBase;
         } else {
-            requireSlot(mem, offset + 35, -1, "Tags");
+            requireSlot(mem, offset + 36, -1, "Tags");
         }
         
         InteractionCameraSettings v8 = null;
         if (hasCamera(mem, offset)) {
-            requireSlot(mem, offset + 39, varPos, "Camera");
+            requireSlot(mem, offset + 40, varPos, "Camera");
             v8 = InteractionCameraSettings.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
         } else {
-            requireSlot(mem, offset + 39, -1, "Camera");
+            requireSlot(mem, offset + 40, -1, "Camera");
         }
         
         java.util.Map<String, String> v12 = null;
         if (hasStateChanges(mem, offset)) {
-            requireSlot(mem, offset + 43, varPos, "StateChanges");
+            requireSlot(mem, offset + 44, varPos, "StateChanges");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("StateChanges");
@@ -385,7 +396,7 @@ public class ChangeStateInteraction extends SimpleBlockInteraction {
             }
             varPos = off - varBase;
         } else {
-            requireSlot(mem, offset + 43, -1, "StateChanges");
+            requireSlot(mem, offset + 44, -1, "StateChanges");
         }
         var result = new ChangeStateInteraction(
             WaitForDataFrom.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 1)),
@@ -400,7 +411,8 @@ public class ChangeStateInteraction extends SimpleBlockInteraction {
             mem.get(PacketIO.PROTO_INT, offset + 14),
             mem.get(PacketIO.PROTO_INT, offset + 18),
             mem.get(PacketIO.PROTO_BOOL, offset + 22),
-            v12
+            v12,
+            mem.get(PacketIO.PROTO_BOOL, offset + 23)
         );
         if (cursor != null) cursor.position = varBase + varPos;
         return result;
@@ -423,15 +435,16 @@ public class ChangeStateInteraction extends SimpleBlockInteraction {
         mem.set(PacketIO.PROTO_INT, offset + 14, this.next);
         mem.set(PacketIO.PROTO_INT, offset + 18, this.failed);
         mem.set(PacketIO.PROTO_BOOL, offset + 22, this.useLatestTarget);
-        var varOffset = offset + 47;
+        mem.set(PacketIO.PROTO_BOOL, offset + 23, this.requireBlockPlacement);
+        var varOffset = offset + 48;
         if (this.effects != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 23, varOffset - offset - 47);
+            mem.set(PacketIO.PROTO_INT, offset + 24, varOffset - offset - 48);
             varOffset += this.effects.serialize(mem, varOffset);
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 23, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 24, -1);
         }
         if (this.settings != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 27, varOffset - offset - 47);
+            mem.set(PacketIO.PROTO_INT, offset + 28, varOffset - offset - 48);
             if (this.settings.size() > 4096000) throw ProtocolException.dictionaryTooLarge("Settings", settings.size(), 4096000);
             varOffset += VarInt.set(mem, varOffset, this.settings.size());
             for (var e : this.settings.entrySet()) {
@@ -440,28 +453,28 @@ public class ChangeStateInteraction extends SimpleBlockInteraction {
                 varOffset += e.getValue().serialize(mem, varOffset);
             }
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 27, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 28, -1);
         }
-        mem.set(PacketIO.PROTO_INT, offset + 31, varOffset - offset - 47);
+        mem.set(PacketIO.PROTO_INT, offset + 32, varOffset - offset - 48);
         varOffset += this.rules.serialize(mem, varOffset);
         if (this.tags != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 35, varOffset - offset - 47);
+            mem.set(PacketIO.PROTO_INT, offset + 36, varOffset - offset - 48);
             if (tags.length > 4096000) throw ProtocolException.arrayTooLong("Tags", tags.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.tags.length);
             
             MemorySegment.copy(this.tags, 0, mem, PacketIO.PROTO_INT, varOffset, this.tags.length);
             varOffset += this.tags.length * 4;
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 35, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 36, -1);
         }
         if (this.camera != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 39, varOffset - offset - 47);
+            mem.set(PacketIO.PROTO_INT, offset + 40, varOffset - offset - 48);
             varOffset += this.camera.serialize(mem, varOffset);
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 39, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 40, -1);
         }
         if (this.stateChanges != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 43, varOffset - offset - 47);
+            mem.set(PacketIO.PROTO_INT, offset + 44, varOffset - offset - 48);
             if (this.stateChanges.size() > 4096000) throw ProtocolException.dictionaryTooLarge("StateChanges", stateChanges.size(), 4096000);
             varOffset += VarInt.set(mem, varOffset, this.stateChanges.size());
             for (var e : this.stateChanges.entrySet()) {
@@ -469,14 +482,14 @@ public class ChangeStateInteraction extends SimpleBlockInteraction {
                 varOffset += PacketIO.writeVarString(mem, varOffset, e.getValue(), 4096000);
             }
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 43, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 44, -1);
         }
     
        return varOffset - offset;
     }
     @Override
     public int computeSize() {
-        int size = 47;
+        int size = 48;
         if (effects != null) size += effects.computeSize();
     if (settings != null) size += VarInt.size(settings.size()) + settings.size() * (1 + 1);
     size += rules.computeSize();
@@ -510,6 +523,7 @@ size += VarInt.size(stateChanges.size()) + stateChangesSize;
         copy.failed = this.failed;
         copy.useLatestTarget = this.useLatestTarget;
         copy.stateChanges = this.stateChanges != null ? new java.util.HashMap<>(this.stateChanges) : null;
+        copy.requireBlockPlacement = this.requireBlockPlacement;
         return copy;
     }
 
@@ -518,7 +532,7 @@ size += VarInt.size(stateChanges.size()) + stateChangesSize;
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof ChangeStateInteraction other)) return false;
-        return java.util.Objects.equals(this.waitForDataFrom, other.waitForDataFrom) && java.util.Objects.equals(this.effects, other.effects) && this.horizontalSpeedMultiplier == other.horizontalSpeedMultiplier && this.runTime == other.runTime && java.util.Objects.equals(this.onItemChangeBehavior, other.onItemChangeBehavior) && java.util.Objects.equals(this.settings, other.settings) && java.util.Objects.equals(this.rules, other.rules) && java.util.Arrays.equals(this.tags, other.tags) && java.util.Objects.equals(this.camera, other.camera) && this.next == other.next && this.failed == other.failed && this.useLatestTarget == other.useLatestTarget && java.util.Objects.equals(this.stateChanges, other.stateChanges);
+        return java.util.Objects.equals(this.waitForDataFrom, other.waitForDataFrom) && java.util.Objects.equals(this.effects, other.effects) && this.horizontalSpeedMultiplier == other.horizontalSpeedMultiplier && this.runTime == other.runTime && java.util.Objects.equals(this.onItemChangeBehavior, other.onItemChangeBehavior) && java.util.Objects.equals(this.settings, other.settings) && java.util.Objects.equals(this.rules, other.rules) && java.util.Arrays.equals(this.tags, other.tags) && java.util.Objects.equals(this.camera, other.camera) && this.next == other.next && this.failed == other.failed && this.useLatestTarget == other.useLatestTarget && java.util.Objects.equals(this.stateChanges, other.stateChanges) && this.requireBlockPlacement == other.requireBlockPlacement;
     }
 
     @Override
@@ -537,6 +551,7 @@ size += VarInt.size(stateChanges.size()) + stateChangesSize;
         result = 31 * result + Integer.hashCode(failed);
         result = 31 * result + Boolean.hashCode(useLatestTarget);
         result = 31 * result + java.util.Objects.hashCode(stateChanges);
+        result = 31 * result + Boolean.hashCode(requireBlockPlacement);
         return result;
     }
 

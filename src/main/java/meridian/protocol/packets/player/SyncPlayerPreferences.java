@@ -52,6 +52,7 @@ public class SyncPlayerPreferences implements Packet, ToServerPacket {
     public boolean showBuilderToolNotifications;
     public boolean noPhysics;
     public boolean eraserEnabled;
+    public boolean activateTriggerVolumes;
     public boolean voiceChat;
     public boolean voiceInput;
     @Nonnull public VoiceInputMode voiceInputMode = VoiceInputMode.VoiceActivity;
@@ -59,7 +60,7 @@ public class SyncPlayerPreferences implements Packet, ToServerPacket {
     public SyncPlayerPreferences() {
     }
 
-    public SyncPlayerPreferences(boolean showEntityMarkers, @Nonnull PickupLocation armorItemsPreferredPickupLocation, @Nonnull PickupLocation weaponAndToolItemsPreferredPickupLocation, @Nonnull PickupLocation usableItemsItemsPreferredPickupLocation, @Nonnull PickupLocation solidBlockItemsPreferredPickupLocation, @Nonnull PickupLocation miscItemsPreferredPickupLocation, boolean allowNPCDetection, boolean respondToHit, boolean hideHelmet, boolean hideCuirass, boolean hideGauntlets, boolean hidePants, @Nonnull PlaceMode placeMode, int creativeInteractionDistance, boolean showBuilderToolNotifications, boolean noPhysics, boolean eraserEnabled, boolean voiceChat, boolean voiceInput, @Nonnull VoiceInputMode voiceInputMode) {
+    public SyncPlayerPreferences(boolean showEntityMarkers, @Nonnull PickupLocation armorItemsPreferredPickupLocation, @Nonnull PickupLocation weaponAndToolItemsPreferredPickupLocation, @Nonnull PickupLocation usableItemsItemsPreferredPickupLocation, @Nonnull PickupLocation solidBlockItemsPreferredPickupLocation, @Nonnull PickupLocation miscItemsPreferredPickupLocation, boolean allowNPCDetection, boolean respondToHit, boolean hideHelmet, boolean hideCuirass, boolean hideGauntlets, boolean hidePants, @Nonnull PlaceMode placeMode, int creativeInteractionDistance, boolean showBuilderToolNotifications, boolean noPhysics, boolean eraserEnabled, boolean activateTriggerVolumes, boolean voiceChat, boolean voiceInput, @Nonnull VoiceInputMode voiceInputMode) {
         this.showEntityMarkers = showEntityMarkers;
         this.armorItemsPreferredPickupLocation = armorItemsPreferredPickupLocation;
         this.weaponAndToolItemsPreferredPickupLocation = weaponAndToolItemsPreferredPickupLocation;
@@ -77,6 +78,7 @@ public class SyncPlayerPreferences implements Packet, ToServerPacket {
         this.showBuilderToolNotifications = showBuilderToolNotifications;
         this.noPhysics = noPhysics;
         this.eraserEnabled = eraserEnabled;
+        this.activateTriggerVolumes = activateTriggerVolumes;
         this.voiceChat = voiceChat;
         this.voiceInput = voiceInput;
         this.voiceInputMode = voiceInputMode;
@@ -100,6 +102,7 @@ public class SyncPlayerPreferences implements Packet, ToServerPacket {
         this.showBuilderToolNotifications = other.showBuilderToolNotifications;
         this.noPhysics = other.noPhysics;
         this.eraserEnabled = other.eraserEnabled;
+        this.activateTriggerVolumes = other.activateTriggerVolumes;
         this.voiceChat = other.voiceChat;
         this.voiceInput = other.voiceInput;
         this.voiceInputMode = other.voiceInputMode;
@@ -251,12 +254,20 @@ public class SyncPlayerPreferences implements Packet, ToServerPacket {
         return (mem.get(PacketIO.PROTO_BYTE, offset + 12) & 0x04) != 0;
     }
     
+    public static boolean getActivateTriggerVolumes(MemorySegment mem) {
+        return getActivateTriggerVolumes(mem, 0);
+    }
+    
+    public static boolean getActivateTriggerVolumes(MemorySegment mem, int offset) {
+        return (mem.get(PacketIO.PROTO_BYTE, offset + 12) & 0x08) != 0;
+    }
+    
     public static boolean getVoiceChat(MemorySegment mem) {
         return getVoiceChat(mem, 0);
     }
     
     public static boolean getVoiceChat(MemorySegment mem, int offset) {
-        return (mem.get(PacketIO.PROTO_BYTE, offset + 12) & 0x08) != 0;
+        return (mem.get(PacketIO.PROTO_BYTE, offset + 12) & 0x10) != 0;
     }
     
     public static boolean getVoiceInput(MemorySegment mem) {
@@ -264,7 +275,7 @@ public class SyncPlayerPreferences implements Packet, ToServerPacket {
     }
     
     public static boolean getVoiceInput(MemorySegment mem, int offset) {
-        return (mem.get(PacketIO.PROTO_BYTE, offset + 12) & 0x10) != 0;
+        return (mem.get(PacketIO.PROTO_BYTE, offset + 12) & 0x20) != 0;
     }
     
     public static VoiceInputMode getVoiceInputMode(MemorySegment mem) {
@@ -315,6 +326,7 @@ public class SyncPlayerPreferences implements Packet, ToServerPacket {
             (mem.get(PacketIO.PROTO_BYTE, offset + 12) & 0x04) != 0,
             (mem.get(PacketIO.PROTO_BYTE, offset + 12) & 0x08) != 0,
             (mem.get(PacketIO.PROTO_BYTE, offset + 12) & 0x10) != 0,
+            (mem.get(PacketIO.PROTO_BYTE, offset + 12) & 0x20) != 0,
             VoiceInputMode.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 13))
         );
         if (cursor != null) cursor.position = offset + 14;
@@ -343,8 +355,9 @@ public class SyncPlayerPreferences implements Packet, ToServerPacket {
         if (this.showBuilderToolNotifications) boolBits1_0 |= 0x01;
         if (this.noPhysics) boolBits1_0 |= 0x02;
         if (this.eraserEnabled) boolBits1_0 |= 0x04;
-        if (this.voiceChat) boolBits1_0 |= 0x08;
-        if (this.voiceInput) boolBits1_0 |= 0x10;
+        if (this.activateTriggerVolumes) boolBits1_0 |= 0x08;
+        if (this.voiceChat) boolBits1_0 |= 0x10;
+        if (this.voiceInput) boolBits1_0 |= 0x20;
         mem.set(PacketIO.PROTO_BYTE, offset + 12 + 0, boolBits1_0);
         mem.set(PacketIO.PROTO_BYTE, offset + 13, (byte) this.voiceInputMode.getValue());
         
@@ -375,6 +388,7 @@ public class SyncPlayerPreferences implements Packet, ToServerPacket {
         copy.showBuilderToolNotifications = this.showBuilderToolNotifications;
         copy.noPhysics = this.noPhysics;
         copy.eraserEnabled = this.eraserEnabled;
+        copy.activateTriggerVolumes = this.activateTriggerVolumes;
         copy.voiceChat = this.voiceChat;
         copy.voiceInput = this.voiceInput;
         copy.voiceInputMode = this.voiceInputMode;
@@ -386,12 +400,12 @@ public class SyncPlayerPreferences implements Packet, ToServerPacket {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof SyncPlayerPreferences other)) return false;
-        return this.showEntityMarkers == other.showEntityMarkers && java.util.Objects.equals(this.armorItemsPreferredPickupLocation, other.armorItemsPreferredPickupLocation) && java.util.Objects.equals(this.weaponAndToolItemsPreferredPickupLocation, other.weaponAndToolItemsPreferredPickupLocation) && java.util.Objects.equals(this.usableItemsItemsPreferredPickupLocation, other.usableItemsItemsPreferredPickupLocation) && java.util.Objects.equals(this.solidBlockItemsPreferredPickupLocation, other.solidBlockItemsPreferredPickupLocation) && java.util.Objects.equals(this.miscItemsPreferredPickupLocation, other.miscItemsPreferredPickupLocation) && this.allowNPCDetection == other.allowNPCDetection && this.respondToHit == other.respondToHit && this.hideHelmet == other.hideHelmet && this.hideCuirass == other.hideCuirass && this.hideGauntlets == other.hideGauntlets && this.hidePants == other.hidePants && java.util.Objects.equals(this.placeMode, other.placeMode) && this.creativeInteractionDistance == other.creativeInteractionDistance && this.showBuilderToolNotifications == other.showBuilderToolNotifications && this.noPhysics == other.noPhysics && this.eraserEnabled == other.eraserEnabled && this.voiceChat == other.voiceChat && this.voiceInput == other.voiceInput && java.util.Objects.equals(this.voiceInputMode, other.voiceInputMode);
+        return this.showEntityMarkers == other.showEntityMarkers && java.util.Objects.equals(this.armorItemsPreferredPickupLocation, other.armorItemsPreferredPickupLocation) && java.util.Objects.equals(this.weaponAndToolItemsPreferredPickupLocation, other.weaponAndToolItemsPreferredPickupLocation) && java.util.Objects.equals(this.usableItemsItemsPreferredPickupLocation, other.usableItemsItemsPreferredPickupLocation) && java.util.Objects.equals(this.solidBlockItemsPreferredPickupLocation, other.solidBlockItemsPreferredPickupLocation) && java.util.Objects.equals(this.miscItemsPreferredPickupLocation, other.miscItemsPreferredPickupLocation) && this.allowNPCDetection == other.allowNPCDetection && this.respondToHit == other.respondToHit && this.hideHelmet == other.hideHelmet && this.hideCuirass == other.hideCuirass && this.hideGauntlets == other.hideGauntlets && this.hidePants == other.hidePants && java.util.Objects.equals(this.placeMode, other.placeMode) && this.creativeInteractionDistance == other.creativeInteractionDistance && this.showBuilderToolNotifications == other.showBuilderToolNotifications && this.noPhysics == other.noPhysics && this.eraserEnabled == other.eraserEnabled && this.activateTriggerVolumes == other.activateTriggerVolumes && this.voiceChat == other.voiceChat && this.voiceInput == other.voiceInput && java.util.Objects.equals(this.voiceInputMode, other.voiceInputMode);
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(showEntityMarkers, armorItemsPreferredPickupLocation, weaponAndToolItemsPreferredPickupLocation, usableItemsItemsPreferredPickupLocation, solidBlockItemsPreferredPickupLocation, miscItemsPreferredPickupLocation, allowNPCDetection, respondToHit, hideHelmet, hideCuirass, hideGauntlets, hidePants, placeMode, creativeInteractionDistance, showBuilderToolNotifications, noPhysics, eraserEnabled, voiceChat, voiceInput, voiceInputMode);
+        return java.util.Objects.hash(showEntityMarkers, armorItemsPreferredPickupLocation, weaponAndToolItemsPreferredPickupLocation, usableItemsItemsPreferredPickupLocation, solidBlockItemsPreferredPickupLocation, miscItemsPreferredPickupLocation, allowNPCDetection, respondToHit, hideHelmet, hideCuirass, hideGauntlets, hidePants, placeMode, creativeInteractionDistance, showBuilderToolNotifications, noPhysics, eraserEnabled, activateTriggerVolumes, voiceChat, voiceInput, voiceInputMode);
     }
 
 }

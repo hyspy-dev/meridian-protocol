@@ -32,12 +32,20 @@ public abstract class ConnectedBlockShape {
         int typeId = (int) typeIdPacked;
         int typeIdLen = (int) (typeIdPacked >>> 32);
 
-        return switch (typeId) {
-            case 0 -> TagPatternConnectedBlockShape.toObject(mem, offset + typeIdLen, cursor);
-                case 1 -> TemplatedConnectedBlockShape.toObject(mem, offset + typeIdLen, cursor);
-                case 2 -> BlockTypeConnectedBlockShape.toObject(mem, offset + typeIdLen, cursor);
-            default -> throw ProtocolException.unknownPolymorphicType("ConnectedBlockShape", typeId);
-        };
+        // A subtype may hold further values of this type, and decoding such a chain recurses
+        // once per link. The cursor counts the links so the chain cannot outrun the stack.
+        var walkCursor = cursor != null ? cursor : new ReadCursor();
+        walkCursor.enterNested("ConnectedBlockShape");
+        try {
+            return switch (typeId) {
+                case 0 -> TagPatternConnectedBlockShape.toObject(mem, offset + typeIdLen, walkCursor);
+                case 1 -> TemplatedConnectedBlockShape.toObject(mem, offset + typeIdLen, walkCursor);
+                case 2 -> BlockTypeConnectedBlockShape.toObject(mem, offset + typeIdLen, walkCursor);
+                default -> throw ProtocolException.unknownPolymorphicType("ConnectedBlockShape", typeId);
+            };
+        } finally {
+            walkCursor.exitNested();
+        }
     }
 
 

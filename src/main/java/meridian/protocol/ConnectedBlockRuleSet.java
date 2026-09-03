@@ -30,12 +30,20 @@ public abstract class ConnectedBlockRuleSet {
         int typeId = (int) typeIdPacked;
         int typeIdLen = (int) (typeIdPacked >>> 32);
 
-        return switch (typeId) {
-            case 0 -> StairConnectedBlockRuleSet.toObject(mem, offset + typeIdLen, cursor);
-                case 1 -> RoofConnectedBlockRuleSet.toObject(mem, offset + typeIdLen, cursor);
-                case 2 -> PatternedConnectedBlockRuleSet.toObject(mem, offset + typeIdLen, cursor);
-            default -> throw ProtocolException.unknownPolymorphicType("ConnectedBlockRuleSet", typeId);
-        };
+        // A subtype may hold further values of this type, and decoding such a chain recurses
+        // once per link. The cursor counts the links so the chain cannot outrun the stack.
+        var walkCursor = cursor != null ? cursor : new ReadCursor();
+        walkCursor.enterNested("ConnectedBlockRuleSet");
+        try {
+            return switch (typeId) {
+                case 0 -> StairConnectedBlockRuleSet.toObject(mem, offset + typeIdLen, walkCursor);
+                case 1 -> RoofConnectedBlockRuleSet.toObject(mem, offset + typeIdLen, walkCursor);
+                case 2 -> PatternedConnectedBlockRuleSet.toObject(mem, offset + typeIdLen, walkCursor);
+                default -> throw ProtocolException.unknownPolymorphicType("ConnectedBlockRuleSet", typeId);
+            };
+        } finally {
+            walkCursor.exitNested();
+        }
     }
 
 

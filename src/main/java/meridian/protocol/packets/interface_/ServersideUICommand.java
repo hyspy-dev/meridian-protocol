@@ -30,14 +30,22 @@ public abstract class ServersideUICommand {
         int typeId = (int) typeIdPacked;
         int typeIdLen = (int) (typeIdPacked >>> 32);
 
-        return switch (typeId) {
-            case 0 -> InitServersideUICommand.toObject(mem, offset + typeIdLen, cursor);
-                case 1 -> SetElementPropertyServersideUICommand.toObject(mem, offset + typeIdLen, cursor);
-                case 2 -> SetDataContextPropertyServersideUIProperty.toObject(mem, offset + typeIdLen, cursor);
-                case 3 -> InsertDataContextCollectionItemServersideUIProperty.toObject(mem, offset + typeIdLen, cursor);
-                case 4 -> RemoveDataContextCollectionItemServersideUIProperty.toObject(mem, offset + typeIdLen, cursor);
-            default -> throw ProtocolException.unknownPolymorphicType("ServersideUICommand", typeId);
-        };
+        // A subtype may hold further values of this type, and decoding such a chain recurses
+        // once per link. The cursor counts the links so the chain cannot outrun the stack.
+        var walkCursor = cursor != null ? cursor : new ReadCursor();
+        walkCursor.enterNested("ServersideUICommand");
+        try {
+            return switch (typeId) {
+                case 0 -> InitServersideUICommand.toObject(mem, offset + typeIdLen, walkCursor);
+                case 1 -> SetElementPropertyServersideUICommand.toObject(mem, offset + typeIdLen, walkCursor);
+                case 2 -> SetDataContextPropertyServersideUIProperty.toObject(mem, offset + typeIdLen, walkCursor);
+                case 3 -> InsertDataContextCollectionItemServersideUIProperty.toObject(mem, offset + typeIdLen, walkCursor);
+                case 4 -> RemoveDataContextCollectionItemServersideUIProperty.toObject(mem, offset + typeIdLen, walkCursor);
+                default -> throw ProtocolException.unknownPolymorphicType("ServersideUICommand", typeId);
+            };
+        } finally {
+            walkCursor.exitNested();
+        }
     }
 
 

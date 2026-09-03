@@ -10,7 +10,8 @@ public enum WindowType {
     DiagramCrafting(3),
     StructuralCrafting(4),
     Processing(5),
-    Memories(6);
+    Memories(6),
+    AbilityBench(7);
 
     public static final WindowType[] VALUES = values();
 

@@ -207,10 +207,25 @@ public class ItemCategory {
     
     /**
      * Decodes one ItemCategory and reports the end of its encoding through the cursor.
+     * A value of this type may hold further values of it, and decoding such a chain
+     * recurses once per link. The cursor counts the links so the chain cannot outrun
+     * the stack.
+     */
+    public static ItemCategory toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
+        var walkCursor = cursor != null ? cursor : new ReadCursor();
+        walkCursor.enterNested("ItemCategory");
+        try {
+            return toObjectUncounted(mem, offset, walkCursor);
+        } finally {
+            walkCursor.exitNested();
+        }
+    }
+    
+    /**
      * The variable block is decoded in field order against a running position, and each
      * offset slot must name that position, so the fields decoded are the bytes walked.
      */
-    public static ItemCategory toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
+    private static ItemCategory toObjectUncounted(MemorySegment mem, int offset, ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
         var varBase = offset + 26;

@@ -39,59 +39,68 @@ public abstract class Interaction {
         int typeId = (int) typeIdPacked;
         int typeIdLen = (int) (typeIdPacked >>> 32);
 
-        return switch (typeId) {
-            case 0 -> SimpleBlockInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 1 -> SimpleInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 2 -> PlaceBlockInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 3 -> BreakBlockInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 4 -> PickBlockInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 5 -> UseBlockInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 6 -> UseEntityInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 7 -> BuilderToolInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 8 -> ModifyInventoryInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 9 -> ChargingInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 10 -> WieldingInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 11 -> ChainingInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 12 -> ConditionInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 13 -> StatsConditionInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 14 -> BlockConditionInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 15 -> ReplaceInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 16 -> ChangeBlockInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 17 -> ChangeStateInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 18 -> FirstClickInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 20 -> SelectInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 21 -> DamageEntityInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 22 -> RepeatInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 23 -> ParallelInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 24 -> ChangeActiveSlotInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 25 -> EffectConditionInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 26 -> ApplyForceInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 27 -> ApplyEffectInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 28 -> ClearEntityEffectInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 29 -> SerialInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 30 -> ChangeStatInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 31 -> MovementConditionInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 32 -> ProjectileInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 33 -> RemoveEntityInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 34 -> ResetCooldownInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 35 -> TriggerCooldownInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 36 -> CooldownConditionInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 37 -> ChainFlagInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 38 -> IncrementCooldownInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 39 -> CancelChainInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 40 -> RunRootInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 41 -> CameraInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 42 -> SpawnDeployableFromRaycastInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 43 -> MemoriesConditionInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 44 -> ToggleGliderInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 45 -> DurabilityConditionInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 46 -> DragPlaceBlockInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 47 -> ExtrudePlaceBlockInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 48 -> SurfaceDrawPlaceBlockInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 49 -> PlaceModeSelectInteraction.toObject(mem, offset + typeIdLen, cursor);
-                case 50 -> DragEraseBlockInteraction.toObject(mem, offset + typeIdLen, cursor);
-            default -> throw ProtocolException.unknownPolymorphicType("Interaction", typeId);
-        };
+        // A subtype may hold further values of this type, and decoding such a chain recurses
+        // once per link. The cursor counts the links so the chain cannot outrun the stack.
+        var walkCursor = cursor != null ? cursor : new ReadCursor();
+        walkCursor.enterNested("Interaction");
+        try {
+            return switch (typeId) {
+                case 0 -> SimpleBlockInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 1 -> SimpleInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 2 -> PlaceBlockInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 3 -> BreakBlockInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 4 -> PickBlockInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 5 -> UseBlockInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 6 -> UseEntityInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 7 -> BuilderToolInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 8 -> ModifyInventoryInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 9 -> ChargingInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 10 -> WieldingInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 11 -> ChainingInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 12 -> ConditionInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 13 -> StatsConditionInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 14 -> BlockConditionInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 15 -> ReplaceInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 16 -> ChangeBlockInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 17 -> ChangeStateInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 18 -> FirstClickInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 20 -> SelectInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 21 -> DamageEntityInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 22 -> RepeatInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 23 -> ParallelInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 24 -> ChangeActiveSlotInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 25 -> EffectConditionInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 26 -> ApplyForceInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 27 -> ApplyEffectInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 28 -> ClearEntityEffectInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 29 -> SerialInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 30 -> ChangeStatInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 31 -> MovementConditionInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 32 -> ProjectileInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 33 -> RemoveEntityInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 34 -> ResetCooldownInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 35 -> TriggerCooldownInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 36 -> CooldownConditionInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 37 -> ChainFlagInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 38 -> IncrementCooldownInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 39 -> CancelChainInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 40 -> RunRootInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 41 -> CameraInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 42 -> SpawnDeployableFromRaycastInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 43 -> MemoriesConditionInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 44 -> ToggleGliderInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 45 -> DurabilityConditionInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 46 -> DragPlaceBlockInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 47 -> ExtrudePlaceBlockInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 48 -> SurfaceDrawPlaceBlockInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 49 -> PlaceModeSelectInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 50 -> DragEraseBlockInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 51 -> GroundedConditionInteraction.toObject(mem, offset + typeIdLen, walkCursor);
+                default -> throw ProtocolException.unknownPolymorphicType("Interaction", typeId);
+            };
+        } finally {
+            walkCursor.exitNested();
+        }
     }
 
 
@@ -136,6 +145,7 @@ public abstract class Interaction {
             if (this instanceof DurabilityConditionInteraction sub) { return 45; }
             if (this instanceof DragPlaceBlockInteraction sub) { return 46; }
             if (this instanceof PlaceModeSelectInteraction sub) { return 49; }
+            if (this instanceof GroundedConditionInteraction sub) { return 51; }
             if (this instanceof SimpleInteraction sub) { return 1; }
             if (this instanceof ChargingInteraction sub) { return 9; }
             if (this instanceof ChainingInteraction sub) { return 11; }

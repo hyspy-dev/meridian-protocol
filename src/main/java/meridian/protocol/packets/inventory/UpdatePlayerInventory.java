@@ -19,8 +19,8 @@ public class UpdatePlayerInventory implements Packet, ToClientPacket {
     public static final boolean IS_COMPRESSED = true;
     public static final int NULLABLE_BIT_FIELD_SIZE = 1;
     public static final int FIXED_BLOCK_SIZE = 1;
-    public static final int VARIABLE_FIELD_COUNT = 6;
-    public static final int VARIABLE_BLOCK_START = 25;
+    public static final int VARIABLE_FIELD_COUNT = 8;
+    public static final int VARIABLE_BLOCK_START = 33;
     public static final int MAX_SIZE = 1677721600;
 
     @Override
@@ -39,17 +39,21 @@ public class UpdatePlayerInventory implements Packet, ToClientPacket {
     @Nullable public InventorySection utility;
     @Nullable public InventorySection tools;
     @Nullable public InventorySection backpack;
+    @Nullable public InventorySection abilitySlots;
+    @Nullable public InventorySection runeBag;
 
     public UpdatePlayerInventory() {
     }
 
-    public UpdatePlayerInventory(@Nullable InventorySection storage, @Nullable InventorySection armor, @Nullable InventorySection hotbar, @Nullable InventorySection utility, @Nullable InventorySection tools, @Nullable InventorySection backpack) {
+    public UpdatePlayerInventory(@Nullable InventorySection storage, @Nullable InventorySection armor, @Nullable InventorySection hotbar, @Nullable InventorySection utility, @Nullable InventorySection tools, @Nullable InventorySection backpack, @Nullable InventorySection abilitySlots, @Nullable InventorySection runeBag) {
         this.storage = storage;
         this.armor = armor;
         this.hotbar = hotbar;
         this.utility = utility;
         this.tools = tools;
         this.backpack = backpack;
+        this.abilitySlots = abilitySlots;
+        this.runeBag = runeBag;
     }
 
     public UpdatePlayerInventory(@Nonnull UpdatePlayerInventory other) {
@@ -59,6 +63,8 @@ public class UpdatePlayerInventory implements Packet, ToClientPacket {
         this.utility = other.utility;
         this.tools = other.tools;
         this.backpack = other.backpack;
+        this.abilitySlots = other.abilitySlots;
+        this.runeBag = other.runeBag;
     }
 
     /**
@@ -67,7 +73,7 @@ public class UpdatePlayerInventory implements Packet, ToClientPacket {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("UpdatePlayerInventory", offset, (int) mem.byteSize());
-        long needed = (long) offset + 25;
+        long needed = (long) offset + 33;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("UpdatePlayerInventory", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -78,7 +84,7 @@ public class UpdatePlayerInventory implements Packet, ToClientPacket {
     
     @Nullable
     public static InventorySection getStorage(MemorySegment mem, int offset) {
-        return hasStorage(mem, offset) ? InventorySection.toObject(mem, offset + getValidatedOffset(mem, offset, 1, 25, "Storage")): null;
+        return hasStorage(mem, offset) ? InventorySection.toObject(mem, offset + getValidatedOffset(mem, offset, 1, 33, "Storage")): null;
     }
     
     @Nullable
@@ -88,7 +94,7 @@ public class UpdatePlayerInventory implements Packet, ToClientPacket {
     
     @Nullable
     public static InventorySection getArmor(MemorySegment mem, int offset) {
-        return hasArmor(mem, offset) ? InventorySection.toObject(mem, offset + getValidatedOffset(mem, offset, 5, 25, "Armor")): null;
+        return hasArmor(mem, offset) ? InventorySection.toObject(mem, offset + getValidatedOffset(mem, offset, 5, 33, "Armor")): null;
     }
     
     @Nullable
@@ -98,7 +104,7 @@ public class UpdatePlayerInventory implements Packet, ToClientPacket {
     
     @Nullable
     public static InventorySection getHotbar(MemorySegment mem, int offset) {
-        return hasHotbar(mem, offset) ? InventorySection.toObject(mem, offset + getValidatedOffset(mem, offset, 9, 25, "Hotbar")): null;
+        return hasHotbar(mem, offset) ? InventorySection.toObject(mem, offset + getValidatedOffset(mem, offset, 9, 33, "Hotbar")): null;
     }
     
     @Nullable
@@ -108,7 +114,7 @@ public class UpdatePlayerInventory implements Packet, ToClientPacket {
     
     @Nullable
     public static InventorySection getUtility(MemorySegment mem, int offset) {
-        return hasUtility(mem, offset) ? InventorySection.toObject(mem, offset + getValidatedOffset(mem, offset, 13, 25, "Utility")): null;
+        return hasUtility(mem, offset) ? InventorySection.toObject(mem, offset + getValidatedOffset(mem, offset, 13, 33, "Utility")): null;
     }
     
     @Nullable
@@ -118,7 +124,7 @@ public class UpdatePlayerInventory implements Packet, ToClientPacket {
     
     @Nullable
     public static InventorySection getTools(MemorySegment mem, int offset) {
-        return hasTools(mem, offset) ? InventorySection.toObject(mem, offset + getValidatedOffset(mem, offset, 17, 25, "Tools")): null;
+        return hasTools(mem, offset) ? InventorySection.toObject(mem, offset + getValidatedOffset(mem, offset, 17, 33, "Tools")): null;
     }
     
     @Nullable
@@ -128,7 +134,27 @@ public class UpdatePlayerInventory implements Packet, ToClientPacket {
     
     @Nullable
     public static InventorySection getBackpack(MemorySegment mem, int offset) {
-        return hasBackpack(mem, offset) ? InventorySection.toObject(mem, offset + getValidatedOffset(mem, offset, 21, 25, "Backpack")): null;
+        return hasBackpack(mem, offset) ? InventorySection.toObject(mem, offset + getValidatedOffset(mem, offset, 21, 33, "Backpack")): null;
+    }
+    
+    @Nullable
+    public static InventorySection getAbilitySlots(MemorySegment mem) {
+        return getAbilitySlots(mem, 0);
+    }
+    
+    @Nullable
+    public static InventorySection getAbilitySlots(MemorySegment mem, int offset) {
+        return hasAbilitySlots(mem, offset) ? InventorySection.toObject(mem, offset + getValidatedOffset(mem, offset, 25, 33, "AbilitySlots")): null;
+    }
+    
+    @Nullable
+    public static InventorySection getRuneBag(MemorySegment mem) {
+        return getRuneBag(mem, 0);
+    }
+    
+    @Nullable
+    public static InventorySection getRuneBag(MemorySegment mem, int offset) {
+        return hasRuneBag(mem, offset) ? InventorySection.toObject(mem, offset + getValidatedOffset(mem, offset, 29, 33, "RuneBag")): null;
     }
     
     public static boolean hasStorage(MemorySegment mem, int offset) {
@@ -159,6 +185,16 @@ public class UpdatePlayerInventory implements Packet, ToClientPacket {
     public static boolean hasBackpack(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
         return (b & 0x20) != 0;
+    }
+    
+    public static boolean hasAbilitySlots(MemorySegment mem, int offset) {
+        var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
+        return (b & 0x40) != 0;
+    }
+    
+    public static boolean hasRuneBag(MemorySegment mem, int offset) {
+        var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
+        return (b & 0x80) != 0;
     }
     
     private static int getValidatedOffset(MemorySegment buffer, int base, int slotPosition, int varBlockStart, String fieldName) {
@@ -194,7 +230,7 @@ public class UpdatePlayerInventory implements Packet, ToClientPacket {
     public static UpdatePlayerInventory toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
-        var varBase = offset + 25;
+        var varBase = offset + 33;
         var varPos = 0;
         var walkCursor = cursor != null ? cursor : new ReadCursor();
         InventorySection v0 = null;
@@ -250,13 +286,33 @@ public class UpdatePlayerInventory implements Packet, ToClientPacket {
         } else {
             requireSlot(mem, offset + 21, -1, "Backpack");
         }
+        
+        InventorySection v6 = null;
+        if (hasAbilitySlots(mem, offset)) {
+            requireSlot(mem, offset + 25, varPos, "AbilitySlots");
+            v6 = InventorySection.toObject(mem, varBase + varPos, walkCursor);
+            varPos = walkCursor.position - varBase;
+        } else {
+            requireSlot(mem, offset + 25, -1, "AbilitySlots");
+        }
+        
+        InventorySection v7 = null;
+        if (hasRuneBag(mem, offset)) {
+            requireSlot(mem, offset + 29, varPos, "RuneBag");
+            v7 = InventorySection.toObject(mem, varBase + varPos, walkCursor);
+            varPos = walkCursor.position - varBase;
+        } else {
+            requireSlot(mem, offset + 29, -1, "RuneBag");
+        }
         var result = new UpdatePlayerInventory(
             v0,
             v1,
             v2,
             v3,
             v4,
-            v5
+            v5,
+            v6,
+            v7
         );
         if (cursor != null) cursor.position = varBase + varPos;
         return result;
@@ -271,57 +327,73 @@ public class UpdatePlayerInventory implements Packet, ToClientPacket {
         if (this.utility != null) nullBits |= 0x08;
         if (this.tools != null) nullBits |= 0x10;
         if (this.backpack != null) nullBits |= 0x20;
+        if (this.abilitySlots != null) nullBits |= 0x40;
+        if (this.runeBag != null) nullBits |= 0x80;
         mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         
         
-        var varOffset = offset + 25;
+        var varOffset = offset + 33;
         if (this.storage != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 1, varOffset - offset - 25);
+            mem.set(PacketIO.PROTO_INT, offset + 1, varOffset - offset - 33);
             varOffset += this.storage.serialize(mem, varOffset);
         } else {
             mem.set(PacketIO.PROTO_INT, offset + 1, -1);
         }
         if (this.armor != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 5, varOffset - offset - 25);
+            mem.set(PacketIO.PROTO_INT, offset + 5, varOffset - offset - 33);
             varOffset += this.armor.serialize(mem, varOffset);
         } else {
             mem.set(PacketIO.PROTO_INT, offset + 5, -1);
         }
         if (this.hotbar != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 9, varOffset - offset - 25);
+            mem.set(PacketIO.PROTO_INT, offset + 9, varOffset - offset - 33);
             varOffset += this.hotbar.serialize(mem, varOffset);
         } else {
             mem.set(PacketIO.PROTO_INT, offset + 9, -1);
         }
         if (this.utility != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 13, varOffset - offset - 25);
+            mem.set(PacketIO.PROTO_INT, offset + 13, varOffset - offset - 33);
             varOffset += this.utility.serialize(mem, varOffset);
         } else {
             mem.set(PacketIO.PROTO_INT, offset + 13, -1);
         }
         if (this.tools != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 17, varOffset - offset - 25);
+            mem.set(PacketIO.PROTO_INT, offset + 17, varOffset - offset - 33);
             varOffset += this.tools.serialize(mem, varOffset);
         } else {
             mem.set(PacketIO.PROTO_INT, offset + 17, -1);
         }
         if (this.backpack != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 21, varOffset - offset - 25);
+            mem.set(PacketIO.PROTO_INT, offset + 21, varOffset - offset - 33);
             varOffset += this.backpack.serialize(mem, varOffset);
         } else {
             mem.set(PacketIO.PROTO_INT, offset + 21, -1);
+        }
+        if (this.abilitySlots != null) {
+            mem.set(PacketIO.PROTO_INT, offset + 25, varOffset - offset - 33);
+            varOffset += this.abilitySlots.serialize(mem, varOffset);
+        } else {
+            mem.set(PacketIO.PROTO_INT, offset + 25, -1);
+        }
+        if (this.runeBag != null) {
+            mem.set(PacketIO.PROTO_INT, offset + 29, varOffset - offset - 33);
+            varOffset += this.runeBag.serialize(mem, varOffset);
+        } else {
+            mem.set(PacketIO.PROTO_INT, offset + 29, -1);
         }
     
        return varOffset - offset;
     }
     public int computeSize() {
-        int size = 25;
+        int size = 33;
         if (storage != null) size += storage.computeSize();
     if (armor != null) size += armor.computeSize();
     if (hotbar != null) size += hotbar.computeSize();
     if (utility != null) size += utility.computeSize();
     if (tools != null) size += tools.computeSize();
     if (backpack != null) size += backpack.computeSize();
+    if (abilitySlots != null) size += abilitySlots.computeSize();
+    if (runeBag != null) size += runeBag.computeSize();
 
         return size;
     }
@@ -334,6 +406,8 @@ public class UpdatePlayerInventory implements Packet, ToClientPacket {
         copy.utility = this.utility != null ? this.utility.clone() : null;
         copy.tools = this.tools != null ? this.tools.clone() : null;
         copy.backpack = this.backpack != null ? this.backpack.clone() : null;
+        copy.abilitySlots = this.abilitySlots != null ? this.abilitySlots.clone() : null;
+        copy.runeBag = this.runeBag != null ? this.runeBag.clone() : null;
         return copy;
     }
 
@@ -342,12 +416,12 @@ public class UpdatePlayerInventory implements Packet, ToClientPacket {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof UpdatePlayerInventory other)) return false;
-        return java.util.Objects.equals(this.storage, other.storage) && java.util.Objects.equals(this.armor, other.armor) && java.util.Objects.equals(this.hotbar, other.hotbar) && java.util.Objects.equals(this.utility, other.utility) && java.util.Objects.equals(this.tools, other.tools) && java.util.Objects.equals(this.backpack, other.backpack);
+        return java.util.Objects.equals(this.storage, other.storage) && java.util.Objects.equals(this.armor, other.armor) && java.util.Objects.equals(this.hotbar, other.hotbar) && java.util.Objects.equals(this.utility, other.utility) && java.util.Objects.equals(this.tools, other.tools) && java.util.Objects.equals(this.backpack, other.backpack) && java.util.Objects.equals(this.abilitySlots, other.abilitySlots) && java.util.Objects.equals(this.runeBag, other.runeBag);
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(storage, armor, hotbar, utility, tools, backpack);
+        return java.util.Objects.hash(storage, armor, hotbar, utility, tools, backpack, abilitySlots, runeBag);
     }
 
 }

@@ -12,7 +12,7 @@
          on; ProtocolSettings.PROTOCOL_CRC holds the same 32 bits as a signed int. Distinct per
          protocol line, so 0.5.x and 0.6.x never collide in .m2. A game version resolves to this
          CRC. Standalone repo, regenerated from shared-source on every Hytale build. -->
-    <version>3871693122</version>
+    <version>636045167</version>
     <packaging>jar</packaging>
 
     <properties>

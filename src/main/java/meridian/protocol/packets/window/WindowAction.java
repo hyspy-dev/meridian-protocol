@@ -30,18 +30,26 @@ public abstract class WindowAction {
         int typeId = (int) typeIdPacked;
         int typeIdLen = (int) (typeIdPacked >>> 32);
 
-        return switch (typeId) {
-            case 0 -> CraftRecipeAction.toObject(mem, offset + typeIdLen, cursor);
-                case 1 -> TierUpgradeAction.toObject(mem, offset + typeIdLen, cursor);
-                case 2 -> SelectSlotAction.toObject(mem, offset + typeIdLen, cursor);
-                case 3 -> ChangeBlockAction.toObject(mem, offset + typeIdLen, cursor);
-                case 4 -> SetActiveAction.toObject(mem, offset + typeIdLen, cursor);
-                case 5 -> CraftItemAction.toObject(mem, offset + typeIdLen, cursor);
-                case 6 -> UpdateCategoryAction.toObject(mem, offset + typeIdLen, cursor);
-                case 7 -> CancelCraftingAction.toObject(mem, offset + typeIdLen, cursor);
-                case 8 -> SortItemsAction.toObject(mem, offset + typeIdLen, cursor);
-            default -> throw ProtocolException.unknownPolymorphicType("WindowAction", typeId);
-        };
+        // A subtype may hold further values of this type, and decoding such a chain recurses
+        // once per link. The cursor counts the links so the chain cannot outrun the stack.
+        var walkCursor = cursor != null ? cursor : new ReadCursor();
+        walkCursor.enterNested("WindowAction");
+        try {
+            return switch (typeId) {
+                case 0 -> CraftRecipeAction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 1 -> TierUpgradeAction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 2 -> SelectSlotAction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 3 -> ChangeBlockAction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 4 -> SetActiveAction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 5 -> CraftItemAction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 6 -> UpdateCategoryAction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 7 -> CancelCraftingAction.toObject(mem, offset + typeIdLen, walkCursor);
+                case 8 -> SortItemsAction.toObject(mem, offset + typeIdLen, walkCursor);
+                default -> throw ProtocolException.unknownPolymorphicType("WindowAction", typeId);
+            };
+        } finally {
+            walkCursor.exitNested();
+        }
     }
 
 

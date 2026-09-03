@@ -18,9 +18,9 @@ public class ShowEventTitle implements Packet, ToClientPacket {
     public static final int PACKET_ID = 214;
     public static final boolean IS_COMPRESSED = false;
     public static final int NULLABLE_BIT_FIELD_SIZE = 1;
-    public static final int FIXED_BLOCK_SIZE = 14;
+    public static final int FIXED_BLOCK_SIZE = 17;
     public static final int VARIABLE_FIELD_COUNT = 3;
-    public static final int VARIABLE_BLOCK_START = 26;
+    public static final int VARIABLE_BLOCK_START = 29;
     public static final int MAX_SIZE = 1677721600;
 
     @Override
@@ -37,19 +37,19 @@ public class ShowEventTitle implements Packet, ToClientPacket {
     public float fadeOutDuration;
     public float duration;
     @Nullable public String icon;
-    public boolean isMajor;
+    @Nonnull public EventTitleStyle style = EventTitleStyle.Default;
     @Nullable public FormattedMessage primaryTitle;
     @Nullable public FormattedMessage secondaryTitle;
 
     public ShowEventTitle() {
     }
 
-    public ShowEventTitle(float fadeInDuration, float fadeOutDuration, float duration, @Nullable String icon, boolean isMajor, @Nullable FormattedMessage primaryTitle, @Nullable FormattedMessage secondaryTitle) {
+    public ShowEventTitle(float fadeInDuration, float fadeOutDuration, float duration, @Nullable String icon, @Nonnull EventTitleStyle style, @Nullable FormattedMessage primaryTitle, @Nullable FormattedMessage secondaryTitle) {
         this.fadeInDuration = fadeInDuration;
         this.fadeOutDuration = fadeOutDuration;
         this.duration = duration;
         this.icon = icon;
-        this.isMajor = isMajor;
+        this.style = style;
         this.primaryTitle = primaryTitle;
         this.secondaryTitle = secondaryTitle;
     }
@@ -59,7 +59,7 @@ public class ShowEventTitle implements Packet, ToClientPacket {
         this.fadeOutDuration = other.fadeOutDuration;
         this.duration = other.duration;
         this.icon = other.icon;
-        this.isMajor = other.isMajor;
+        this.style = other.style;
         this.primaryTitle = other.primaryTitle;
         this.secondaryTitle = other.secondaryTitle;
     }
@@ -70,7 +70,7 @@ public class ShowEventTitle implements Packet, ToClientPacket {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("ShowEventTitle", offset, (int) mem.byteSize());
-        long needed = (long) offset + 26;
+        long needed = (long) offset + 29;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("ShowEventTitle", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -105,15 +105,15 @@ public class ShowEventTitle implements Packet, ToClientPacket {
     
     @Nullable
     public static String getIcon(MemorySegment mem, int offset) {
-        return hasIcon(mem, offset) ? PacketIO.readVarString("Icon", mem, offset + getValidatedOffset(mem, offset, 14, 26, "Icon"), 4096000): null;
+        return hasIcon(mem, offset) ? PacketIO.readVarString("Icon", mem, offset + getValidatedOffset(mem, offset, 17, 29, "Icon"), 4096000): null;
     }
     
-    public static boolean getIsMajor(MemorySegment mem) {
-        return getIsMajor(mem, 0);
+    public static EventTitleStyle getStyle(MemorySegment mem) {
+        return getStyle(mem, 0);
     }
     
-    public static boolean getIsMajor(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_BOOL, offset + 13);
+    public static EventTitleStyle getStyle(MemorySegment mem, int offset) {
+        return EventTitleStyle.fromValue(mem.get(PacketIO.PROTO_INT, offset + 13));
     }
     
     @Nullable
@@ -123,7 +123,7 @@ public class ShowEventTitle implements Packet, ToClientPacket {
     
     @Nullable
     public static FormattedMessage getPrimaryTitle(MemorySegment mem, int offset) {
-        return hasPrimaryTitle(mem, offset) ? FormattedMessage.toObject(mem, offset + getValidatedOffset(mem, offset, 18, 26, "PrimaryTitle")): null;
+        return hasPrimaryTitle(mem, offset) ? FormattedMessage.toObject(mem, offset + getValidatedOffset(mem, offset, 21, 29, "PrimaryTitle")): null;
     }
     
     @Nullable
@@ -133,7 +133,7 @@ public class ShowEventTitle implements Packet, ToClientPacket {
     
     @Nullable
     public static FormattedMessage getSecondaryTitle(MemorySegment mem, int offset) {
-        return hasSecondaryTitle(mem, offset) ? FormattedMessage.toObject(mem, offset + getValidatedOffset(mem, offset, 22, 26, "SecondaryTitle")): null;
+        return hasSecondaryTitle(mem, offset) ? FormattedMessage.toObject(mem, offset + getValidatedOffset(mem, offset, 25, 29, "SecondaryTitle")): null;
     }
     
     public static boolean hasIcon(MemorySegment mem, int offset) {
@@ -184,43 +184,43 @@ public class ShowEventTitle implements Packet, ToClientPacket {
     public static ShowEventTitle toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
-        var varBase = offset + 26;
+        var varBase = offset + 29;
         var varPos = 0;
         var walkCursor = cursor != null ? cursor : new ReadCursor();
         String v3 = null;
         if (hasIcon(mem, offset)) {
-            requireSlot(mem, offset + 14, varPos, "Icon");
+            requireSlot(mem, offset + 17, varPos, "Icon");
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
             v3 = PacketIO.readVarString("Icon", mem, off, 0, 4096000, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         } else {
-            requireSlot(mem, offset + 14, -1, "Icon");
+            requireSlot(mem, offset + 17, -1, "Icon");
         }
         
         FormattedMessage v5 = null;
         if (hasPrimaryTitle(mem, offset)) {
-            requireSlot(mem, offset + 18, varPos, "PrimaryTitle");
+            requireSlot(mem, offset + 21, varPos, "PrimaryTitle");
             v5 = FormattedMessage.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
         } else {
-            requireSlot(mem, offset + 18, -1, "PrimaryTitle");
+            requireSlot(mem, offset + 21, -1, "PrimaryTitle");
         }
         
         FormattedMessage v6 = null;
         if (hasSecondaryTitle(mem, offset)) {
-            requireSlot(mem, offset + 22, varPos, "SecondaryTitle");
+            requireSlot(mem, offset + 25, varPos, "SecondaryTitle");
             v6 = FormattedMessage.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
         } else {
-            requireSlot(mem, offset + 22, -1, "SecondaryTitle");
+            requireSlot(mem, offset + 25, -1, "SecondaryTitle");
         }
         var result = new ShowEventTitle(
             PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 1), "FadeInDuration"),
             PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 5), "FadeOutDuration"),
             PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 9), "Duration"),
             v3,
-            mem.get(PacketIO.PROTO_BOOL, offset + 13),
+            EventTitleStyle.fromValue(mem.get(PacketIO.PROTO_INT, offset + 13)),
             v5,
             v6
         );
@@ -239,31 +239,31 @@ public class ShowEventTitle implements Packet, ToClientPacket {
         PacketIO.requireFinite(this.fadeInDuration, "FadeInDuration"); mem.set(PacketIO.PROTO_FLOAT, offset + 1, this.fadeInDuration);
         PacketIO.requireFinite(this.fadeOutDuration, "FadeOutDuration"); mem.set(PacketIO.PROTO_FLOAT, offset + 5, this.fadeOutDuration);
         PacketIO.requireFinite(this.duration, "Duration"); mem.set(PacketIO.PROTO_FLOAT, offset + 9, this.duration);
-        mem.set(PacketIO.PROTO_BOOL, offset + 13, this.isMajor);
-        var varOffset = offset + 26;
+        mem.set(PacketIO.PROTO_INT, offset + 13, this.style.getValue());
+        var varOffset = offset + 29;
         if (this.icon != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 14, varOffset - offset - 26);
+            mem.set(PacketIO.PROTO_INT, offset + 17, varOffset - offset - 29);
             varOffset += PacketIO.writeVarString(mem, varOffset, this.icon, 4096000);
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 14, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 17, -1);
         }
         if (this.primaryTitle != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 18, varOffset - offset - 26);
+            mem.set(PacketIO.PROTO_INT, offset + 21, varOffset - offset - 29);
             varOffset += this.primaryTitle.serialize(mem, varOffset);
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 18, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 21, -1);
         }
         if (this.secondaryTitle != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 22, varOffset - offset - 26);
+            mem.set(PacketIO.PROTO_INT, offset + 25, varOffset - offset - 29);
             varOffset += this.secondaryTitle.serialize(mem, varOffset);
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 22, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 25, -1);
         }
     
        return varOffset - offset;
     }
     public int computeSize() {
-        int size = 26;
+        int size = 29;
         if (icon != null) size += PacketIO.stringSize(icon);
     if (primaryTitle != null) size += primaryTitle.computeSize();
     if (secondaryTitle != null) size += secondaryTitle.computeSize();
@@ -277,7 +277,7 @@ public class ShowEventTitle implements Packet, ToClientPacket {
         copy.fadeOutDuration = this.fadeOutDuration;
         copy.duration = this.duration;
         copy.icon = this.icon;
-        copy.isMajor = this.isMajor;
+        copy.style = this.style;
         copy.primaryTitle = this.primaryTitle != null ? this.primaryTitle.clone() : null;
         copy.secondaryTitle = this.secondaryTitle != null ? this.secondaryTitle.clone() : null;
         return copy;
@@ -288,12 +288,12 @@ public class ShowEventTitle implements Packet, ToClientPacket {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof ShowEventTitle other)) return false;
-        return this.fadeInDuration == other.fadeInDuration && this.fadeOutDuration == other.fadeOutDuration && this.duration == other.duration && java.util.Objects.equals(this.icon, other.icon) && this.isMajor == other.isMajor && java.util.Objects.equals(this.primaryTitle, other.primaryTitle) && java.util.Objects.equals(this.secondaryTitle, other.secondaryTitle);
+        return this.fadeInDuration == other.fadeInDuration && this.fadeOutDuration == other.fadeOutDuration && this.duration == other.duration && java.util.Objects.equals(this.icon, other.icon) && java.util.Objects.equals(this.style, other.style) && java.util.Objects.equals(this.primaryTitle, other.primaryTitle) && java.util.Objects.equals(this.secondaryTitle, other.secondaryTitle);
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(fadeInDuration, fadeOutDuration, duration, icon, isMajor, primaryTitle, secondaryTitle);
+        return java.util.Objects.hash(fadeInDuration, fadeOutDuration, duration, icon, style, primaryTitle, secondaryTitle);
     }
 
 }

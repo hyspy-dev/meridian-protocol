@@ -30,14 +30,22 @@ public abstract class ParamValue {
         int typeId = (int) typeIdPacked;
         int typeIdLen = (int) (typeIdPacked >>> 32);
 
-        return switch (typeId) {
-            case 0 -> StringParamValue.toObject(mem, offset + typeIdLen, cursor);
-                case 1 -> BoolParamValue.toObject(mem, offset + typeIdLen, cursor);
-                case 2 -> DoubleParamValue.toObject(mem, offset + typeIdLen, cursor);
-                case 3 -> IntParamValue.toObject(mem, offset + typeIdLen, cursor);
-                case 4 -> LongParamValue.toObject(mem, offset + typeIdLen, cursor);
-            default -> throw ProtocolException.unknownPolymorphicType("ParamValue", typeId);
-        };
+        // A subtype may hold further values of this type, and decoding such a chain recurses
+        // once per link. The cursor counts the links so the chain cannot outrun the stack.
+        var walkCursor = cursor != null ? cursor : new ReadCursor();
+        walkCursor.enterNested("ParamValue");
+        try {
+            return switch (typeId) {
+                case 0 -> StringParamValue.toObject(mem, offset + typeIdLen, walkCursor);
+                case 1 -> BoolParamValue.toObject(mem, offset + typeIdLen, walkCursor);
+                case 2 -> DoubleParamValue.toObject(mem, offset + typeIdLen, walkCursor);
+                case 3 -> IntParamValue.toObject(mem, offset + typeIdLen, walkCursor);
+                case 4 -> LongParamValue.toObject(mem, offset + typeIdLen, walkCursor);
+                default -> throw ProtocolException.unknownPolymorphicType("ParamValue", typeId);
+            };
+        } finally {
+            walkCursor.exitNested();
+        }
     }
 
 

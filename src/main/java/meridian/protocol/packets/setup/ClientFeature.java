@@ -8,13 +8,7 @@ public enum ClientFeature {
     Mantling(1),
     SprintForce(2),
     CrouchSlide(3),
-    SafetyRoll(4),
-    DisplayHealthBars(5),
-    DisplayCombatText(6),
-    CanHideHelmet(7),
-    CanHideCuirass(8),
-    CanHideGauntlets(9),
-    CanHidePants(10);
+    SafetyRoll(4);
 
     public static final ClientFeature[] VALUES = values();
 

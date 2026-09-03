@@ -13,20 +13,21 @@ import java.util.HashMap;
 
 public class ChangeStatInteraction extends SimpleInteraction {
     public static final int NULLABLE_BIT_FIELD_SIZE = 1;
-    public static final int FIXED_BLOCK_SIZE = 25;
+    public static final int FIXED_BLOCK_SIZE = 26;
     public static final int VARIABLE_FIELD_COUNT = 6;
-    public static final int VARIABLE_BLOCK_START = 49;
+    public static final int VARIABLE_BLOCK_START = 50;
     public static final int MAX_SIZE = 1677721600;
 
     @Nonnull public InteractionTarget entityTarget = InteractionTarget.User;
     @Nonnull public ValueType valueType = ValueType.Percent;
     @Nullable public java.util.Map<Integer, Float> statModifiers;
     @Nonnull public ChangeStatBehaviour changeStatBehaviour = ChangeStatBehaviour.Add;
+    public boolean useAbilityCost;
 
     public ChangeStatInteraction() {
     }
 
-    public ChangeStatInteraction(@Nonnull WaitForDataFrom waitForDataFrom, @Nullable InteractionEffects effects, float horizontalSpeedMultiplier, float runTime, @Nonnull InteractionItemChangeBehavior onItemChangeBehavior, @Nullable java.util.Map<GameMode, InteractionSettings> settings, @Nonnull InteractionRules rules, @Nullable int[] tags, @Nullable InteractionCameraSettings camera, int next, int failed, @Nonnull InteractionTarget entityTarget, @Nonnull ValueType valueType, @Nullable java.util.Map<Integer, Float> statModifiers, @Nonnull ChangeStatBehaviour changeStatBehaviour) {
+    public ChangeStatInteraction(@Nonnull WaitForDataFrom waitForDataFrom, @Nullable InteractionEffects effects, float horizontalSpeedMultiplier, float runTime, @Nonnull InteractionItemChangeBehavior onItemChangeBehavior, @Nullable java.util.Map<GameMode, InteractionSettings> settings, @Nonnull InteractionRules rules, @Nullable int[] tags, @Nullable InteractionCameraSettings camera, int next, int failed, @Nonnull InteractionTarget entityTarget, @Nonnull ValueType valueType, @Nullable java.util.Map<Integer, Float> statModifiers, @Nonnull ChangeStatBehaviour changeStatBehaviour, boolean useAbilityCost) {
         this.waitForDataFrom = waitForDataFrom;
         this.effects = effects;
         this.horizontalSpeedMultiplier = horizontalSpeedMultiplier;
@@ -42,6 +43,7 @@ public class ChangeStatInteraction extends SimpleInteraction {
         this.valueType = valueType;
         this.statModifiers = statModifiers;
         this.changeStatBehaviour = changeStatBehaviour;
+        this.useAbilityCost = useAbilityCost;
     }
 
     public ChangeStatInteraction(@Nonnull ChangeStatInteraction other) {
@@ -60,6 +62,7 @@ public class ChangeStatInteraction extends SimpleInteraction {
         this.valueType = other.valueType;
         this.statModifiers = other.statModifiers;
         this.changeStatBehaviour = other.changeStatBehaviour;
+        this.useAbilityCost = other.useAbilityCost;
     }
 
     /**
@@ -68,7 +71,7 @@ public class ChangeStatInteraction extends SimpleInteraction {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("ChangeStatInteraction", offset, (int) mem.byteSize());
-        long needed = (long) offset + 49;
+        long needed = (long) offset + 50;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("ChangeStatInteraction", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -87,7 +90,7 @@ public class ChangeStatInteraction extends SimpleInteraction {
     
     @Nullable
     public static InteractionEffects getEffects(MemorySegment mem, int offset) {
-        return hasEffects(mem, offset) ? InteractionEffects.toObject(mem, offset + getValidatedOffset(mem, offset, 25, 49, "Effects")): null;
+        return hasEffects(mem, offset) ? InteractionEffects.toObject(mem, offset + getValidatedOffset(mem, offset, 26, 50, "Effects")): null;
     }
     
     public static float getHorizontalSpeedMultiplier(MemorySegment mem) {
@@ -122,7 +125,7 @@ public class ChangeStatInteraction extends SimpleInteraction {
     @Nullable
     public static java.util.Map<GameMode, InteractionSettings> getSettings(MemorySegment mem, int offset) {
         if (!hasSettings(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 29, 49, "Settings");
+        var off = offset + getValidatedOffset(mem, offset, 30, 50, "Settings");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("Settings");
         var len = (int) packed;
@@ -148,7 +151,7 @@ public class ChangeStatInteraction extends SimpleInteraction {
     }
     
     public static InteractionRules getRules(MemorySegment mem, int offset) {
-        return InteractionRules.toObject(mem, offset + getValidatedOffset(mem, offset, 33, 49, "Rules"));
+        return InteractionRules.toObject(mem, offset + getValidatedOffset(mem, offset, 34, 50, "Rules"));
     }
     
     @Nullable
@@ -159,7 +162,7 @@ public class ChangeStatInteraction extends SimpleInteraction {
     @Nullable
     public static int[] getTags(MemorySegment mem, int offset) {
         if (!hasTags(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 37, 49, "Tags");
+        var off = offset + getValidatedOffset(mem, offset, 38, 50, "Tags");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("Tags");
         var len = (int) packed;
@@ -179,7 +182,7 @@ public class ChangeStatInteraction extends SimpleInteraction {
     
     @Nullable
     public static InteractionCameraSettings getCamera(MemorySegment mem, int offset) {
-        return hasCamera(mem, offset) ? InteractionCameraSettings.toObject(mem, offset + getValidatedOffset(mem, offset, 41, 49, "Camera")): null;
+        return hasCamera(mem, offset) ? InteractionCameraSettings.toObject(mem, offset + getValidatedOffset(mem, offset, 42, 50, "Camera")): null;
     }
     
     public static int getNext(MemorySegment mem) {
@@ -222,7 +225,7 @@ public class ChangeStatInteraction extends SimpleInteraction {
     @Nullable
     public static java.util.Map<Integer, Float> getStatModifiers(MemorySegment mem, int offset) {
         if (!hasStatModifiers(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 45, 49, "StatModifiers");
+        var off = offset + getValidatedOffset(mem, offset, 46, 50, "StatModifiers");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("StatModifiers");
         var len = (int) packed;
@@ -249,6 +252,14 @@ public class ChangeStatInteraction extends SimpleInteraction {
     
     public static ChangeStatBehaviour getChangeStatBehaviour(MemorySegment mem, int offset) {
         return ChangeStatBehaviour.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 24));
+    }
+    
+    public static boolean getUseAbilityCost(MemorySegment mem) {
+        return getUseAbilityCost(mem, 0);
+    }
+    
+    public static boolean getUseAbilityCost(MemorySegment mem, int offset) {
+        return mem.get(PacketIO.PROTO_BOOL, offset + 25);
     }
     
     public static boolean hasEffects(MemorySegment mem, int offset) {
@@ -309,21 +320,21 @@ public class ChangeStatInteraction extends SimpleInteraction {
     public static ChangeStatInteraction toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
-        var varBase = offset + 49;
+        var varBase = offset + 50;
         var varPos = 0;
         var walkCursor = cursor != null ? cursor : new ReadCursor();
         InteractionEffects v1 = null;
         if (hasEffects(mem, offset)) {
-            requireSlot(mem, offset + 25, varPos, "Effects");
+            requireSlot(mem, offset + 26, varPos, "Effects");
             v1 = InteractionEffects.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
         } else {
-            requireSlot(mem, offset + 25, -1, "Effects");
+            requireSlot(mem, offset + 26, -1, "Effects");
         }
         
         java.util.Map<GameMode, InteractionSettings> v5 = null;
         if (hasSettings(mem, offset)) {
-            requireSlot(mem, offset + 29, varPos, "Settings");
+            requireSlot(mem, offset + 30, varPos, "Settings");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("Settings");
@@ -344,11 +355,11 @@ public class ChangeStatInteraction extends SimpleInteraction {
             }
             varPos = off - varBase;
         } else {
-            requireSlot(mem, offset + 29, -1, "Settings");
+            requireSlot(mem, offset + 30, -1, "Settings");
         }
         
         InteractionRules v6;
-        requireSlot(mem, offset + 33, varPos, "Rules");
+        requireSlot(mem, offset + 34, varPos, "Rules");
         {
             v6 = InteractionRules.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
@@ -356,7 +367,7 @@ public class ChangeStatInteraction extends SimpleInteraction {
         
         int[] v7 = null;
         if (hasTags(mem, offset)) {
-            requireSlot(mem, offset + 37, varPos, "Tags");
+            requireSlot(mem, offset + 38, varPos, "Tags");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("Tags");
@@ -369,21 +380,21 @@ public class ChangeStatInteraction extends SimpleInteraction {
             MemorySegment.copy(mem, PacketIO.PROTO_INT, off, v7, 0, len);
             varPos = off + len * 4 - varBase;
         } else {
-            requireSlot(mem, offset + 37, -1, "Tags");
+            requireSlot(mem, offset + 38, -1, "Tags");
         }
         
         InteractionCameraSettings v8 = null;
         if (hasCamera(mem, offset)) {
-            requireSlot(mem, offset + 41, varPos, "Camera");
+            requireSlot(mem, offset + 42, varPos, "Camera");
             v8 = InteractionCameraSettings.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
         } else {
-            requireSlot(mem, offset + 41, -1, "Camera");
+            requireSlot(mem, offset + 42, -1, "Camera");
         }
         
         java.util.Map<Integer, Float> v13 = null;
         if (hasStatModifiers(mem, offset)) {
-            requireSlot(mem, offset + 45, varPos, "StatModifiers");
+            requireSlot(mem, offset + 46, varPos, "StatModifiers");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("StatModifiers");
@@ -404,7 +415,7 @@ public class ChangeStatInteraction extends SimpleInteraction {
             }
             varPos = off - varBase;
         } else {
-            requireSlot(mem, offset + 45, -1, "StatModifiers");
+            requireSlot(mem, offset + 46, -1, "StatModifiers");
         }
         var result = new ChangeStatInteraction(
             WaitForDataFrom.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 1)),
@@ -421,7 +432,8 @@ public class ChangeStatInteraction extends SimpleInteraction {
             InteractionTarget.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 22)),
             ValueType.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 23)),
             v13,
-            ChangeStatBehaviour.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 24))
+            ChangeStatBehaviour.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 24)),
+            mem.get(PacketIO.PROTO_BOOL, offset + 25)
         );
         if (cursor != null) cursor.position = varBase + varPos;
         return result;
@@ -446,15 +458,16 @@ public class ChangeStatInteraction extends SimpleInteraction {
         mem.set(PacketIO.PROTO_BYTE, offset + 22, (byte) this.entityTarget.getValue());
         mem.set(PacketIO.PROTO_BYTE, offset + 23, (byte) this.valueType.getValue());
         mem.set(PacketIO.PROTO_BYTE, offset + 24, (byte) this.changeStatBehaviour.getValue());
-        var varOffset = offset + 49;
+        mem.set(PacketIO.PROTO_BOOL, offset + 25, this.useAbilityCost);
+        var varOffset = offset + 50;
         if (this.effects != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 25, varOffset - offset - 49);
+            mem.set(PacketIO.PROTO_INT, offset + 26, varOffset - offset - 50);
             varOffset += this.effects.serialize(mem, varOffset);
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 25, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 26, -1);
         }
         if (this.settings != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 29, varOffset - offset - 49);
+            mem.set(PacketIO.PROTO_INT, offset + 30, varOffset - offset - 50);
             if (this.settings.size() > 4096000) throw ProtocolException.dictionaryTooLarge("Settings", settings.size(), 4096000);
             varOffset += VarInt.set(mem, varOffset, this.settings.size());
             for (var e : this.settings.entrySet()) {
@@ -463,28 +476,28 @@ public class ChangeStatInteraction extends SimpleInteraction {
                 varOffset += e.getValue().serialize(mem, varOffset);
             }
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 29, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 30, -1);
         }
-        mem.set(PacketIO.PROTO_INT, offset + 33, varOffset - offset - 49);
+        mem.set(PacketIO.PROTO_INT, offset + 34, varOffset - offset - 50);
         varOffset += this.rules.serialize(mem, varOffset);
         if (this.tags != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 37, varOffset - offset - 49);
+            mem.set(PacketIO.PROTO_INT, offset + 38, varOffset - offset - 50);
             if (tags.length > 4096000) throw ProtocolException.arrayTooLong("Tags", tags.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.tags.length);
             
             MemorySegment.copy(this.tags, 0, mem, PacketIO.PROTO_INT, varOffset, this.tags.length);
             varOffset += this.tags.length * 4;
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 37, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 38, -1);
         }
         if (this.camera != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 41, varOffset - offset - 49);
+            mem.set(PacketIO.PROTO_INT, offset + 42, varOffset - offset - 50);
             varOffset += this.camera.serialize(mem, varOffset);
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 41, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 42, -1);
         }
         if (this.statModifiers != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 45, varOffset - offset - 49);
+            mem.set(PacketIO.PROTO_INT, offset + 46, varOffset - offset - 50);
             if (this.statModifiers.size() > 4096000) throw ProtocolException.dictionaryTooLarge("StatModifiers", statModifiers.size(), 4096000);
             varOffset += VarInt.set(mem, varOffset, this.statModifiers.size());
             for (var e : this.statModifiers.entrySet()) {
@@ -494,14 +507,14 @@ public class ChangeStatInteraction extends SimpleInteraction {
                 varOffset += 4;
             }
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 45, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 46, -1);
         }
     
        return varOffset - offset;
     }
     @Override
     public int computeSize() {
-        int size = 49;
+        int size = 50;
         if (effects != null) size += effects.computeSize();
     if (settings != null) size += VarInt.size(settings.size()) + settings.size() * (1 + 1);
     size += rules.computeSize();
@@ -533,6 +546,7 @@ public class ChangeStatInteraction extends SimpleInteraction {
         copy.valueType = this.valueType;
         copy.statModifiers = this.statModifiers != null ? new java.util.HashMap<>(this.statModifiers) : null;
         copy.changeStatBehaviour = this.changeStatBehaviour;
+        copy.useAbilityCost = this.useAbilityCost;
         return copy;
     }
 
@@ -541,7 +555,7 @@ public class ChangeStatInteraction extends SimpleInteraction {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof ChangeStatInteraction other)) return false;
-        return java.util.Objects.equals(this.waitForDataFrom, other.waitForDataFrom) && java.util.Objects.equals(this.effects, other.effects) && this.horizontalSpeedMultiplier == other.horizontalSpeedMultiplier && this.runTime == other.runTime && java.util.Objects.equals(this.onItemChangeBehavior, other.onItemChangeBehavior) && java.util.Objects.equals(this.settings, other.settings) && java.util.Objects.equals(this.rules, other.rules) && java.util.Arrays.equals(this.tags, other.tags) && java.util.Objects.equals(this.camera, other.camera) && this.next == other.next && this.failed == other.failed && java.util.Objects.equals(this.entityTarget, other.entityTarget) && java.util.Objects.equals(this.valueType, other.valueType) && java.util.Objects.equals(this.statModifiers, other.statModifiers) && java.util.Objects.equals(this.changeStatBehaviour, other.changeStatBehaviour);
+        return java.util.Objects.equals(this.waitForDataFrom, other.waitForDataFrom) && java.util.Objects.equals(this.effects, other.effects) && this.horizontalSpeedMultiplier == other.horizontalSpeedMultiplier && this.runTime == other.runTime && java.util.Objects.equals(this.onItemChangeBehavior, other.onItemChangeBehavior) && java.util.Objects.equals(this.settings, other.settings) && java.util.Objects.equals(this.rules, other.rules) && java.util.Arrays.equals(this.tags, other.tags) && java.util.Objects.equals(this.camera, other.camera) && this.next == other.next && this.failed == other.failed && java.util.Objects.equals(this.entityTarget, other.entityTarget) && java.util.Objects.equals(this.valueType, other.valueType) && java.util.Objects.equals(this.statModifiers, other.statModifiers) && java.util.Objects.equals(this.changeStatBehaviour, other.changeStatBehaviour) && this.useAbilityCost == other.useAbilityCost;
     }
 
     @Override
@@ -562,6 +576,7 @@ public class ChangeStatInteraction extends SimpleInteraction {
         result = 31 * result + java.util.Objects.hashCode(valueType);
         result = 31 * result + java.util.Objects.hashCode(statModifiers);
         result = 31 * result + java.util.Objects.hashCode(changeStatBehaviour);
+        result = 31 * result + Boolean.hashCode(useAbilityCost);
         return result;
     }
 

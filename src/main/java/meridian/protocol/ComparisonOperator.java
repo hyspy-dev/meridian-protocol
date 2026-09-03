@@ -3,7 +3,7 @@ package meridian.protocol;
 
 import meridian.protocol.io.ProtocolException;
 
-public enum DurabilityOperator {
+public enum ComparisonOperator {
     LessThan(0),
     LessOrEqual(1),
     GreaterThan(2),
@@ -11,11 +11,11 @@ public enum DurabilityOperator {
     Equal(4),
     NotEqual(5);
 
-    public static final DurabilityOperator[] VALUES = values();
+    public static final ComparisonOperator[] VALUES = values();
 
     private final int value;
 
-    DurabilityOperator(int value) {
+    ComparisonOperator(int value) {
         this.value = value;
     }
 
@@ -23,10 +23,10 @@ public enum DurabilityOperator {
         return value;
     }
 
-    public static DurabilityOperator fromValue(int value) {
+    public static ComparisonOperator fromValue(int value) {
         if (value >= 0 && value < VALUES.length) {
             return VALUES[value];
         }
-        throw ProtocolException.invalidEnumValue("DurabilityOperator", value);
+        throw ProtocolException.invalidEnumValue("ComparisonOperator", value);
     }
 }

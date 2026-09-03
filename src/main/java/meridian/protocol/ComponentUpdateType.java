@@ -33,7 +33,8 @@ public enum ComponentUpdateType {
     CarriedBlock(26),
     PreventInventoryAccess(27),
     PrefabPreview(28),
-    PreventEmotes(29);
+    PreventEmotes(29),
+    Beams(30);
 
     public static final ComponentUpdateType[] VALUES = values();
 

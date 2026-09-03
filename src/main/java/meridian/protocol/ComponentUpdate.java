@@ -30,39 +30,48 @@ public abstract class ComponentUpdate {
         int typeId = (int) typeIdPacked;
         int typeIdLen = (int) (typeIdPacked >>> 32);
 
-        return switch (typeId) {
-            case 0 -> NameplateUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 1 -> UIComponentsUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 2 -> CombatTextUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 3 -> ModelUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 4 -> PlayerSkinUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 5 -> ItemUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 6 -> BlockUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 7 -> EquipmentUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 8 -> EntityStatsUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 9 -> TransformUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 10 -> MovementStatesUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 11 -> EntityEffectsUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 12 -> InteractionsUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 13 -> DynamicLightUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 14 -> InteractableUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 15 -> IntangibleUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 16 -> InvulnerableUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 17 -> RespondToHitUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 18 -> HitboxCollisionUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 19 -> RepulsionUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 20 -> PredictionUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 21 -> AudioUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 22 -> MountedUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 23 -> NewSpawnUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 24 -> ActiveAnimationsUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 25 -> PropUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 26 -> CarriedBlockUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 27 -> PreventInventoryAccessUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 28 -> PrefabPreviewUpdate.toObject(mem, offset + typeIdLen, cursor);
-                case 29 -> PreventEmotesUpdate.toObject(mem, offset + typeIdLen, cursor);
-            default -> throw ProtocolException.unknownPolymorphicType("ComponentUpdate", typeId);
-        };
+        // A subtype may hold further values of this type, and decoding such a chain recurses
+        // once per link. The cursor counts the links so the chain cannot outrun the stack.
+        var walkCursor = cursor != null ? cursor : new ReadCursor();
+        walkCursor.enterNested("ComponentUpdate");
+        try {
+            return switch (typeId) {
+                case 0 -> NameplateUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 1 -> UIComponentsUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 2 -> CombatTextUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 3 -> ModelUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 4 -> PlayerSkinUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 5 -> ItemUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 6 -> BlockUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 7 -> EquipmentUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 8 -> EntityStatsUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 9 -> TransformUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 10 -> MovementStatesUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 11 -> EntityEffectsUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 12 -> InteractionsUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 13 -> DynamicLightUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 14 -> InteractableUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 15 -> IntangibleUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 16 -> InvulnerableUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 17 -> RespondToHitUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 18 -> HitboxCollisionUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 19 -> RepulsionUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 20 -> PredictionUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 21 -> AudioUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 22 -> MountedUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 23 -> NewSpawnUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 24 -> ActiveAnimationsUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 25 -> PropUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 26 -> CarriedBlockUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 27 -> PreventInventoryAccessUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 28 -> PrefabPreviewUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 29 -> PreventEmotesUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 30 -> BeamsUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                default -> throw ProtocolException.unknownPolymorphicType("ComponentUpdate", typeId);
+            };
+        } finally {
+            walkCursor.exitNested();
+        }
     }
 
 
@@ -97,6 +106,7 @@ public abstract class ComponentUpdate {
             if (this instanceof PreventInventoryAccessUpdate sub) { return 27; }
             if (this instanceof PrefabPreviewUpdate sub) { return 28; }
             if (this instanceof PreventEmotesUpdate sub) { return 29; }
+            if (this instanceof BeamsUpdate sub) { return 30; }
         throw new IllegalStateException("Unknown subtype: " + getClass().getName());
     }
 
