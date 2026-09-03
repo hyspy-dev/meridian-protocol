@@ -1028,6 +1028,11 @@ public final class PacketRegistry {
             meridian.protocol.packets.world.SetBlockAnimationSpeeds::toObject);
         register(
             PacketDirection.ToServer, NetworkChannel.Default,
+            254, "ConfigureIcePeer", meridian.protocol.packets.serveraccess.ConfigureIcePeer.class,
+            1, 17639, false,
+            meridian.protocol.packets.serveraccess.ConfigureIcePeer::toObject);
+        register(
+            PacketDirection.ToServer, NetworkChannel.Default,
             260, "RequestMachinimaActorModel", meridian.protocol.packets.machinima.RequestMachinimaActorModel.class,
             1, 49152028, false,
             meridian.protocol.packets.machinima.RequestMachinimaActorModel::toObject);

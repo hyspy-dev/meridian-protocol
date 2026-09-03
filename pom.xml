@@ -7,10 +7,12 @@
 
     <groupId>meridian</groupId>
     <artifactId>meridian-protocol</artifactId>
-    <!-- Version = the wire-protocol CRC (= ProtocolSettings.PROTOCOL_CRC). Distinct per protocol
-         line, so 0.5.x and 0.6.x never collide in .m2. A game version resolves to this CRC.
-         Standalone repo, regenerated from shared-source on every Hytale build. -->
-    <version>245610536</version>
+    <!-- Version = the wire-protocol CRC as an unsigned uint32, the textual form Hytale itself
+         uses (Protocol/protocol-version.json, the discovery heartbeat) and the launcher matches
+         on; ProtocolSettings.PROTOCOL_CRC holds the same 32 bits as a signed int. Distinct per
+         protocol line, so 0.5.x and 0.6.x never collide in .m2. A game version resolves to this
+         CRC. Standalone repo, regenerated from shared-source on every Hytale build. -->
+    <version>3871693122</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -86,9 +88,12 @@
         </repository>
     </distributionManagement>
 
-    <!-- Guard: the artifact version MUST equal the wire CRC baked into the generated source, so a
-         regen that changed PROTOCOL_CRC without bumping the version (or vice versa) fails loudly
-         instead of shipping a mislabeled protocol. Runs at validate (even with -DskipTests). -->
+    <!-- Guard: the artifact version MUST equal the wire CRC, so a regen that changed the CRC
+         without bumping the version (or vice versa) fails loudly instead of shipping a mislabeled
+         protocol. src/main/resources/protocol-version.json is Hytale's own stamp (crc as uint32 +
+         buildNumber), copied from shared-source Protocol/ on every regen: the version must equal
+         its crc, and its buildNumber must equal the one baked into ProtocolSettings.java, so the
+         three cannot drift apart. Runs at validate (even with -DskipTests). -->
     <build>
         <plugins>
             <plugin>
@@ -102,14 +107,29 @@
                         <goals><goal>run</goal></goals>
                         <configuration>
                             <target>
-                                <loadfile property="protocol.src"
-                                          srcFile="${project.basedir}/src/main/java/meridian/protocol/ProtocolSettings.java"/>
+                                <loadfile property="protocol.json"
+                                          srcFile="${project.basedir}/src/main/resources/protocol-version.json"/>
+                                <loadfile property="protocol.build"
+                                          srcFile="${project.basedir}/src/main/java/meridian/protocol/ProtocolSettings.java">
+                                    <filterchain>
+                                        <tokenfilter>
+                                            <containsregex pattern=".*PROTOCOL_BUILD_NUMBER\s*=\s*(\d+).*" replace="\1"/>
+                                        </tokenfilter>
+                                        <striplinebreaks/>
+                                    </filterchain>
+                                </loadfile>
                                 <condition property="protocol.crc.ok">
-                                    <matches string="${protocol.src}" multiline="true"
-                                             pattern="PROTOCOL_CRC\s*=\s*${project.version}\b"/>
+                                    <matches string="${protocol.json}" multiline="true"
+                                             pattern="&quot;crc&quot;\s*:\s*${project.version}\b"/>
                                 </condition>
                                 <fail unless="protocol.crc.ok"
-                                      message="meridian-protocol version (${project.version}) != PROTOCOL_CRC in ProtocolSettings.java — regen and version are out of sync. Set the version to the new CRC (and the meridian.protocol.version property in consumers)."/>
+                                      message="meridian-protocol version (${project.version}) != crc in protocol-version.json — regen and version are out of sync. Set the version to the new CRC (unsigned uint32, as in protocol-version.json) and the meridian.protocol.version property in consumers."/>
+                                <condition property="protocol.build.ok">
+                                    <matches string="${protocol.json}" multiline="true"
+                                             pattern="&quot;buildNumber&quot;\s*:\s*${protocol.build}\b"/>
+                                </condition>
+                                <fail unless="protocol.build.ok"
+                                      message="protocol-version.json buildNumber != PROTOCOL_BUILD_NUMBER (${protocol.build}) in ProtocolSettings.java — the json and the generated tree come from different shared-source commits. Re-copy Protocol/protocol-version.json with the regen."/>
                             </target>
                         </configuration>
                     </execution>
