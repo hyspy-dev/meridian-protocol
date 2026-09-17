@@ -12,11 +12,11 @@ import meridian.protocol.io.VarInt;
 
 
 public class MusicTransition {
-    public static final int NULLABLE_BIT_FIELD_SIZE = 1;
-    public static final int FIXED_BLOCK_SIZE = 25;
+    public static final int NULLABLE_BIT_FIELD_SIZE = 2;
+    public static final int FIXED_BLOCK_SIZE = 50;
     public static final int VARIABLE_FIELD_COUNT = 6;
-    public static final int VARIABLE_BLOCK_START = 49;
-    public static final int MAX_SIZE = 98304097;
+    public static final int VARIABLE_BLOCK_START = 74;
+    public static final int MAX_SIZE = 98304122;
 
     @Nullable public String id;
     @Nullable public int[] fromContainerIndices;
@@ -24,10 +24,10 @@ public class MusicTransition {
     @Nullable public MusicSync exitAt;
     @Nonnull public DestinationAlign align = DestinationAlign.EntryMarker;
     @Nullable public String alignMarkerName;
-    public float fadeOutDuration;
+    @Nullable public BarBeatDuration fadeOutDuration;
     @Nonnull public FadeCurve fadeOutCurve = FadeCurve.Linear;
-    public float fadeOutDelay;
-    public float fadeInDuration;
+    @Nullable public BarBeatDuration fadeOutDelay;
+    @Nullable public BarBeatDuration fadeInDuration;
     @Nonnull public FadeCurve fadeInCurve = FadeCurve.Linear;
     public boolean playPostExit;
     @Nullable public String postEvent;
@@ -37,7 +37,7 @@ public class MusicTransition {
     public MusicTransition() {
     }
 
-    public MusicTransition(@Nullable String id, @Nullable int[] fromContainerIndices, @Nullable int[] toContainerIndices, @Nullable MusicSync exitAt, @Nonnull DestinationAlign align, @Nullable String alignMarkerName, float fadeOutDuration, @Nonnull FadeCurve fadeOutCurve, float fadeOutDelay, float fadeInDuration, @Nonnull FadeCurve fadeInCurve, boolean playPostExit, @Nullable String postEvent, int priority, int specificity) {
+    public MusicTransition(@Nullable String id, @Nullable int[] fromContainerIndices, @Nullable int[] toContainerIndices, @Nullable MusicSync exitAt, @Nonnull DestinationAlign align, @Nullable String alignMarkerName, @Nullable BarBeatDuration fadeOutDuration, @Nonnull FadeCurve fadeOutCurve, @Nullable BarBeatDuration fadeOutDelay, @Nullable BarBeatDuration fadeInDuration, @Nonnull FadeCurve fadeInCurve, boolean playPostExit, @Nullable String postEvent, int priority, int specificity) {
         this.id = id;
         this.fromContainerIndices = fromContainerIndices;
         this.toContainerIndices = toContainerIndices;
@@ -79,7 +79,7 @@ public class MusicTransition {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("MusicTransition", offset, (int) mem.byteSize());
-        long needed = (long) offset + 49;
+        long needed = (long) offset + 74;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("MusicTransition", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -90,7 +90,7 @@ public class MusicTransition {
     
     @Nullable
     public static String getId(MemorySegment mem, int offset) {
-        return hasId(mem, offset) ? PacketIO.readVarString("Id", mem, offset + getValidatedOffset(mem, offset, 25, 49, "Id"), 4096000): null;
+        return hasId(mem, offset) ? PacketIO.readVarString("Id", mem, offset + getValidatedOffset(mem, offset, 50, 74, "Id"), 4096000): null;
     }
     
     @Nullable
@@ -101,7 +101,7 @@ public class MusicTransition {
     @Nullable
     public static int[] getFromContainerIndices(MemorySegment mem, int offset) {
         if (!hasFromContainerIndices(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 29, 49, "FromContainerIndices");
+        var off = offset + getValidatedOffset(mem, offset, 54, 74, "FromContainerIndices");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("FromContainerIndices");
         var len = (int) packed;
@@ -122,7 +122,7 @@ public class MusicTransition {
     @Nullable
     public static int[] getToContainerIndices(MemorySegment mem, int offset) {
         if (!hasToContainerIndices(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 33, 49, "ToContainerIndices");
+        var off = offset + getValidatedOffset(mem, offset, 58, 74, "ToContainerIndices");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("ToContainerIndices");
         var len = (int) packed;
@@ -142,7 +142,7 @@ public class MusicTransition {
     
     @Nullable
     public static MusicSync getExitAt(MemorySegment mem, int offset) {
-        return hasExitAt(mem, offset) ? MusicSync.toObject(mem, offset + getValidatedOffset(mem, offset, 37, 49, "ExitAt")): null;
+        return hasExitAt(mem, offset) ? MusicSync.toObject(mem, offset + getValidatedOffset(mem, offset, 62, 74, "ExitAt")): null;
     }
     
     public static DestinationAlign getAlign(MemorySegment mem) {
@@ -150,7 +150,7 @@ public class MusicTransition {
     }
     
     public static DestinationAlign getAlign(MemorySegment mem, int offset) {
-        return DestinationAlign.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 1));
+        return DestinationAlign.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 2));
     }
     
     @Nullable
@@ -160,15 +160,17 @@ public class MusicTransition {
     
     @Nullable
     public static String getAlignMarkerName(MemorySegment mem, int offset) {
-        return hasAlignMarkerName(mem, offset) ? PacketIO.readVarString("AlignMarkerName", mem, offset + getValidatedOffset(mem, offset, 41, 49, "AlignMarkerName"), 4096000): null;
+        return hasAlignMarkerName(mem, offset) ? PacketIO.readVarString("AlignMarkerName", mem, offset + getValidatedOffset(mem, offset, 66, 74, "AlignMarkerName"), 4096000): null;
     }
     
-    public static float getFadeOutDuration(MemorySegment mem) {
+    @Nullable
+    public static BarBeatDuration getFadeOutDuration(MemorySegment mem) {
         return getFadeOutDuration(mem, 0);
     }
     
-    public static float getFadeOutDuration(MemorySegment mem, int offset) {
-        return PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 2), "FadeOutDuration");
+    @Nullable
+    public static BarBeatDuration getFadeOutDuration(MemorySegment mem, int offset) {
+        return hasFadeOutDuration(mem, offset) ? BarBeatDuration.toObject(mem, offset + 3): null;
     }
     
     public static FadeCurve getFadeOutCurve(MemorySegment mem) {
@@ -176,23 +178,27 @@ public class MusicTransition {
     }
     
     public static FadeCurve getFadeOutCurve(MemorySegment mem, int offset) {
-        return FadeCurve.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 6));
+        return FadeCurve.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 15));
     }
     
-    public static float getFadeOutDelay(MemorySegment mem) {
+    @Nullable
+    public static BarBeatDuration getFadeOutDelay(MemorySegment mem) {
         return getFadeOutDelay(mem, 0);
     }
     
-    public static float getFadeOutDelay(MemorySegment mem, int offset) {
-        return PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 7), "FadeOutDelay");
+    @Nullable
+    public static BarBeatDuration getFadeOutDelay(MemorySegment mem, int offset) {
+        return hasFadeOutDelay(mem, offset) ? BarBeatDuration.toObject(mem, offset + 16): null;
     }
     
-    public static float getFadeInDuration(MemorySegment mem) {
+    @Nullable
+    public static BarBeatDuration getFadeInDuration(MemorySegment mem) {
         return getFadeInDuration(mem, 0);
     }
     
-    public static float getFadeInDuration(MemorySegment mem, int offset) {
-        return PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 11), "FadeInDuration");
+    @Nullable
+    public static BarBeatDuration getFadeInDuration(MemorySegment mem, int offset) {
+        return hasFadeInDuration(mem, offset) ? BarBeatDuration.toObject(mem, offset + 28): null;
     }
     
     public static FadeCurve getFadeInCurve(MemorySegment mem) {
@@ -200,7 +206,7 @@ public class MusicTransition {
     }
     
     public static FadeCurve getFadeInCurve(MemorySegment mem, int offset) {
-        return FadeCurve.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 15));
+        return FadeCurve.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 40));
     }
     
     public static boolean getPlayPostExit(MemorySegment mem) {
@@ -208,7 +214,7 @@ public class MusicTransition {
     }
     
     public static boolean getPlayPostExit(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_BOOL, offset + 16);
+        return mem.get(PacketIO.PROTO_BOOL, offset + 41);
     }
     
     @Nullable
@@ -218,7 +224,7 @@ public class MusicTransition {
     
     @Nullable
     public static String getPostEvent(MemorySegment mem, int offset) {
-        return hasPostEvent(mem, offset) ? PacketIO.readVarString("PostEvent", mem, offset + getValidatedOffset(mem, offset, 45, 49, "PostEvent"), 4096000): null;
+        return hasPostEvent(mem, offset) ? PacketIO.readVarString("PostEvent", mem, offset + getValidatedOffset(mem, offset, 70, 74, "PostEvent"), 4096000): null;
     }
     
     public static int getPriority(MemorySegment mem) {
@@ -226,7 +232,7 @@ public class MusicTransition {
     }
     
     public static int getPriority(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_INT, offset + 17);
+        return mem.get(PacketIO.PROTO_INT, offset + 42);
     }
     
     public static int getSpecificity(MemorySegment mem) {
@@ -234,37 +240,52 @@ public class MusicTransition {
     }
     
     public static int getSpecificity(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_INT, offset + 21);
+        return mem.get(PacketIO.PROTO_INT, offset + 46);
     }
     
-    public static boolean hasId(MemorySegment mem, int offset) {
+    public static boolean hasFadeOutDuration(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
         return (b & 0x01) != 0;
     }
     
-    public static boolean hasFromContainerIndices(MemorySegment mem, int offset) {
+    public static boolean hasFadeOutDelay(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
         return (b & 0x02) != 0;
     }
     
-    public static boolean hasToContainerIndices(MemorySegment mem, int offset) {
+    public static boolean hasFadeInDuration(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
         return (b & 0x04) != 0;
     }
     
-    public static boolean hasExitAt(MemorySegment mem, int offset) {
+    public static boolean hasId(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
         return (b & 0x08) != 0;
     }
     
-    public static boolean hasAlignMarkerName(MemorySegment mem, int offset) {
+    public static boolean hasFromContainerIndices(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
         return (b & 0x10) != 0;
     }
     
-    public static boolean hasPostEvent(MemorySegment mem, int offset) {
+    public static boolean hasToContainerIndices(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
         return (b & 0x20) != 0;
+    }
+    
+    public static boolean hasExitAt(MemorySegment mem, int offset) {
+        var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
+        return (b & 0x40) != 0;
+    }
+    
+    public static boolean hasAlignMarkerName(MemorySegment mem, int offset) {
+        var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
+        return (b & 0x80) != 0;
+    }
+    
+    public static boolean hasPostEvent(MemorySegment mem, int offset) {
+        var b = mem.get(PacketIO.PROTO_BYTE, offset + 1);
+        return (b & 0x01) != 0;
     }
     
     private static int getValidatedOffset(MemorySegment buffer, int base, int slotPosition, int varBlockStart, String fieldName) {
@@ -300,23 +321,23 @@ public class MusicTransition {
     public static MusicTransition toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
-        var varBase = offset + 49;
+        var varBase = offset + 74;
         var varPos = 0;
         var walkCursor = cursor != null ? cursor : new ReadCursor();
         String v0 = null;
         if (hasId(mem, offset)) {
-            requireSlot(mem, offset + 25, varPos, "Id");
+            requireSlot(mem, offset + 50, varPos, "Id");
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
             v0 = PacketIO.readVarString("Id", mem, off, 0, 4096000, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         } else {
-            requireSlot(mem, offset + 25, -1, "Id");
+            requireSlot(mem, offset + 50, -1, "Id");
         }
         
         int[] v1 = null;
         if (hasFromContainerIndices(mem, offset)) {
-            requireSlot(mem, offset + 29, varPos, "FromContainerIndices");
+            requireSlot(mem, offset + 54, varPos, "FromContainerIndices");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("FromContainerIndices");
@@ -329,12 +350,12 @@ public class MusicTransition {
             MemorySegment.copy(mem, PacketIO.PROTO_INT, off, v1, 0, len);
             varPos = off + len * 4 - varBase;
         } else {
-            requireSlot(mem, offset + 29, -1, "FromContainerIndices");
+            requireSlot(mem, offset + 54, -1, "FromContainerIndices");
         }
         
         int[] v2 = null;
         if (hasToContainerIndices(mem, offset)) {
-            requireSlot(mem, offset + 33, varPos, "ToContainerIndices");
+            requireSlot(mem, offset + 58, varPos, "ToContainerIndices");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("ToContainerIndices");
@@ -347,55 +368,55 @@ public class MusicTransition {
             MemorySegment.copy(mem, PacketIO.PROTO_INT, off, v2, 0, len);
             varPos = off + len * 4 - varBase;
         } else {
-            requireSlot(mem, offset + 33, -1, "ToContainerIndices");
+            requireSlot(mem, offset + 58, -1, "ToContainerIndices");
         }
         
         MusicSync v3 = null;
         if (hasExitAt(mem, offset)) {
-            requireSlot(mem, offset + 37, varPos, "ExitAt");
+            requireSlot(mem, offset + 62, varPos, "ExitAt");
             v3 = MusicSync.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
         } else {
-            requireSlot(mem, offset + 37, -1, "ExitAt");
+            requireSlot(mem, offset + 62, -1, "ExitAt");
         }
         
         String v5 = null;
         if (hasAlignMarkerName(mem, offset)) {
-            requireSlot(mem, offset + 41, varPos, "AlignMarkerName");
+            requireSlot(mem, offset + 66, varPos, "AlignMarkerName");
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
             v5 = PacketIO.readVarString("AlignMarkerName", mem, off, 0, 4096000, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         } else {
-            requireSlot(mem, offset + 41, -1, "AlignMarkerName");
+            requireSlot(mem, offset + 66, -1, "AlignMarkerName");
         }
         
         String v12 = null;
         if (hasPostEvent(mem, offset)) {
-            requireSlot(mem, offset + 45, varPos, "PostEvent");
+            requireSlot(mem, offset + 70, varPos, "PostEvent");
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
             v12 = PacketIO.readVarString("PostEvent", mem, off, 0, 4096000, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         } else {
-            requireSlot(mem, offset + 45, -1, "PostEvent");
+            requireSlot(mem, offset + 70, -1, "PostEvent");
         }
         var result = new MusicTransition(
             v0,
             v1,
             v2,
             v3,
-            DestinationAlign.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 1)),
+            DestinationAlign.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 2)),
             v5,
-            PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 2), "FadeOutDuration"),
-            FadeCurve.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 6)),
-            PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 7), "FadeOutDelay"),
-            PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 11), "FadeInDuration"),
+            hasFadeOutDuration(mem, offset) ? BarBeatDuration.toObject(mem, offset + 3) : null,
             FadeCurve.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 15)),
-            mem.get(PacketIO.PROTO_BOOL, offset + 16),
+            hasFadeOutDelay(mem, offset) ? BarBeatDuration.toObject(mem, offset + 16) : null,
+            hasFadeInDuration(mem, offset) ? BarBeatDuration.toObject(mem, offset + 28) : null,
+            FadeCurve.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 40)),
+            mem.get(PacketIO.PROTO_BOOL, offset + 41),
             v12,
-            mem.get(PacketIO.PROTO_INT, offset + 17),
-            mem.get(PacketIO.PROTO_INT, offset + 21)
+            mem.get(PacketIO.PROTO_INT, offset + 42),
+            mem.get(PacketIO.PROTO_INT, offset + 46)
         );
         if (cursor != null) cursor.position = varBase + varPos;
         return result;
@@ -403,73 +424,90 @@ public class MusicTransition {
     public int serialize(@Nonnull MemorySegment mem, int offset) {
         byte nullBits;
         nullBits = 0;
-        if (this.id != null) nullBits |= 0x01;
-        if (this.fromContainerIndices != null) nullBits |= 0x02;
-        if (this.toContainerIndices != null) nullBits |= 0x04;
-        if (this.exitAt != null) nullBits |= 0x08;
-        if (this.alignMarkerName != null) nullBits |= 0x10;
-        if (this.postEvent != null) nullBits |= 0x20;
+        if (this.fadeOutDuration != null) nullBits |= 0x01;
+        if (this.fadeOutDelay != null) nullBits |= 0x02;
+        if (this.fadeInDuration != null) nullBits |= 0x04;
+        if (this.id != null) nullBits |= 0x08;
+        if (this.fromContainerIndices != null) nullBits |= 0x10;
+        if (this.toContainerIndices != null) nullBits |= 0x20;
+        if (this.exitAt != null) nullBits |= 0x40;
+        if (this.alignMarkerName != null) nullBits |= 0x80;
         mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
+        nullBits = 0;
+        if (this.postEvent != null) nullBits |= 0x01;
+        mem.set(PacketIO.PROTO_BYTE, offset + 1, nullBits);
         
-        mem.set(PacketIO.PROTO_BYTE, offset + 1, (byte) this.align.getValue());
-        PacketIO.requireFinite(this.fadeOutDuration, "FadeOutDuration"); mem.set(PacketIO.PROTO_FLOAT, offset + 2, this.fadeOutDuration);
-        mem.set(PacketIO.PROTO_BYTE, offset + 6, (byte) this.fadeOutCurve.getValue());
-        PacketIO.requireFinite(this.fadeOutDelay, "FadeOutDelay"); mem.set(PacketIO.PROTO_FLOAT, offset + 7, this.fadeOutDelay);
-        PacketIO.requireFinite(this.fadeInDuration, "FadeInDuration"); mem.set(PacketIO.PROTO_FLOAT, offset + 11, this.fadeInDuration);
-        mem.set(PacketIO.PROTO_BYTE, offset + 15, (byte) this.fadeInCurve.getValue());
-        mem.set(PacketIO.PROTO_BOOL, offset + 16, this.playPostExit);
-        mem.set(PacketIO.PROTO_INT, offset + 17, this.priority);
-        mem.set(PacketIO.PROTO_INT, offset + 21, this.specificity);
-        var varOffset = offset + 49;
+        mem.set(PacketIO.PROTO_BYTE, offset + 2, (byte) this.align.getValue());
+        if (this.fadeOutDuration != null) {
+            this.fadeOutDuration.serialize(mem, offset + 3);
+        } else {
+            mem.asSlice(offset + 3, 12).fill((byte) 0); 
+        }
+        mem.set(PacketIO.PROTO_BYTE, offset + 15, (byte) this.fadeOutCurve.getValue());
+        if (this.fadeOutDelay != null) {
+            this.fadeOutDelay.serialize(mem, offset + 16);
+        } else {
+            mem.asSlice(offset + 16, 12).fill((byte) 0); 
+        }
+        if (this.fadeInDuration != null) {
+            this.fadeInDuration.serialize(mem, offset + 28);
+        } else {
+            mem.asSlice(offset + 28, 12).fill((byte) 0); 
+        }
+        mem.set(PacketIO.PROTO_BYTE, offset + 40, (byte) this.fadeInCurve.getValue());
+        mem.set(PacketIO.PROTO_BOOL, offset + 41, this.playPostExit);
+        mem.set(PacketIO.PROTO_INT, offset + 42, this.priority);
+        mem.set(PacketIO.PROTO_INT, offset + 46, this.specificity);
+        var varOffset = offset + 74;
         if (this.id != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 25, varOffset - offset - 49);
+            mem.set(PacketIO.PROTO_INT, offset + 50, varOffset - offset - 74);
             varOffset += PacketIO.writeVarString(mem, varOffset, this.id, 4096000);
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 25, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 50, -1);
         }
         if (this.fromContainerIndices != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 29, varOffset - offset - 49);
+            mem.set(PacketIO.PROTO_INT, offset + 54, varOffset - offset - 74);
             if (fromContainerIndices.length > 4096000) throw ProtocolException.arrayTooLong("FromContainerIndices", fromContainerIndices.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.fromContainerIndices.length);
             
             MemorySegment.copy(this.fromContainerIndices, 0, mem, PacketIO.PROTO_INT, varOffset, this.fromContainerIndices.length);
             varOffset += this.fromContainerIndices.length * 4;
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 29, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 54, -1);
         }
         if (this.toContainerIndices != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 33, varOffset - offset - 49);
+            mem.set(PacketIO.PROTO_INT, offset + 58, varOffset - offset - 74);
             if (toContainerIndices.length > 4096000) throw ProtocolException.arrayTooLong("ToContainerIndices", toContainerIndices.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.toContainerIndices.length);
             
             MemorySegment.copy(this.toContainerIndices, 0, mem, PacketIO.PROTO_INT, varOffset, this.toContainerIndices.length);
             varOffset += this.toContainerIndices.length * 4;
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 33, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 58, -1);
         }
         if (this.exitAt != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 37, varOffset - offset - 49);
+            mem.set(PacketIO.PROTO_INT, offset + 62, varOffset - offset - 74);
             varOffset += this.exitAt.serialize(mem, varOffset);
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 37, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 62, -1);
         }
         if (this.alignMarkerName != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 41, varOffset - offset - 49);
+            mem.set(PacketIO.PROTO_INT, offset + 66, varOffset - offset - 74);
             varOffset += PacketIO.writeVarString(mem, varOffset, this.alignMarkerName, 4096000);
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 41, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 66, -1);
         }
         if (this.postEvent != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 45, varOffset - offset - 49);
+            mem.set(PacketIO.PROTO_INT, offset + 70, varOffset - offset - 74);
             varOffset += PacketIO.writeVarString(mem, varOffset, this.postEvent, 4096000);
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 45, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 70, -1);
         }
     
        return varOffset - offset;
     }
     public int computeSize() {
-        int size = 49;
+        int size = 74;
         if (id != null) size += PacketIO.stringSize(id);
     if (fromContainerIndices != null) size += VarInt.size(fromContainerIndices.length) + fromContainerIndices.length * 4;
     if (toContainerIndices != null) size += VarInt.size(toContainerIndices.length) + toContainerIndices.length * 4;
@@ -488,10 +526,10 @@ public class MusicTransition {
         copy.exitAt = this.exitAt != null ? this.exitAt.clone() : null;
         copy.align = this.align;
         copy.alignMarkerName = this.alignMarkerName;
-        copy.fadeOutDuration = this.fadeOutDuration;
+        copy.fadeOutDuration = this.fadeOutDuration != null ? this.fadeOutDuration.clone() : null;
         copy.fadeOutCurve = this.fadeOutCurve;
-        copy.fadeOutDelay = this.fadeOutDelay;
-        copy.fadeInDuration = this.fadeInDuration;
+        copy.fadeOutDelay = this.fadeOutDelay != null ? this.fadeOutDelay.clone() : null;
+        copy.fadeInDuration = this.fadeInDuration != null ? this.fadeInDuration.clone() : null;
         copy.fadeInCurve = this.fadeInCurve;
         copy.playPostExit = this.playPostExit;
         copy.postEvent = this.postEvent;
@@ -505,7 +543,7 @@ public class MusicTransition {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof MusicTransition other)) return false;
-        return java.util.Objects.equals(this.id, other.id) && java.util.Arrays.equals(this.fromContainerIndices, other.fromContainerIndices) && java.util.Arrays.equals(this.toContainerIndices, other.toContainerIndices) && java.util.Objects.equals(this.exitAt, other.exitAt) && java.util.Objects.equals(this.align, other.align) && java.util.Objects.equals(this.alignMarkerName, other.alignMarkerName) && this.fadeOutDuration == other.fadeOutDuration && java.util.Objects.equals(this.fadeOutCurve, other.fadeOutCurve) && this.fadeOutDelay == other.fadeOutDelay && this.fadeInDuration == other.fadeInDuration && java.util.Objects.equals(this.fadeInCurve, other.fadeInCurve) && this.playPostExit == other.playPostExit && java.util.Objects.equals(this.postEvent, other.postEvent) && this.priority == other.priority && this.specificity == other.specificity;
+        return java.util.Objects.equals(this.id, other.id) && java.util.Arrays.equals(this.fromContainerIndices, other.fromContainerIndices) && java.util.Arrays.equals(this.toContainerIndices, other.toContainerIndices) && java.util.Objects.equals(this.exitAt, other.exitAt) && java.util.Objects.equals(this.align, other.align) && java.util.Objects.equals(this.alignMarkerName, other.alignMarkerName) && java.util.Objects.equals(this.fadeOutDuration, other.fadeOutDuration) && java.util.Objects.equals(this.fadeOutCurve, other.fadeOutCurve) && java.util.Objects.equals(this.fadeOutDelay, other.fadeOutDelay) && java.util.Objects.equals(this.fadeInDuration, other.fadeInDuration) && java.util.Objects.equals(this.fadeInCurve, other.fadeInCurve) && this.playPostExit == other.playPostExit && java.util.Objects.equals(this.postEvent, other.postEvent) && this.priority == other.priority && this.specificity == other.specificity;
     }
 
     @Override
@@ -517,10 +555,10 @@ public class MusicTransition {
         result = 31 * result + java.util.Objects.hashCode(exitAt);
         result = 31 * result + java.util.Objects.hashCode(align);
         result = 31 * result + java.util.Objects.hashCode(alignMarkerName);
-        result = 31 * result + Float.hashCode(fadeOutDuration);
+        result = 31 * result + java.util.Objects.hashCode(fadeOutDuration);
         result = 31 * result + java.util.Objects.hashCode(fadeOutCurve);
-        result = 31 * result + Float.hashCode(fadeOutDelay);
-        result = 31 * result + Float.hashCode(fadeInDuration);
+        result = 31 * result + java.util.Objects.hashCode(fadeOutDelay);
+        result = 31 * result + java.util.Objects.hashCode(fadeInDuration);
         result = 31 * result + java.util.Objects.hashCode(fadeInCurve);
         result = 31 * result + Boolean.hashCode(playPostExit);
         result = 31 * result + java.util.Objects.hashCode(postEvent);
@@ -529,4 +567,4 @@ public class MusicTransition {
         return result;
     }
 
-}
+}

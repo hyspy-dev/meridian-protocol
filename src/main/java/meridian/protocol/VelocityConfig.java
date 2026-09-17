@@ -176,4 +176,4 @@ public class VelocityConfig {
         return java.util.Objects.hash(groundResistance, groundResistanceMax, airResistance, airResistanceMax, threshold, style);
     }
 
-}
+}

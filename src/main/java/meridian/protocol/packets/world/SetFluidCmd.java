@@ -134,4 +134,4 @@ public class SetFluidCmd {
         return java.util.Objects.hash(index, fluidId, fluidLevel);
     }
 
-}
+}

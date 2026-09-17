@@ -122,4 +122,4 @@ public class CombatConfig {
         return java.util.Objects.hash(displayHealthBars, displayCombatText);
     }
 
-}
+}

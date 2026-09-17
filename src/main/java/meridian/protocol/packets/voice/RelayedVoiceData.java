@@ -260,4 +260,4 @@ public class RelayedVoiceData implements Packet, ToClientPacket {
         return result;
     }
 
-}
+}

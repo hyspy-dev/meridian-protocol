@@ -206,4 +206,4 @@ public class BlockPlacementSettings {
         return java.util.Objects.hash(allowRotationKey, placeInEmptyBlocks, previewVisibility, rotationMode, wallPlacementOverrideBlockId, floorPlacementOverrideBlockId, ceilingPlacementOverrideBlockId, allowBreakReplace);
     }
 
-}
+}

@@ -255,4 +255,4 @@ size += VarInt.size(animations.length) + animationsSize;
         return result;
     }
 
-}
+}

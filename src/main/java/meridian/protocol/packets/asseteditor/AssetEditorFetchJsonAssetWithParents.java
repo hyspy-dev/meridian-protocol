@@ -172,4 +172,4 @@ public class AssetEditorFetchJsonAssetWithParents implements Packet, ToServerPac
         return java.util.Objects.hash(token, path, isFromOpenedTab);
     }
 
-}
+}

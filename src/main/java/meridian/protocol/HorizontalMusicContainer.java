@@ -794,4 +794,4 @@ size += VarInt.size(stingers.length) + stingersSize;
         return result;
     }
 
-}
+}

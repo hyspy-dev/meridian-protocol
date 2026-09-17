@@ -192,4 +192,4 @@ public class ApplyKnockback implements Packet, ToClientPacket {
         return java.util.Objects.hash(hitPosition, x, y, z, changeType);
     }
 
-}
+}

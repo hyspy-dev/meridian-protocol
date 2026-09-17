@@ -143,4 +143,4 @@ public class ItemHudUI {
         return java.util.Objects.hash(path, type);
     }
 
-}
+}

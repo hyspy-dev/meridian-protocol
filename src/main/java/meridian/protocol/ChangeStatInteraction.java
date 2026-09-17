@@ -580,4 +580,4 @@ public class ChangeStatInteraction extends SimpleInteraction {
         return result;
     }
 
-}
+}

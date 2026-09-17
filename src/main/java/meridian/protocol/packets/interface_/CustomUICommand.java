@@ -241,4 +241,4 @@ public class CustomUICommand {
         return java.util.Objects.hash(type, selector, data, text);
     }
 
-}
+}

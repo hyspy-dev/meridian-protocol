@@ -230,4 +230,4 @@ public class ItemSoundSet {
         return java.util.Objects.hash(id, soundEventIndices);
     }
 
-}
+}

@@ -78,4 +78,4 @@ public abstract class WindowAction {
     public int computeSizeWithTypeId() {
         return VarInt.size(getTypeId()) + computeSize();
     }
-}
+}

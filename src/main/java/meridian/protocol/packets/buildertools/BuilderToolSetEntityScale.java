@@ -136,4 +136,4 @@ public class BuilderToolSetEntityScale implements Packet, ToServerPacket {
         return java.util.Objects.hash(entityId, scale);
     }
 
-}
+}

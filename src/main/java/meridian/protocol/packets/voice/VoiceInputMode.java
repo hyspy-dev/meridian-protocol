@@ -26,4 +26,4 @@ public enum VoiceInputMode {
         }
         throw ProtocolException.invalidEnumValue("VoiceInputMode", value);
     }
-}
+}

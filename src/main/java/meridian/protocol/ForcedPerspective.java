@@ -26,4 +26,4 @@ public enum ForcedPerspective {
         }
         throw ProtocolException.invalidEnumValue("ForcedPerspective", value);
     }
-}
+}

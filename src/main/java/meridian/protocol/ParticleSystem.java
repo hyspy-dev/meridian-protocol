@@ -288,4 +288,4 @@ size += VarInt.size(spawners.length) + spawnersSize;
         return result;
     }
 
-}
+}

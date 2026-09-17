@@ -146,4 +146,4 @@ public class BuilderToolGMaskPresetLoadResponse implements Packet, ToServerPacke
         return java.util.Objects.hash(maskData);
     }
 
-}
+}

@@ -225,4 +225,4 @@ size += VarInt.size(types.size()) + typesSize;
         return java.util.Objects.hash(type, maxId, types);
     }
 
-}
+}

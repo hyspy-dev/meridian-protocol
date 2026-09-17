@@ -204,4 +204,4 @@ public class MusicEmitterConfig {
         return java.util.Objects.hash(musicContainerIndex, audioCategoryOverrideIndex, referenceDistance, maxDistance, spatialBlend, reverbSend, volume, loop);
     }
 
-}
+}

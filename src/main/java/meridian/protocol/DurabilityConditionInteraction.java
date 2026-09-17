@@ -484,4 +484,4 @@ public class DurabilityConditionInteraction extends SimpleInteraction {
         return result;
     }
 
-}
+}

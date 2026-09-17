@@ -156,4 +156,4 @@ size += VarInt.size(beams.length) + beamsSize;
         return result;
     }
 
-}
+}

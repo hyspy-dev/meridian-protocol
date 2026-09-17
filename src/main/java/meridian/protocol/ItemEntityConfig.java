@@ -169,4 +169,4 @@ public class ItemEntityConfig {
         return java.util.Objects.hash(particleSystemId, particleColor, showItemParticles);
     }
 
-}
+}

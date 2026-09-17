@@ -319,4 +319,4 @@ size += VarInt.size(tasks.length) + tasksSize;
         return result;
     }
 
-}
+}

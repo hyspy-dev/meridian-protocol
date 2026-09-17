@@ -225,4 +225,4 @@ size += VarInt.size(fluids.size()) + fluidsSize;
         return java.util.Objects.hash(type, maxId, fluids);
     }
 
-}
+}

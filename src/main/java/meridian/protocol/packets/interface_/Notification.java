@@ -331,4 +331,4 @@ public class Notification implements Packet, ToClientPacket {
         return java.util.Objects.hash(message, secondaryMessage, icon, item, style, tag);
     }
 
-}
+}

@@ -21,7 +21,7 @@ public class SetAudioState implements Packet, ToClientPacket {
     public static final int FIXED_BLOCK_SIZE = 9;
     public static final int VARIABLE_FIELD_COUNT = 1;
     public static final int VARIABLE_BLOCK_START = 9;
-    public static final int MAX_SIZE = 16384029;
+    public static final int MAX_SIZE = 32768079;
 
     @Override
     public int getId() {
@@ -172,4 +172,4 @@ public class SetAudioState implements Packet, ToClientPacket {
         return java.util.Objects.hash(audioStateIndex, valueIndex, transitionOverride);
     }
 
-}
+}

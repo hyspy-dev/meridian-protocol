@@ -26,4 +26,4 @@ public enum RotationAxis {
         }
         throw ProtocolException.invalidEnumValue("RotationAxis", value);
     }
-}
+}

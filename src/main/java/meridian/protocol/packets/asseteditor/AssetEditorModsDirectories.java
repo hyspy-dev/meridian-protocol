@@ -185,4 +185,4 @@ size += VarInt.size(directories.length) + directoriesSize;
         return result;
     }
 
-}
+}

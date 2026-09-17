@@ -120,4 +120,4 @@ public class NameplateUpdate extends ComponentUpdate {
         return java.util.Objects.hash(text);
     }
 
-}
+}

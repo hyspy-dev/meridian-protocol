@@ -192,4 +192,4 @@ public class ChangeVelocity implements Packet, ToClientPacket {
         return java.util.Objects.hash(x, y, z, changeType, config);
     }
 
-}
+}

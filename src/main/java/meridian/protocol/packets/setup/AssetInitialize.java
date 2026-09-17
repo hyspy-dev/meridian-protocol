@@ -146,4 +146,4 @@ public class AssetInitialize implements Packet, ToClientPacket {
         return java.util.Objects.hash(asset, size);
     }
 
-}
+}

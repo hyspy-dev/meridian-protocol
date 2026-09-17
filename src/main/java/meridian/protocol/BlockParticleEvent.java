@@ -33,4 +33,4 @@ public enum BlockParticleEvent {
         }
         throw ProtocolException.invalidEnumValue("BlockParticleEvent", value);
     }
-}
+}

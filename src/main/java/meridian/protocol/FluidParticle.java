@@ -169,4 +169,4 @@ public class FluidParticle {
         return java.util.Objects.hash(systemId, color, scale);
     }
 
-}
+}

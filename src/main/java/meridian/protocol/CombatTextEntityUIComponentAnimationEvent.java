@@ -204,4 +204,4 @@ public class CombatTextEntityUIComponentAnimationEvent {
         return java.util.Objects.hash(type, startAt, endAt, startScale, endScale, positionOffset, startOpacity, endOpacity);
     }
 
-}
+}

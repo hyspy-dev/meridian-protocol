@@ -26,4 +26,4 @@ public enum ItemGridInfoDisplayMode {
         }
         throw ProtocolException.invalidEnumValue("ItemGridInfoDisplayMode", value);
     }
-}
+}

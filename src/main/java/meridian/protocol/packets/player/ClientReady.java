@@ -138,4 +138,4 @@ public class ClientReady implements Packet, ToServerPacket {
         return java.util.Objects.hash(readyForChunks, readyForGameplay);
     }
 
-}
+}

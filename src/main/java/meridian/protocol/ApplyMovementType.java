@@ -25,4 +25,4 @@ public enum ApplyMovementType {
         }
         throw ProtocolException.invalidEnumValue("ApplyMovementType", value);
     }
-}
+}

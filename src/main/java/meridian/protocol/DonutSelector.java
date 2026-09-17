@@ -205,4 +205,4 @@ public class DonutSelector extends Selector {
         return java.util.Objects.hash(minRadius, maxRadius, width, height, angle, offset, yawOffset);
     }
 
-}
+}

@@ -148,4 +148,4 @@ public class StateDelta {
         return java.util.Objects.hash(valueIndex, volumeDb, mute, pitchSemitones);
     }
 
-}
+}

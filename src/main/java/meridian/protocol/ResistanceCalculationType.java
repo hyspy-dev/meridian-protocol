@@ -25,4 +25,4 @@ public enum ResistanceCalculationType {
         }
         throw ProtocolException.invalidEnumValue("ResistanceCalculationType", value);
     }
-}
+}

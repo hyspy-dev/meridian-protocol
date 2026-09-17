@@ -185,4 +185,4 @@ public class DamageInfo implements Packet, ToClientPacket {
         return java.util.Objects.hash(damageSourcePosition, damageAmount, damageCause);
     }
 
-}
+}

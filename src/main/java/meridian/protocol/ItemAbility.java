@@ -882,4 +882,4 @@ size += VarInt.size(attributeModifiers.size()) + attributeModifiersSize;
         return result;
     }
 
-}
+}

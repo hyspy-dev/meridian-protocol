@@ -158,4 +158,4 @@ public class AssetEditorRequestAssetInheritance implements Packet, ToServerPacke
         return java.util.Objects.hash(token, assetPath);
     }
 
-}
+}

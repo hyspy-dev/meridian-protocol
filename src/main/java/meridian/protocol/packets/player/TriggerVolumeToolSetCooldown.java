@@ -161,4 +161,4 @@ public class TriggerVolumeToolSetCooldown implements Packet, ToServerPacket {
         return java.util.Objects.hash(volumeId, cooldown, cooldownMode);
     }
 
-}
+}

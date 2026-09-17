@@ -248,4 +248,4 @@ size += VarInt.size(blockBaseHitboxes.size()) + blockBaseHitboxesSize;
         return java.util.Objects.hash(type, maxId, blockBaseHitboxes);
     }
 
-}
+}

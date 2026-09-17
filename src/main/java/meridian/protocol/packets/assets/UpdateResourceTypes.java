@@ -212,4 +212,4 @@ size += VarInt.size(resourceTypes.size()) + resourceTypesSize;
         return java.util.Objects.hash(type, resourceTypes);
     }
 
-}
+}

@@ -133,4 +133,4 @@ public class AmbienceFXBlockSoundSet {
         return java.util.Objects.hash(blockSoundSetIndex, percent);
     }
 
-}
+}

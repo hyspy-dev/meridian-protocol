@@ -269,4 +269,4 @@ public class OpenWindow implements Packet, ToClientPacket {
         return java.util.Objects.hash(id, windowType, windowData, inventory, extraResources);
     }
 
-}
+}

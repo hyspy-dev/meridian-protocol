@@ -126,4 +126,4 @@ public class ViewRadius implements Packet, ToServerPacket, ToClientPacket {
         return java.util.Objects.hash(value);
     }
 
-}
+}

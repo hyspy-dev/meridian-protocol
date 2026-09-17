@@ -278,4 +278,4 @@ public class HorizontalSelector extends Selector {
         return java.util.Objects.hash(extendTop, extendBottom, yawLength, yawStartOffset, pitchOffset, rollOffset, startDistance, endDistance, direction, testLineOfSight, ignorePitch, ignoreYaw, anchor);
     }
 
-}
+}

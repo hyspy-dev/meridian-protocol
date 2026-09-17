@@ -180,4 +180,4 @@ public class AssetEditorCapabilities implements Packet, ToClientPacket {
         return java.util.Objects.hash(canDiscardAssets, canEditAssets, canCreateAssetPacks, canEditAssetPacks, canDeleteAssetPacks);
     }
 
-}
+}

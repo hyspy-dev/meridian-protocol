@@ -162,4 +162,4 @@ public class SoundEventLayerRandomSettings {
         return java.util.Objects.hash(minVolume, maxVolume, minPitch, maxPitch, maxStartOffset);
     }
 
-}
+}

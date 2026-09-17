@@ -122,4 +122,4 @@ public class CloseWindow implements Packet, ToServerPacket, ToClientPacket {
         return java.util.Objects.hash(id);
     }
 
-}
+}

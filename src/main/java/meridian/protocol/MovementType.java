@@ -36,4 +36,4 @@ public enum MovementType {
         }
         throw ProtocolException.invalidEnumValue("MovementType", value);
     }
-}
+}

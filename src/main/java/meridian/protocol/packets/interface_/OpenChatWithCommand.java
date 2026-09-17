@@ -146,4 +146,4 @@ public class OpenChatWithCommand implements Packet, ToClientPacket {
         return java.util.Objects.hash(command);
     }
 
-}
+}

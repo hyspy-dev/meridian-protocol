@@ -26,4 +26,4 @@ public enum FluidFog {
         }
         throw ProtocolException.invalidEnumValue("FluidFog", value);
     }
-}
+}

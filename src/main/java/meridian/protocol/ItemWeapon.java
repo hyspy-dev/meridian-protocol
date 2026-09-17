@@ -378,4 +378,4 @@ size += VarInt.size(statModifiers.size()) + statModifiersSize;
         return result;
     }
 
-}
+}

@@ -172,4 +172,4 @@ public class WorldLoadProgress implements Packet, ToClientPacket {
         return java.util.Objects.hash(status, percentComplete, percentCompleteSubitem);
     }
 
-}
+}

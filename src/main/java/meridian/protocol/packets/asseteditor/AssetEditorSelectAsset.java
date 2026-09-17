@@ -145,4 +145,4 @@ public class AssetEditorSelectAsset implements Packet, ToServerPacket {
         return java.util.Objects.hash(path);
     }
 
-}
+}

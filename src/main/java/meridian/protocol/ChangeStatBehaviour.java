@@ -27,4 +27,4 @@ public enum ChangeStatBehaviour {
         }
         throw ProtocolException.invalidEnumValue("ChangeStatBehaviour", value);
     }
-}
+}

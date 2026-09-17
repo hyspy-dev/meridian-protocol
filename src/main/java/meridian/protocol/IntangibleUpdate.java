@@ -88,4 +88,4 @@ public class IntangibleUpdate extends ComponentUpdate {
         return 0;
     }
 
-}
+}

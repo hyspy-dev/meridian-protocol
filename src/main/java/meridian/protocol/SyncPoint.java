@@ -28,4 +28,4 @@ public enum SyncPoint {
         }
         throw ProtocolException.invalidEnumValue("SyncPoint", value);
     }
-}
+}

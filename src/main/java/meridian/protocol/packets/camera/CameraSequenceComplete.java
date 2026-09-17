@@ -122,4 +122,4 @@ public class CameraSequenceComplete implements Packet, ToServerPacket {
         return java.util.Objects.hash(sequenceId);
     }
 
-}
+}

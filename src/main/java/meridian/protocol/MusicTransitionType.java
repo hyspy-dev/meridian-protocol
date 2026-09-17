@@ -26,4 +26,4 @@ public enum MusicTransitionType {
         }
         throw ProtocolException.invalidEnumValue("MusicTransitionType", value);
     }
-}
+}

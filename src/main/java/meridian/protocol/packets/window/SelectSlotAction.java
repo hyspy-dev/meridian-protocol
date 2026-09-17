@@ -108,4 +108,4 @@ public class SelectSlotAction extends WindowAction {
         return java.util.Objects.hash(slot);
     }
 
-}
+}

@@ -25,4 +25,4 @@ public enum GameMode {
         }
         throw ProtocolException.invalidEnumValue("GameMode", value);
     }
-}
+}

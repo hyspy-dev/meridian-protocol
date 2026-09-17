@@ -28,4 +28,4 @@ public enum SceneUpdateType {
         }
         throw ProtocolException.invalidEnumValue("SceneUpdateType", value);
     }
-}
+}

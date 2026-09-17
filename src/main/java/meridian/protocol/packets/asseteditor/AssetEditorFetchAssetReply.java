@@ -18,10 +18,10 @@ public class AssetEditorFetchAssetReply implements Packet, ToClientPacket {
     public static final int PACKET_ID = 312;
     public static final boolean IS_COMPRESSED = false;
     public static final int NULLABLE_BIT_FIELD_SIZE = 1;
-    public static final int FIXED_BLOCK_SIZE = 5;
+    public static final int FIXED_BLOCK_SIZE = 6;
     public static final int VARIABLE_FIELD_COUNT = 1;
-    public static final int VARIABLE_BLOCK_START = 5;
-    public static final int MAX_SIZE = 4096010;
+    public static final int VARIABLE_BLOCK_START = 6;
+    public static final int MAX_SIZE = 4096011;
 
     @Override
     public int getId() {
@@ -35,18 +35,21 @@ public class AssetEditorFetchAssetReply implements Packet, ToClientPacket {
 
     public int token;
     @Nullable public byte[] contents;
+    public boolean isReadOnly;
 
     public AssetEditorFetchAssetReply() {
     }
 
-    public AssetEditorFetchAssetReply(int token, @Nullable byte[] contents) {
+    public AssetEditorFetchAssetReply(int token, @Nullable byte[] contents, boolean isReadOnly) {
         this.token = token;
         this.contents = contents;
+        this.isReadOnly = isReadOnly;
     }
 
     public AssetEditorFetchAssetReply(@Nonnull AssetEditorFetchAssetReply other) {
         this.token = other.token;
         this.contents = other.contents;
+        this.isReadOnly = other.isReadOnly;
     }
 
     /**
@@ -55,7 +58,7 @@ public class AssetEditorFetchAssetReply implements Packet, ToClientPacket {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("AssetEditorFetchAssetReply", offset, (int) mem.byteSize());
-        long needed = (long) offset + 5;
+        long needed = (long) offset + 6;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("AssetEditorFetchAssetReply", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -75,7 +78,7 @@ public class AssetEditorFetchAssetReply implements Packet, ToClientPacket {
     @Nullable
     public static byte[] getContents(MemorySegment mem, int offset) {
         if (!hasContents(mem, offset)) return null;
-        var off = offset + 5;
+        var off = offset + 6;
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("Contents");
         var len = (int) packed;
@@ -86,6 +89,14 @@ public class AssetEditorFetchAssetReply implements Packet, ToClientPacket {
         var data = new byte[len];
         MemorySegment.copy(mem, PacketIO.PROTO_BYTE, off, data, 0, len);
         return data;
+    }
+    
+    public static boolean getIsReadOnly(MemorySegment mem) {
+        return getIsReadOnly(mem, 0);
+    }
+    
+    public static boolean getIsReadOnly(MemorySegment mem, int offset) {
+        return mem.get(PacketIO.PROTO_BOOL, offset + 5);
     }
     
     public static boolean hasContents(MemorySegment mem, int offset) {
@@ -111,7 +122,7 @@ public class AssetEditorFetchAssetReply implements Packet, ToClientPacket {
     public static AssetEditorFetchAssetReply toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
-        var varBase = offset + 5;
+        var varBase = offset + 6;
         var varPos = 0;
         byte[] v1 = null;
         if (hasContents(mem, offset)) {
@@ -129,7 +140,8 @@ public class AssetEditorFetchAssetReply implements Packet, ToClientPacket {
         }
         var result = new AssetEditorFetchAssetReply(
             mem.get(PacketIO.PROTO_INT, offset + 1),
-            v1
+            v1,
+            mem.get(PacketIO.PROTO_BOOL, offset + 5)
         );
         if (cursor != null) cursor.position = varBase + varPos;
         return result;
@@ -142,7 +154,8 @@ public class AssetEditorFetchAssetReply implements Packet, ToClientPacket {
         mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         
         mem.set(PacketIO.PROTO_INT, offset + 1, this.token);
-        var varOffset = offset + 5;
+        mem.set(PacketIO.PROTO_BOOL, offset + 5, this.isReadOnly);
+        var varOffset = offset + 6;
         if (this.contents != null) {
             
             if (contents.length > 4096000) throw ProtocolException.arrayTooLong("Contents", contents.length, 4096000);
@@ -155,7 +168,7 @@ public class AssetEditorFetchAssetReply implements Packet, ToClientPacket {
        return varOffset - offset;
     }
     public int computeSize() {
-        int size = 5;
+        int size = 6;
         if (contents != null) size += VarInt.size(contents.length) + contents.length * 1;
 
         return size;
@@ -165,6 +178,7 @@ public class AssetEditorFetchAssetReply implements Packet, ToClientPacket {
         AssetEditorFetchAssetReply copy = new AssetEditorFetchAssetReply();
         copy.token = this.token;
         copy.contents = this.contents != null ? java.util.Arrays.copyOf(this.contents, this.contents.length) : null;
+        copy.isReadOnly = this.isReadOnly;
         return copy;
     }
 
@@ -173,7 +187,7 @@ public class AssetEditorFetchAssetReply implements Packet, ToClientPacket {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof AssetEditorFetchAssetReply other)) return false;
-        return this.token == other.token && java.util.Arrays.equals(this.contents, other.contents);
+        return this.token == other.token && java.util.Arrays.equals(this.contents, other.contents) && this.isReadOnly == other.isReadOnly;
     }
 
     @Override
@@ -181,7 +195,8 @@ public class AssetEditorFetchAssetReply implements Packet, ToClientPacket {
         int result = 1;
         result = 31 * result + Integer.hashCode(token);
         result = 31 * result + java.util.Arrays.hashCode(contents);
+        result = 31 * result + Boolean.hashCode(isReadOnly);
         return result;
     }
 
-}
+}

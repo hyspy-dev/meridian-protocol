@@ -253,4 +253,4 @@ size += VarInt.size(particleSystemIds.length) + particleSystemIdsSize;
         return result;
     }
 
-}
+}

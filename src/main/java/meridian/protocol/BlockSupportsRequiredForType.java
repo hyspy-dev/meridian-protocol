@@ -25,4 +25,4 @@ public enum BlockSupportsRequiredForType {
         }
         throw ProtocolException.invalidEnumValue("BlockSupportsRequiredForType", value);
     }
-}
+}

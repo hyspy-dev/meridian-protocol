@@ -134,4 +134,4 @@ public class MouseButtonEvent {
         return java.util.Objects.hash(mouseButtonType, state, clicks);
     }
 
-}
+}

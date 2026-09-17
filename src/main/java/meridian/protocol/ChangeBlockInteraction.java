@@ -564,4 +564,4 @@ public class ChangeBlockInteraction extends SimpleBlockInteraction {
         return result;
     }
 
-}
+}

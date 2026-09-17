@@ -250,4 +250,4 @@ public class InteractionChainData {
         return java.util.Objects.hash(entityId, proxyId, hitLocation, hitDetail, blockPosition, targetSlot, hitNormal);
     }
 
-}
+}

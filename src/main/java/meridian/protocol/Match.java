@@ -25,4 +25,4 @@ public enum Match {
         }
         throw ProtocolException.invalidEnumValue("Match", value);
     }
-}
+}

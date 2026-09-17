@@ -25,4 +25,4 @@ public enum StreamType {
         }
         throw ProtocolException.invalidEnumValue("StreamType", value);
     }
-}
+}

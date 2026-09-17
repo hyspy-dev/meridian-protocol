@@ -197,4 +197,4 @@ public class WeatherParticle {
         return java.util.Objects.hash(systemId, color, scale, isOvergroundOnly, positionOffsetMultiplier);
     }
 
-}
+}

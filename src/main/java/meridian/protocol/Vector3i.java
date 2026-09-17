@@ -134,4 +134,4 @@ public class Vector3i {
         return java.util.Objects.hash(x, y, z);
     }
 
-}
+}

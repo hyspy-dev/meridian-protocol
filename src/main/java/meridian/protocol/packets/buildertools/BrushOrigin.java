@@ -28,4 +28,4 @@ public enum BrushOrigin {
         }
         throw ProtocolException.invalidEnumValue("BrushOrigin", value);
     }
-}
+}

@@ -212,4 +212,4 @@ size += VarInt.size(trails.size()) + trailsSize;
         return java.util.Objects.hash(type, trails);
     }
 
-}
+}

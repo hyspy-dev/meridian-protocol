@@ -491,4 +491,4 @@ public class ChainFlagInteraction extends SimpleInteraction {
         return result;
     }
 
-}
+}

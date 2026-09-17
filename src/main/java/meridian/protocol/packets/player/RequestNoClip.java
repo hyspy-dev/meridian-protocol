@@ -138,4 +138,4 @@ public class RequestNoClip implements Packet, ToServerPacket {
         return java.util.Objects.hash(enabled, notify);
     }
 
-}
+}

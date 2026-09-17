@@ -231,4 +231,4 @@ size += VarInt.size(pointIds.length) + pointIdsSize;
         return result;
     }
 
-}
+}

@@ -122,4 +122,4 @@ public class UntrackObjective implements Packet, ToClientPacket {
         return java.util.Objects.hash(objectiveUuid);
     }
 
-}
+}

@@ -30,4 +30,4 @@ public enum CustomUICommandType {
         }
         throw ProtocolException.invalidEnumValue("CustomUICommandType", value);
     }
-}
+}

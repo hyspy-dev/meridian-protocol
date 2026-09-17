@@ -27,4 +27,4 @@ public enum BenchType {
         }
         throw ProtocolException.invalidEnumValue("BenchType", value);
     }
-}
+}

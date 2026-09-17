@@ -27,4 +27,4 @@ public enum SurfaceType {
         }
         throw ProtocolException.invalidEnumValue("SurfaceType", value);
     }
-}
+}

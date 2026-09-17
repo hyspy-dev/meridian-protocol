@@ -230,4 +230,4 @@ public class ServerAuthToken implements Packet, ToClientPacket {
         return result;
     }
 
-}
+}

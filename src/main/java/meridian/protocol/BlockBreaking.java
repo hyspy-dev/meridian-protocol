@@ -269,4 +269,4 @@ public class BlockBreaking {
         return java.util.Objects.hash(gatherType, health, quantity, quality, itemId, dropListId);
     }
 
-}
+}

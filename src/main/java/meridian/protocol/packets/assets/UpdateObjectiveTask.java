@@ -173,4 +173,4 @@ public class UpdateObjectiveTask implements Packet, ToClientPacket {
         return java.util.Objects.hash(objectiveUuid, taskIndex, task);
     }
 
-}
+}

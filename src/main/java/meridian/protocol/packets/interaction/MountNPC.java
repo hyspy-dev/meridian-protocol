@@ -164,4 +164,4 @@ public class MountNPC implements Packet, ToClientPacket {
         return java.util.Objects.hash(anchorX, anchorY, anchorZ, entityId);
     }
 
-}
+}

@@ -229,4 +229,4 @@ size += VarInt.size(options.length) + optionsSize;
         return result;
     }
 
-}
+}

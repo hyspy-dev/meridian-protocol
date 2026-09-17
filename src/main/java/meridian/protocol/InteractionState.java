@@ -28,4 +28,4 @@ public enum InteractionState {
         }
         throw ProtocolException.invalidEnumValue("InteractionState", value);
     }
-}
+}

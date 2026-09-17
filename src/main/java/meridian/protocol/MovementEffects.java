@@ -206,4 +206,4 @@ public class MovementEffects {
         return java.util.Objects.hash(disableForward, disableBackward, disableLeft, disableRight, disableSprint, disableJump, disableCrouch, speedMultiplier);
     }
 
-}
+}

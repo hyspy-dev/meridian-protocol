@@ -268,4 +268,4 @@ public class AssetInfo {
         return java.util.Objects.hash(path, oldPath, isDeleted, isNew, lastModificationDate, lastModificationUsername);
     }
 
-}
+}

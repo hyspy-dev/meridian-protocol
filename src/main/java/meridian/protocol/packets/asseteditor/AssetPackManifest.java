@@ -429,4 +429,4 @@ size += VarInt.size(authors.length) + authorsSize;
         return result;
     }
 
-}
+}

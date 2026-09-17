@@ -27,4 +27,4 @@ public enum ApplyForceState {
         }
         throw ProtocolException.invalidEnumValue("ApplyForceState", value);
     }
-}
+}

@@ -194,4 +194,4 @@ public class BuilderToolRandomizeClipboard implements Packet, ToServerPacket {
         return java.util.Objects.hash(deltaX, deltaY, deltaZ, flipX, flipY, flipZ);
     }
 
-}
+}

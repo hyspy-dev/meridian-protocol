@@ -189,4 +189,4 @@ public class AssetPath {
         return java.util.Objects.hash(pack, path);
     }
 
-}
+}

@@ -134,4 +134,4 @@ public class RemovePointDisplay implements Packet, ToClientPacket {
         return java.util.Objects.hash(pointId);
     }
 
-}
+}

@@ -122,4 +122,4 @@ public class AssetEditorAuthorization implements Packet, ToClientPacket {
         return java.util.Objects.hash(canUse);
     }
 
-}
+}

@@ -134,4 +134,4 @@ public class BarBeatPosition {
         return java.util.Objects.hash(bar, beat, ms);
     }
 
-}
+}

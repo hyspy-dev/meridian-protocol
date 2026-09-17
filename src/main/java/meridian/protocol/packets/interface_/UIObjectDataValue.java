@@ -206,4 +206,4 @@ size += VarInt.size(properties.size()) + propertiesSize;
         return java.util.Objects.hash(typeName, properties);
     }
 
-}
+}

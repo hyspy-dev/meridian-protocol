@@ -122,4 +122,4 @@ public class SetTimeDilation implements Packet, ToClientPacket {
         return java.util.Objects.hash(timeDilation);
     }
 
-}
+}

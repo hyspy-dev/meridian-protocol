@@ -108,4 +108,4 @@ public class RepulsionUpdate extends ComponentUpdate {
         return java.util.Objects.hash(repulsionConfigIndex);
     }
 
-}
+}

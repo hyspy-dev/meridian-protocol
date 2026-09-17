@@ -202,4 +202,4 @@ public class TriggerVolumeToolResize implements Packet, ToServerPacket {
         return java.util.Objects.hash(volumeId, shapeType, param1, param2, newPosition);
     }
 
-}
+}

@@ -895,4 +895,4 @@ public class PlayerSkin {
         return java.util.Objects.hash(bodyCharacteristic, underwear, face, eyes, ears, mouth, facialHair, haircut, eyebrows, pants, overpants, undertop, overtop, shoes, headAccessory, faceAccessory, earAccessory, skinFeature, gloves, cape);
     }
 
-}
+}

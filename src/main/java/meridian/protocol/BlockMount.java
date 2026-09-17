@@ -148,4 +148,4 @@ public class BlockMount {
         return java.util.Objects.hash(type, position, orientation, blockTypeId);
     }
 
-}
+}

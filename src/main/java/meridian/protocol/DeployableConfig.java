@@ -199,4 +199,4 @@ public class DeployableConfig {
         return java.util.Objects.hash(model, modelPreview, allowPlaceOnWalls);
     }
 
-}
+}

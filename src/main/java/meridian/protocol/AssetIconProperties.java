@@ -159,4 +159,4 @@ public class AssetIconProperties {
         return java.util.Objects.hash(scale, translation, rotation);
     }
 
-}
+}

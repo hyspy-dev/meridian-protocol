@@ -229,4 +229,4 @@ public class StingerBinding {
         return java.util.Objects.hash(musicEvent, stingerIndex, playAt, minRepeatIntervalSeconds, shortLead);
     }
 
-}
+}

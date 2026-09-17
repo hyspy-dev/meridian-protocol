@@ -232,4 +232,4 @@ public class ItemGlider {
         return java.util.Objects.hash(terminalVelocity, fallSpeedMultiplier, horizontalSpeedMultiplier, speed, diveTerminalVelocity, diveSpeed, diveFallSpeedMultiplier, diveHorizontalSpeedMultiplier, energyClimbRate, diveSpeedToEnergyRatio);
     }
 
-}
+}

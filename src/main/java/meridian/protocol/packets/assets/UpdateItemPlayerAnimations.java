@@ -212,4 +212,4 @@ size += VarInt.size(itemPlayerAnimations.size()) + itemPlayerAnimationsSize;
         return java.util.Objects.hash(type, itemPlayerAnimations);
     }
 
-}
+}

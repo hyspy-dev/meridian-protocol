@@ -248,4 +248,4 @@ size += VarInt.size(sounds.size()) + soundsSize;
         return java.util.Objects.hash(id, sounds, category);
     }
 
-}
+}

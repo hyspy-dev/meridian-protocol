@@ -26,4 +26,4 @@ public enum JsonUpdateType {
         }
         throw ProtocolException.invalidEnumValue("JsonUpdateType", value);
     }
-}
+}

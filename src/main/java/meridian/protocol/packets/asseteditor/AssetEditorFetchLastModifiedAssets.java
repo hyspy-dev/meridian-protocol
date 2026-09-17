@@ -102,4 +102,4 @@ public class AssetEditorFetchLastModifiedAssets implements Packet, ToServerPacke
         return 0;
     }
 
-}
+}

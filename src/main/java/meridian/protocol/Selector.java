@@ -72,4 +72,4 @@ public abstract class Selector {
     public int computeSizeWithTypeId() {
         return VarInt.size(getTypeId()) + computeSize();
     }
-}
+}

@@ -88,4 +88,4 @@ public class PreventInventoryAccessUpdate extends ComponentUpdate {
         return 0;
     }
 
-}
+}

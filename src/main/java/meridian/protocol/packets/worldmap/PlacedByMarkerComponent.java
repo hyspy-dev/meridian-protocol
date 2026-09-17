@@ -133,4 +133,4 @@ public class PlacedByMarkerComponent extends MapMarkerComponent {
         return java.util.Objects.hash(name, playerId);
     }
 
-}
+}

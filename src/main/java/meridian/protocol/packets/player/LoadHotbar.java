@@ -122,4 +122,4 @@ public class LoadHotbar implements Packet, ToServerPacket {
         return java.util.Objects.hash(inventoryRow);
     }
 
-}
+}

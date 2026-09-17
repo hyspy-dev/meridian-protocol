@@ -225,4 +225,4 @@ size += VarInt.size(entityEffects.size()) + entityEffectsSize;
         return java.util.Objects.hash(type, maxId, entityEffects);
     }
 
-}
+}

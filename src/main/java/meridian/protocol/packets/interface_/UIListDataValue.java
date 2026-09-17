@@ -199,4 +199,4 @@ size += VarInt.size(items.length) + itemsSize;
         return result;
     }
 
-}
+}

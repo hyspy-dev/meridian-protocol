@@ -211,4 +211,4 @@ public class CameraSettings {
         return java.util.Objects.hash(positionOffset, yaw, pitch);
     }
 
-}
+}

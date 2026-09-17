@@ -26,4 +26,4 @@ public enum WriteUpdateType {
         }
         throw ProtocolException.invalidEnumValue("WriteUpdateType", value);
     }
-}
+}

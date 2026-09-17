@@ -28,4 +28,4 @@ public enum DrawType {
         }
         throw ProtocolException.invalidEnumValue("DrawType", value);
     }
-}
+}

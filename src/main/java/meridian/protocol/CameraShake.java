@@ -157,4 +157,4 @@ public class CameraShake {
         return java.util.Objects.hash(firstPerson, thirdPerson);
     }
 
-}
+}

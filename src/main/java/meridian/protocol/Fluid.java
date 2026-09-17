@@ -618,4 +618,4 @@ size += VarInt.size(particles.length) + particlesSize;
         return result;
     }
 
-}
+}

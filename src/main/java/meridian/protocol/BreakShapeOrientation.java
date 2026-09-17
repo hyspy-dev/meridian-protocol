@@ -25,4 +25,4 @@ public enum BreakShapeOrientation {
         }
         throw ProtocolException.invalidEnumValue("BreakShapeOrientation", value);
     }
-}
+}

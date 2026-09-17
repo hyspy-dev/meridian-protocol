@@ -136,4 +136,4 @@ public class TeleportToWorldMapPosition implements Packet, ToServerPacket {
         return java.util.Objects.hash(x, y);
     }
 
-}
+}

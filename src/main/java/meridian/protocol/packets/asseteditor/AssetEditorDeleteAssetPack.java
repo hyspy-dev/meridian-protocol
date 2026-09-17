@@ -146,4 +146,4 @@ public class AssetEditorDeleteAssetPack implements Packet, ToServerPacket, ToCli
         return java.util.Objects.hash(id);
     }
 
-}
+}

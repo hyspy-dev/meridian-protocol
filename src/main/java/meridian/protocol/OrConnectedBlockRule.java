@@ -171,4 +171,4 @@ size += VarInt.size(rules.length) + rulesSize;
         return result;
     }
 
-}
+}

@@ -146,4 +146,4 @@ public class ChatMessage implements Packet, ToServerPacket {
         return java.util.Objects.hash(message);
     }
 
-}
+}

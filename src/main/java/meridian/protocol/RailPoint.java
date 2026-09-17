@@ -120,4 +120,4 @@ public class RailPoint {
         return java.util.Objects.hash(point, normal);
     }
 
-}
+}

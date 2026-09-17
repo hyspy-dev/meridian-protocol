@@ -172,4 +172,4 @@ public class UpdateBossBar implements Packet, ToClientPacket {
         return java.util.Objects.hash(entityNetworkId, name, hide);
     }
 
-}
+}

@@ -24,4 +24,4 @@ public enum NetworkChannel {
         if (value >= 0 && value < VALUES.length) return VALUES[value];
         throw new IllegalArgumentException("Invalid network channel: " + value);
     }
-}
+}

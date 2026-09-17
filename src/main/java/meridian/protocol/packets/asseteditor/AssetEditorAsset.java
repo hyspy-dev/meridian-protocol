@@ -188,4 +188,4 @@ public class AssetEditorAsset {
         return java.util.Objects.hash(hash, path);
     }
 
-}
+}

@@ -173,4 +173,4 @@ public class StreamOpenResponse implements Packet, ToClientPacket {
         return java.util.Objects.hash(type, accepted, rejectionReason);
     }
 
-}
+}

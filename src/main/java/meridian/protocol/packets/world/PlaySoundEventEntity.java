@@ -164,4 +164,4 @@ public class PlaySoundEventEntity implements Packet, ToClientPacket {
         return java.util.Objects.hash(soundEventIndex, networkId, volumeModifier, pitchModifier);
     }
 
-}
+}

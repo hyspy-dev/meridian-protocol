@@ -29,4 +29,4 @@ public enum NoiseType {
         }
         throw ProtocolException.invalidEnumValue("NoiseType", value);
     }
-}
+}

@@ -229,4 +229,4 @@ public class AssetEditorExportAssetInitialize implements Packet, ToClientPacket 
         return java.util.Objects.hash(asset, oldPath, size, failed);
     }
 
-}
+}

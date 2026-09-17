@@ -599,4 +599,4 @@ size += VarInt.size(flags.size()) + flagsSize;
         return result;
     }
 
-}
+}

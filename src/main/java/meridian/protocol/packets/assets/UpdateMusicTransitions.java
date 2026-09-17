@@ -96,7 +96,7 @@ public class UpdateMusicTransitions implements Packet, ToClientPacket {
         if (len > 4096000) throw ProtocolException.dictionaryTooLarge("MusicTransitions", len, 4096000);
         
         off += (int) (packed >>> 32);
-        if (off + (long) len * 53 > mem.byteSize()) throw ProtocolException.bufferTooSmall("MusicTransitions", (int) java.lang.Math.min(off + (long) len * 53, Integer.MAX_VALUE), (int) mem.byteSize());
+        if (off + (long) len * 78 > mem.byteSize()) throw ProtocolException.bufferTooSmall("MusicTransitions", (int) java.lang.Math.min(off + (long) len * 78, Integer.MAX_VALUE), (int) mem.byteSize());
         java.util.Map<Integer, MusicTransition> data = new HashMap<>(len);
         for (var i = 0; i < len; i++) {
             var key = mem.get(PacketIO.PROTO_INT, off);
@@ -145,7 +145,7 @@ public class UpdateMusicTransitions implements Packet, ToClientPacket {
             if (len > 4096000) throw ProtocolException.dictionaryTooLarge("MusicTransitions", len, 4096000);
             
             off += (int) (packed >>> 32);
-            if (off + (long) len * 53 > mem.byteSize()) throw ProtocolException.bufferTooSmall("MusicTransitions", (int) java.lang.Math.min(off + (long) len * 53, Integer.MAX_VALUE), (int) mem.byteSize());
+            if (off + (long) len * 78 > mem.byteSize()) throw ProtocolException.bufferTooSmall("MusicTransitions", (int) java.lang.Math.min(off + (long) len * 78, Integer.MAX_VALUE), (int) mem.byteSize());
             v2 = new HashMap<>(len);
             for (var i = 0; i < len; i++) {
                 var key = mem.get(PacketIO.PROTO_INT, off);
@@ -225,4 +225,4 @@ size += VarInt.size(musicTransitions.size()) + musicTransitionsSize;
         return java.util.Objects.hash(type, maxId, musicTransitions);
     }
 
-}
+}

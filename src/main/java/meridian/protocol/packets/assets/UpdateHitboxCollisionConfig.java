@@ -219,4 +219,4 @@ public class UpdateHitboxCollisionConfig implements Packet, ToClientPacket {
         return java.util.Objects.hash(type, maxId, hitboxCollisionConfigs);
     }
 
-}
+}

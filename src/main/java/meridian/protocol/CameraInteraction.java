@@ -499,4 +499,4 @@ public class CameraInteraction extends SimpleInteraction {
         return result;
     }
 
-}
+}

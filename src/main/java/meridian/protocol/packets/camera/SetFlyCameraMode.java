@@ -122,4 +122,4 @@ public class SetFlyCameraMode implements Packet, ToClientPacket {
         return java.util.Objects.hash(entering);
     }
 
-}
+}

@@ -170,4 +170,4 @@ size += VarInt.size(updates.length) + updatesSize;
         return result;
     }
 
-}
+}

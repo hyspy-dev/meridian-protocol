@@ -171,4 +171,4 @@ public abstract class Interaction {
     public int computeSizeWithTypeId() {
         return VarInt.size(getTypeId()) + computeSize();
     }
-}
+}

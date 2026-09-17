@@ -146,4 +146,4 @@ public class PostMusicEvent implements Packet, ToClientPacket {
         return java.util.Objects.hash(musicEvent);
     }
 
-}
+}

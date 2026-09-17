@@ -207,4 +207,4 @@ size += VarInt.size(translations.size()) + translationsSize;
         return java.util.Objects.hash(type, translations);
     }
 
-}
+}

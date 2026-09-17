@@ -377,4 +377,4 @@ public class ItemAnimation {
         return java.util.Objects.hash(thirdPerson, thirdPersonMoving, thirdPersonFace, firstPerson, firstPersonOverride, keepPreviousFirstPersonAnimation, speed, blendingDuration, looping, clipsGeometry);
     }
 
-}
+}

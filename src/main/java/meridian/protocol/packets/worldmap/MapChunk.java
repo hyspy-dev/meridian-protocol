@@ -156,4 +156,4 @@ public class MapChunk {
         return java.util.Objects.hash(chunkX, chunkZ, image);
     }
 
-}
+}

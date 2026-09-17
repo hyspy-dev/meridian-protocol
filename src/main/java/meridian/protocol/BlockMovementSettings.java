@@ -274,4 +274,4 @@ public class BlockMovementSettings {
         return java.util.Objects.hash(isClimbable, climbUpSpeedMultiplier, climbDownSpeedMultiplier, climbLateralSpeedMultiplier, isBouncy, bounceVelocity, drag, friction, terminalVelocityModifier, horizontalSpeedMultiplier, acceleration, jumpForceMultiplier, disableAutoStep);
     }
 
-}
+}

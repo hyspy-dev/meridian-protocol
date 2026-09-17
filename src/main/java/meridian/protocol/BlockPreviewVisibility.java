@@ -26,4 +26,4 @@ public enum BlockPreviewVisibility {
         }
         throw ProtocolException.invalidEnumValue("BlockPreviewVisibility", value);
     }
-}
+}

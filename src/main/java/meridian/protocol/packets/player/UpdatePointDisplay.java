@@ -185,4 +185,4 @@ size += VarInt.size(points.length) + pointsSize;
         return result;
     }
 
-}
+}

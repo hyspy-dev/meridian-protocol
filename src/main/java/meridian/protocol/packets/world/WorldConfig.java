@@ -150,4 +150,4 @@ public class WorldConfig {
         return java.util.Objects.hash(allowBlockBreaking, blockBreakingBypassTagIndex, allowBlockGathering, allowBlockPlacement);
     }
 
-}
+}

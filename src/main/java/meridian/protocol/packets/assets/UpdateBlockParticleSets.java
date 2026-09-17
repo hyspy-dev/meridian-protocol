@@ -212,4 +212,4 @@ size += VarInt.size(blockParticleSets.size()) + blockParticleSetsSize;
         return java.util.Objects.hash(type, blockParticleSets);
     }
 
-}
+}

@@ -122,4 +122,4 @@ public class ClientOpenWindow implements Packet, ToServerPacket {
         return java.util.Objects.hash(type);
     }
 
-}
+}

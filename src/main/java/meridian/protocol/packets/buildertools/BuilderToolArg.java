@@ -510,4 +510,4 @@ public class BuilderToolArg {
         return java.util.Objects.hash(required, id, argType, boolArg, floatArg, intArg, stringArg, blockArg, maskArg, brushShapeArg, brushOriginArg, brushAxisArg, rotationArg, optionArg);
     }
 
-}
+}

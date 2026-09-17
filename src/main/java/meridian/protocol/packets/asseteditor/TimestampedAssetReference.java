@@ -188,4 +188,4 @@ public class TimestampedAssetReference {
         return java.util.Objects.hash(path, timestamp);
     }
 
-}
+}

@@ -29,4 +29,4 @@ public enum AnimationSlot {
         }
         throw ProtocolException.invalidEnumValue("AnimationSlot", value);
     }
-}
+}

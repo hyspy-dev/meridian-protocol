@@ -25,4 +25,4 @@ public enum ValueType {
         }
         throw ProtocolException.invalidEnumValue("ValueType", value);
     }
-}
+}

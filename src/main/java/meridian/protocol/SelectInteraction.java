@@ -584,4 +584,4 @@ size += VarInt.size(hitEntityRules.length) + hitEntityRulesSize;
         return result;
     }
 
-}
+}

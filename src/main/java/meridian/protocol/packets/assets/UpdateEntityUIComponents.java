@@ -225,4 +225,4 @@ size += VarInt.size(components.size()) + componentsSize;
         return java.util.Objects.hash(type, maxId, components);
     }
 
-}
+}

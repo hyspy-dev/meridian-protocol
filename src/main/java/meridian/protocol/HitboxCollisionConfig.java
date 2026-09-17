@@ -164,4 +164,4 @@ public class HitboxCollisionConfig {
         return java.util.Objects.hash(collisionType, softCollisionOffsetRatio, rotateHitbox, allowEntityAnchoring, rotateAnchoredEntities);
     }
 
-}
+}

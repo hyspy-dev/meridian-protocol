@@ -255,4 +255,4 @@ public class BlockSoundSet {
         return java.util.Objects.hash(id, soundEventIndices, moveInRepeatRange);
     }
 
-}
+}

@@ -27,4 +27,4 @@ public enum ShadingMode {
         }
         throw ProtocolException.invalidEnumValue("ShadingMode", value);
     }
-}
+}

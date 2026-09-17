@@ -582,4 +582,4 @@ public class StatsConditionInteraction extends SimpleInteraction {
         return result;
     }
 
-}
+}

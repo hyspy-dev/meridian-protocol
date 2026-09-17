@@ -354,4 +354,4 @@ public class Connect implements Packet, ToServerPacket {
         return result;
     }
 
-}
+}

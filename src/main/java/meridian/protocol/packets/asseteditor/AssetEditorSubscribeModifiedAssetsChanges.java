@@ -122,4 +122,4 @@ public class AssetEditorSubscribeModifiedAssetsChanges implements Packet, ToServ
         return java.util.Objects.hash(subscribe);
     }
 
-}
+}

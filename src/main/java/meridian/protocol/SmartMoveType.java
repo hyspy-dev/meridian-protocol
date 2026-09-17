@@ -26,4 +26,4 @@ public enum SmartMoveType {
         }
         throw ProtocolException.invalidEnumValue("SmartMoveType", value);
     }
-}
+}

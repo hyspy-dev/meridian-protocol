@@ -26,4 +26,4 @@ public final class DebugFlags {
     public static byte none() {
         return (byte) 0;
     }
-}
+}

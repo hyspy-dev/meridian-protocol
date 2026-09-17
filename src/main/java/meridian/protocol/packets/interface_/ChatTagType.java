@@ -24,4 +24,4 @@ public enum ChatTagType {
         }
         throw ProtocolException.invalidEnumValue("ChatTagType", value);
     }
-}
+}

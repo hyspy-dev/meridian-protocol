@@ -136,4 +136,4 @@ public class SetActiveSlot implements Packet, ToServerPacket, ToClientPacket {
         return java.util.Objects.hash(inventorySectionId, activeSlot);
     }
 
-}
+}

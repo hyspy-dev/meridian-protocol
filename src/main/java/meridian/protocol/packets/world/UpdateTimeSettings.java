@@ -164,4 +164,4 @@ public class UpdateTimeSettings implements Packet, ToClientPacket {
         return java.util.Objects.hash(daytimeDurationSeconds, nighttimeDurationSeconds, totalMoonPhases, timePaused);
     }
 
-}
+}

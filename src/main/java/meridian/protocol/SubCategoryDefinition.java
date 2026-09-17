@@ -241,4 +241,4 @@ public class SubCategoryDefinition {
         return java.util.Objects.hash(id, name, description, order);
     }
 
-}
+}

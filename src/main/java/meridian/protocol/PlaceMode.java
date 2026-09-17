@@ -29,4 +29,4 @@ public enum PlaceMode {
         }
         throw ProtocolException.invalidEnumValue("PlaceMode", value);
     }
-}
+}

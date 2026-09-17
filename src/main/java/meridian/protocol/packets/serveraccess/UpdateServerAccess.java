@@ -184,4 +184,4 @@ size += VarInt.size(hosts.length) + hostsSize;
         return result;
     }
 
-}
+}

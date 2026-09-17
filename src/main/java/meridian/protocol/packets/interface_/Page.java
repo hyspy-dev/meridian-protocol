@@ -12,7 +12,8 @@ public enum Page {
     MachinimaEditor(5),
     ContentCreation(6),
     Custom(7),
-    Serverside(8);
+    Serverside(8),
+    Chapters(9);
 
     public static final Page[] VALUES = values();
 
@@ -32,4 +33,4 @@ public enum Page {
         }
         throw ProtocolException.invalidEnumValue("Page", value);
     }
-}
+}

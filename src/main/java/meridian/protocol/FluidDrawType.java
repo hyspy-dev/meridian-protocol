@@ -25,4 +25,4 @@ public enum FluidDrawType {
         }
         throw ProtocolException.invalidEnumValue("FluidDrawType", value);
     }
-}
+}

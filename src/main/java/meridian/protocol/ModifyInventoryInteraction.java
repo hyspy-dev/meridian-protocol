@@ -612,4 +612,4 @@ public class ModifyInventoryInteraction extends SimpleInteraction {
         return result;
     }
 
-}
+}

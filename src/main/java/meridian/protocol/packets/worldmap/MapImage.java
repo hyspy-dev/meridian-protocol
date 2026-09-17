@@ -280,4 +280,4 @@ public class MapImage {
         return result;
     }
 
-}
+}

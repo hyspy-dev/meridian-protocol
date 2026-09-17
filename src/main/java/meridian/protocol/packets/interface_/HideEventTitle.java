@@ -122,4 +122,4 @@ public class HideEventTitle implements Packet, ToClientPacket {
         return java.util.Objects.hash(fadeOutDuration);
     }
 
-}
+}

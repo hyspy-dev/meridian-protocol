@@ -102,4 +102,4 @@ public class ClearDebugShapes implements Packet, ToClientPacket {
         return 0;
     }
 
-}
+}

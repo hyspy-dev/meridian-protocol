@@ -122,4 +122,4 @@ public class StreamOpen implements Packet, ToServerPacket {
         return java.util.Objects.hash(type);
     }
 
-}
+}

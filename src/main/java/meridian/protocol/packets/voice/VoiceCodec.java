@@ -24,4 +24,4 @@ public enum VoiceCodec {
         }
         throw ProtocolException.invalidEnumValue("VoiceCodec", value);
     }
-}
+}

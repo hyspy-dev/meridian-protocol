@@ -178,4 +178,4 @@ public class Ping implements Packet, ToClientPacket {
         return java.util.Objects.hash(id, time, lastPingValueRaw, lastPingValueDirect, lastPingValueTick);
     }
 
-}
+}

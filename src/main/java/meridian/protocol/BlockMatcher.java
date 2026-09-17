@@ -156,4 +156,4 @@ public class BlockMatcher {
         return java.util.Objects.hash(block, face, staticFace);
     }
 
-}
+}

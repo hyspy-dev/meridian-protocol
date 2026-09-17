@@ -25,4 +25,4 @@ public enum ClientType {
         }
         throw ProtocolException.invalidEnumValue("ClientType", value);
     }
-}
+}

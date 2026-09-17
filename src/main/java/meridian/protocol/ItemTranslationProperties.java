@@ -368,4 +368,4 @@ size += VarInt.size(descriptionArguments.size()) + descriptionArgumentsSize;
         return java.util.Objects.hash(name, nameArguments, description, descriptionArguments);
     }
 
-}
+}

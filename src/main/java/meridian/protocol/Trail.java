@@ -402,4 +402,4 @@ public class Trail {
         return java.util.Objects.hash(id, texture, lifeSpan, roll, start, end, lightInfluence, renderMode, intersectionHighlight, smooth, frameSize, frameRange, frameLifeSpan);
     }
 
-}
+}

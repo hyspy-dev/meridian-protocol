@@ -120,4 +120,4 @@ public class EntityMatcher {
         return java.util.Objects.hash(type, invert);
     }
 
-}
+}

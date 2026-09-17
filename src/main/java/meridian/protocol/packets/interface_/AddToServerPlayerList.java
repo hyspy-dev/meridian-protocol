@@ -170,4 +170,4 @@ size += VarInt.size(players.length) + playersSize;
         return result;
     }
 
-}
+}

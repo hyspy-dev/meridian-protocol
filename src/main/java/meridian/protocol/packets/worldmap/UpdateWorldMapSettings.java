@@ -250,4 +250,4 @@ public class UpdateWorldMapSettings implements Packet, ToClientPacket {
         return java.util.Objects.hash(enabled, allowTeleportToCoordinates, allowTeleportToMarkers, allowShowOnMapToggle, allowCompassTrackingToggle, allowCreatingMapMarkers, allowRemovingOtherPlayersMarkers, defaultScale, minScale, maxScale);
     }
 
-}
+}

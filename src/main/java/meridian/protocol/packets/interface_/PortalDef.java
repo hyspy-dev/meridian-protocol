@@ -13,28 +13,25 @@ import meridian.protocol.io.VarInt;
 
 public class PortalDef {
     public static final int NULLABLE_BIT_FIELD_SIZE = 1;
-    public static final int FIXED_BLOCK_SIZE = 9;
+    public static final int FIXED_BLOCK_SIZE = 5;
     public static final int VARIABLE_FIELD_COUNT = 1;
-    public static final int VARIABLE_BLOCK_START = 9;
-    public static final int MAX_SIZE = 16384014;
+    public static final int VARIABLE_BLOCK_START = 5;
+    public static final int MAX_SIZE = 16384010;
 
     @Nullable public String nameKey;
-    public int explorationSeconds;
-    public int breachSeconds;
+    public int durationSeconds;
 
     public PortalDef() {
     }
 
-    public PortalDef(@Nullable String nameKey, int explorationSeconds, int breachSeconds) {
+    public PortalDef(@Nullable String nameKey, int durationSeconds) {
         this.nameKey = nameKey;
-        this.explorationSeconds = explorationSeconds;
-        this.breachSeconds = breachSeconds;
+        this.durationSeconds = durationSeconds;
     }
 
     public PortalDef(@Nonnull PortalDef other) {
         this.nameKey = other.nameKey;
-        this.explorationSeconds = other.explorationSeconds;
-        this.breachSeconds = other.breachSeconds;
+        this.durationSeconds = other.durationSeconds;
     }
 
     /**
@@ -43,7 +40,7 @@ public class PortalDef {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("PortalDef", offset, (int) mem.byteSize());
-        long needed = (long) offset + 9;
+        long needed = (long) offset + 5;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("PortalDef", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -54,23 +51,15 @@ public class PortalDef {
     
     @Nullable
     public static String getNameKey(MemorySegment mem, int offset) {
-        return hasNameKey(mem, offset) ? PacketIO.readVarString("NameKey", mem, offset + 9, 4096000): null;
+        return hasNameKey(mem, offset) ? PacketIO.readVarString("NameKey", mem, offset + 5, 4096000): null;
     }
     
-    public static int getExplorationSeconds(MemorySegment mem) {
-        return getExplorationSeconds(mem, 0);
+    public static int getDurationSeconds(MemorySegment mem) {
+        return getDurationSeconds(mem, 0);
     }
     
-    public static int getExplorationSeconds(MemorySegment mem, int offset) {
+    public static int getDurationSeconds(MemorySegment mem, int offset) {
         return mem.get(PacketIO.PROTO_INT, offset + 1);
-    }
-    
-    public static int getBreachSeconds(MemorySegment mem) {
-        return getBreachSeconds(mem, 0);
-    }
-    
-    public static int getBreachSeconds(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_INT, offset + 5);
     }
     
     public static boolean hasNameKey(MemorySegment mem, int offset) {
@@ -96,7 +85,7 @@ public class PortalDef {
     public static PortalDef toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
-        var varBase = offset + 9;
+        var varBase = offset + 5;
         var varPos = 0;
         String v0 = null;
         if (hasNameKey(mem, offset)) {
@@ -107,8 +96,7 @@ public class PortalDef {
         }
         var result = new PortalDef(
             v0,
-            mem.get(PacketIO.PROTO_INT, offset + 1),
-            mem.get(PacketIO.PROTO_INT, offset + 5)
+            mem.get(PacketIO.PROTO_INT, offset + 1)
         );
         if (cursor != null) cursor.position = varBase + varPos;
         return result;
@@ -119,9 +107,8 @@ public class PortalDef {
         if (this.nameKey != null) nullBits |= 0x01;
         mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         
-        mem.set(PacketIO.PROTO_INT, offset + 1, this.explorationSeconds);
-        mem.set(PacketIO.PROTO_INT, offset + 5, this.breachSeconds);
-        var varOffset = offset + 9;
+        mem.set(PacketIO.PROTO_INT, offset + 1, this.durationSeconds);
+        var varOffset = offset + 5;
         if (this.nameKey != null) {
             
             varOffset += PacketIO.writeVarString(mem, varOffset, this.nameKey, 4096000);
@@ -130,7 +117,7 @@ public class PortalDef {
        return varOffset - offset;
     }
     public int computeSize() {
-        int size = 9;
+        int size = 5;
         if (nameKey != null) size += PacketIO.stringSize(nameKey);
 
         return size;
@@ -139,8 +126,7 @@ public class PortalDef {
     public PortalDef clone() {
         PortalDef copy = new PortalDef();
         copy.nameKey = this.nameKey;
-        copy.explorationSeconds = this.explorationSeconds;
-        copy.breachSeconds = this.breachSeconds;
+        copy.durationSeconds = this.durationSeconds;
         return copy;
     }
 
@@ -149,12 +135,12 @@ public class PortalDef {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof PortalDef other)) return false;
-        return java.util.Objects.equals(this.nameKey, other.nameKey) && this.explorationSeconds == other.explorationSeconds && this.breachSeconds == other.breachSeconds;
+        return java.util.Objects.equals(this.nameKey, other.nameKey) && this.durationSeconds == other.durationSeconds;
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(nameKey, explorationSeconds, breachSeconds);
+        return java.util.Objects.hash(nameKey, durationSeconds);
     }
 
-}
+}

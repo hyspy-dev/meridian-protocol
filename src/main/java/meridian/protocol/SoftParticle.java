@@ -26,4 +26,4 @@ public enum SoftParticle {
         }
         throw ProtocolException.invalidEnumValue("SoftParticle", value);
     }
-}
+}

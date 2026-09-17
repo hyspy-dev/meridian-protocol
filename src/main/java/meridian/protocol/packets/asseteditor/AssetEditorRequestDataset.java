@@ -146,4 +146,4 @@ public class AssetEditorRequestDataset implements Packet, ToServerPacket {
         return java.util.Objects.hash(name);
     }
 
-}
+}

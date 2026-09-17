@@ -26,4 +26,4 @@ public enum PickupLocation {
         }
         throw ProtocolException.invalidEnumValue("PickupLocation", value);
     }
-}
+}

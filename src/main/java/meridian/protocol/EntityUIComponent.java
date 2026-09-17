@@ -297,4 +297,4 @@ public class EntityUIComponent {
         return result;
     }
 
-}
+}

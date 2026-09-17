@@ -256,4 +256,4 @@ public class ServerInfo implements Packet, ToClientPacket {
         return java.util.Objects.hash(serverName, motd, maxPlayers, fallbackServer);
     }
 
-}
+}

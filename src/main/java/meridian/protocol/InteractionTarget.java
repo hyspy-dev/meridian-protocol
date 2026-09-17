@@ -26,4 +26,4 @@ public enum InteractionTarget {
         }
         throw ProtocolException.invalidEnumValue("InteractionTarget", value);
     }
-}
+}

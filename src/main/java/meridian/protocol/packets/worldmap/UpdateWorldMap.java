@@ -102,7 +102,7 @@ public class UpdateWorldMap implements Packet, ToClientPacket {
         var len = (int) packed;
         if (len > 4096000) throw ProtocolException.arrayTooLong("AddedMarkers", len, 4096000);
         var lenOffset = (int) (packed >>> 32);
-        if (off + lenOffset + (long) len * 58 > mem.byteSize()) throw ProtocolException.bufferTooSmall("AddedMarkers", (int) java.lang.Math.min(off + lenOffset + (long) len * 58, Integer.MAX_VALUE), (int) mem.byteSize());
+        if (off + lenOffset + (long) len * 63 > mem.byteSize()) throw ProtocolException.bufferTooSmall("AddedMarkers", (int) java.lang.Math.min(off + lenOffset + (long) len * 63, Integer.MAX_VALUE), (int) mem.byteSize());
         off += lenOffset;
         var data = new MapMarker[len];
         for (var i = 0; i < len; i++) {
@@ -218,7 +218,7 @@ public class UpdateWorldMap implements Packet, ToClientPacket {
             var len = (int) packed;
             if (len > 4096000) throw ProtocolException.arrayTooLong("AddedMarkers", len, 4096000);
             var lenOffset = (int) (packed >>> 32);
-            if (off + lenOffset + (long) len * 58 > mem.byteSize()) throw ProtocolException.bufferTooSmall("AddedMarkers", (int) java.lang.Math.min(off + lenOffset + (long) len * 58, Integer.MAX_VALUE), (int) mem.byteSize());
+            if (off + lenOffset + (long) len * 63 > mem.byteSize()) throw ProtocolException.bufferTooSmall("AddedMarkers", (int) java.lang.Math.min(off + lenOffset + (long) len * 63, Integer.MAX_VALUE), (int) mem.byteSize());
             off += lenOffset;
             v1 = new MapMarker[len];
             for (var i = 0; i < len; i++) {
@@ -358,4 +358,4 @@ size += VarInt.size(removedMarkers.length) + removedMarkersSize;
         return result;
     }
 
-}
+}

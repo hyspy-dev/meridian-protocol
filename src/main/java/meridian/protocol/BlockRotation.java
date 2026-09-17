@@ -134,4 +134,4 @@ public class BlockRotation {
         return java.util.Objects.hash(rotationYaw, rotationPitch, rotationRoll);
     }
 
-}
+}

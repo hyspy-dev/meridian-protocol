@@ -136,4 +136,4 @@ public class AssetEditorUpdateSecondsPerGameDay implements Packet, ToClientPacke
         return java.util.Objects.hash(daytimeDurationSeconds, nighttimeDurationSeconds);
     }
 
-}
+}

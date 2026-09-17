@@ -138,4 +138,4 @@ public class SetNoClip implements Packet, ToClientPacket {
         return java.util.Objects.hash(enabled, notify);
     }
 
-}
+}

@@ -28,4 +28,4 @@ public enum ClientFeature {
         }
         throw ProtocolException.invalidEnumValue("ClientFeature", value);
     }
-}
+}

@@ -312,4 +312,4 @@ size += VarInt.size(removedParticleSpawners.length) + removedParticleSpawnersSiz
         return result;
     }
 
-}
+}

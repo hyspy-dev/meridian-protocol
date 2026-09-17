@@ -327,4 +327,4 @@ public class DisplayDebug implements Packet, ToClientPacket {
         return result;
     }
 
-}
+}

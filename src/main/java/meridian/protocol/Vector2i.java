@@ -120,4 +120,4 @@ public class Vector2i {
         return java.util.Objects.hash(x, y);
     }
 
-}
+}

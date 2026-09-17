@@ -26,4 +26,4 @@ public enum CustomPageLifetime {
         }
         throw ProtocolException.invalidEnumValue("CustomPageLifetime", value);
     }
-}
+}

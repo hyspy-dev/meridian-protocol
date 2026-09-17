@@ -18,10 +18,10 @@ public class UpdatePortal implements Packet, ToClientPacket {
     public static final int PACKET_ID = 229;
     public static final boolean IS_COMPRESSED = false;
     public static final int NULLABLE_BIT_FIELD_SIZE = 1;
-    public static final int FIXED_BLOCK_SIZE = 6;
+    public static final int FIXED_BLOCK_SIZE = 9;
     public static final int VARIABLE_FIELD_COUNT = 1;
-    public static final int VARIABLE_BLOCK_START = 6;
-    public static final int MAX_SIZE = 16384020;
+    public static final int VARIABLE_BLOCK_START = 9;
+    public static final int MAX_SIZE = 16384019;
 
     @Override
     public int getId() {
@@ -55,7 +55,7 @@ public class UpdatePortal implements Packet, ToClientPacket {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("UpdatePortal", offset, (int) mem.byteSize());
-        long needed = (long) offset + 6;
+        long needed = (long) offset + 9;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("UpdatePortal", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -76,7 +76,7 @@ public class UpdatePortal implements Packet, ToClientPacket {
     
     @Nullable
     public static PortalDef getDefinition(MemorySegment mem, int offset) {
-        return hasDefinition(mem, offset) ? PortalDef.toObject(mem, offset + 6): null;
+        return hasDefinition(mem, offset) ? PortalDef.toObject(mem, offset + 9): null;
     }
     
     public static boolean hasState(MemorySegment mem, int offset) {
@@ -107,7 +107,7 @@ public class UpdatePortal implements Packet, ToClientPacket {
     public static UpdatePortal toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
-        var varBase = offset + 6;
+        var varBase = offset + 9;
         var varPos = 0;
         var walkCursor = cursor != null ? cursor : new ReadCursor();
         PortalDef v1 = null;
@@ -133,9 +133,9 @@ public class UpdatePortal implements Packet, ToClientPacket {
         if (this.state != null) {
             this.state.serialize(mem, offset + 1);
         } else {
-            mem.asSlice(offset + 1, 5).fill((byte) 0); 
+            mem.asSlice(offset + 1, 8).fill((byte) 0); 
         }
-        var varOffset = offset + 6;
+        var varOffset = offset + 9;
         if (this.definition != null) {
             
             varOffset += this.definition.serialize(mem, varOffset);
@@ -144,7 +144,7 @@ public class UpdatePortal implements Packet, ToClientPacket {
        return varOffset - offset;
     }
     public int computeSize() {
-        int size = 6;
+        int size = 9;
         if (definition != null) size += definition.computeSize();
 
         return size;
@@ -170,4 +170,4 @@ public class UpdatePortal implements Packet, ToClientPacket {
         return java.util.Objects.hash(state, definition);
     }
 
-}
+}

@@ -26,4 +26,4 @@ public enum Phobia {
         }
         throw ProtocolException.invalidEnumValue("Phobia", value);
     }
-}
+}

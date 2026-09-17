@@ -169,4 +169,4 @@ size += VarInt.size(resources.length) + resourcesSize;
         return result;
     }
 
-}
+}

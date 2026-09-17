@@ -120,4 +120,4 @@ public class Rangeb {
         return java.util.Objects.hash(min, max);
     }
 
-}
+}

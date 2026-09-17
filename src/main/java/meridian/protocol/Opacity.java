@@ -27,4 +27,4 @@ public enum Opacity {
         }
         throw ProtocolException.invalidEnumValue("Opacity", value);
     }
-}
+}

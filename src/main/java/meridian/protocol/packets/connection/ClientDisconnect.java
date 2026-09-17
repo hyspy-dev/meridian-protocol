@@ -136,4 +136,4 @@ public class ClientDisconnect implements Packet, ToServerPacket {
         return java.util.Objects.hash(reason, type);
     }
 
-}
+}

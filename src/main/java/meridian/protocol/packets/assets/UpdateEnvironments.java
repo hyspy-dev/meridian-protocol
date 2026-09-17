@@ -239,4 +239,4 @@ size += VarInt.size(environments.size()) + environmentsSize;
         return java.util.Objects.hash(type, maxId, environments, rebuildMapGeometry);
     }
 
-}
+}

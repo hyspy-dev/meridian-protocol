@@ -134,4 +134,4 @@ public class ClampConfig {
         return java.util.Objects.hash(min, max, normalize);
     }
 
-}
+}

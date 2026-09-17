@@ -122,4 +122,4 @@ public class AssetEditorModifiedAssetsCount implements Packet, ToClientPacket {
         return java.util.Objects.hash(count);
     }
 
-}
+}

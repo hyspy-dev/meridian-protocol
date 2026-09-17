@@ -108,4 +108,4 @@ public class PlayerMarkerComponent extends MapMarkerComponent {
         return java.util.Objects.hash(playerId);
     }
 
-}
+}

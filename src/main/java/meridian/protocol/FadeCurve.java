@@ -28,4 +28,4 @@ public enum FadeCurve {
         }
         throw ProtocolException.invalidEnumValue("FadeCurve", value);
     }
-}
+}

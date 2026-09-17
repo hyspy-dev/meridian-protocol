@@ -106,4 +106,4 @@ public class InteractionSettings {
         return java.util.Objects.hash(allowSkipOnClick);
     }
 
-}
+}

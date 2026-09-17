@@ -102,4 +102,4 @@ public class ClearChunks implements Packet, ToClientPacket {
         return 0;
     }
 
-}
+}

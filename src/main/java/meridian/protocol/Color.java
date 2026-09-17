@@ -134,4 +134,4 @@ public class Color {
         return java.util.Objects.hash(red, green, blue);
     }
 
-}
+}

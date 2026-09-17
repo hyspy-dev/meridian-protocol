@@ -34,4 +34,4 @@ public enum BrushShape {
         }
         throw ProtocolException.invalidEnumValue("BrushShape", value);
     }
-}
+}

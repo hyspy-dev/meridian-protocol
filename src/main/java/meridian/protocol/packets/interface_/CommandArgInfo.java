@@ -280,4 +280,4 @@ public class CommandArgInfo {
         return java.util.Objects.hash(name, argTypeId, argTypeName, valueCount, description);
     }
 
-}
+}

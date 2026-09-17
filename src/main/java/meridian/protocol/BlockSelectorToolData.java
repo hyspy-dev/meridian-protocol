@@ -106,4 +106,4 @@ public class BlockSelectorToolData {
         return java.util.Objects.hash(durabilityLossOnUse);
     }
 
-}
+}

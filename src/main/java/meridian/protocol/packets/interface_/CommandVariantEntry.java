@@ -385,4 +385,4 @@ size += VarInt.size(suggestionOverrides.length) + suggestionOverridesSize;
         return result;
     }
 
-}
+}

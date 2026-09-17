@@ -122,4 +122,4 @@ public class WorldSavingStatus implements Packet, ToClientPacket {
         return java.util.Objects.hash(isWorldSaving);
     }
 
-}
+}

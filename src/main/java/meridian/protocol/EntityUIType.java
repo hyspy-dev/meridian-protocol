@@ -25,4 +25,4 @@ public enum EntityUIType {
         }
         throw ProtocolException.invalidEnumValue("EntityUIType", value);
     }
-}
+}

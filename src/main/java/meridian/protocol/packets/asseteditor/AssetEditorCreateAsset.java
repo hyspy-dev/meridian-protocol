@@ -310,4 +310,4 @@ public class AssetEditorCreateAsset implements Packet, ToServerPacket {
         return result;
     }
 
-}
+}

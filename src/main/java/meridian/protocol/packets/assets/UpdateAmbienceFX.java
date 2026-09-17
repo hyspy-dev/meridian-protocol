@@ -225,4 +225,4 @@ size += VarInt.size(ambienceFX.size()) + ambienceFXSize;
         return java.util.Objects.hash(type, maxId, ambienceFX);
     }
 
-}
+}

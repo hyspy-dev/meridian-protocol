@@ -26,4 +26,4 @@ public enum DestinationAlign {
         }
         throw ProtocolException.invalidEnumValue("DestinationAlign", value);
     }
-}
+}

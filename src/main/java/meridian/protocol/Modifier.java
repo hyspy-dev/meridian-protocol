@@ -134,4 +134,4 @@ public class Modifier {
         return java.util.Objects.hash(target, calculationType, amount);
     }
 
-}
+}

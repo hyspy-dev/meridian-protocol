@@ -28,4 +28,4 @@ public enum ParticleRotationInfluence {
         }
         throw ProtocolException.invalidEnumValue("ParticleRotationInfluence", value);
     }
-}
+}

@@ -254,4 +254,4 @@ public class RoofConnectedBlockRuleSet extends ConnectedBlockRuleSet {
         return java.util.Objects.hash(regular, hollow, topperBlockId, width, materialName);
     }
 
-}
+}

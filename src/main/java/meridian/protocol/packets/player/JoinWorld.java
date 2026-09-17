@@ -205,4 +205,4 @@ public class JoinWorld implements Packet, ToClientPacket {
         return java.util.Objects.hash(clearWorld, fadeInOut, worldUuid, minSectionY, maxSectionY);
     }
 
-}
+}

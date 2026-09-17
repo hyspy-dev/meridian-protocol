@@ -294,4 +294,4 @@ public class EntityStatType {
         return java.util.Objects.hash(id, value, min, max, minValueEffects, maxValueEffects, resetBehavior, hideFromTooltip);
     }
 
-}
+}

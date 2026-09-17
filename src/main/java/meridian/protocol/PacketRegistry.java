@@ -517,6 +517,11 @@ public final class PacketRegistry {
             14, 14, false,
             meridian.protocol.packets.player.SyncPlayerPreferences::toObject);
         register(
+            PacketDirection.ToClient, NetworkChannel.Chunks,
+            117, "UpdateBlockDamages", meridian.protocol.packets.world.UpdateBlockDamages.class,
+            12, 327697, false,
+            meridian.protocol.packets.world.UpdateBlockDamages::toObject);
+        register(
             PacketDirection.ToClient, NetworkChannel.Default,
             118, "UpdateMemoriesFeatureStatus", meridian.protocol.packets.player.UpdateMemoriesFeatureStatus.class,
             1, 1, false,
@@ -554,7 +559,7 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToClient, NetworkChannel.Chunks,
             132, "SetChunkHeightmap", meridian.protocol.packets.world.SetChunkHeightmap.class,
-            8, 4096013, true,
+            4104, 4104, true,
             meridian.protocol.packets.world.SetChunkHeightmap::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Chunks,
@@ -564,7 +569,7 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToClient, NetworkChannel.Chunks,
             134, "SetChunkEnvironments", meridian.protocol.packets.world.SetChunkEnvironments.class,
-            8, 4096013, true,
+            12, 196626, true,
             meridian.protocol.packets.world.SetChunkEnvironments::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Chunks,
@@ -584,7 +589,7 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToClient, NetworkChannel.Chunks,
             138, "SetColumn", meridian.protocol.packets.world.SetColumn.class,
-            8, 12288035, true,
+            4104, 4100109, true,
             meridian.protocol.packets.world.SetColumn::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Chunks,
@@ -734,7 +739,7 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             168, "SetAudioState", meridian.protocol.packets.world.SetAudioState.class,
-            9, 16384029, false,
+            9, 32768079, false,
             meridian.protocol.packets.world.SetAudioState::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Chunks,
@@ -806,6 +811,16 @@ public final class PacketRegistry {
             182, "UnloadChunks", meridian.protocol.packets.world.UnloadChunks.class,
             1, 81939, true,
             meridian.protocol.packets.world.UnloadChunks::toObject);
+        register(
+            PacketDirection.ToClient, NetworkChannel.Chunks,
+            183, "ServerSetHeight", meridian.protocol.packets.world.ServerSetHeight.class,
+            12, 12, false,
+            meridian.protocol.packets.world.ServerSetHeight::toObject);
+        register(
+            PacketDirection.ToClient, NetworkChannel.Chunks,
+            184, "ServerSetHeights", meridian.protocol.packets.world.ServerSetHeights.class,
+            8, 6157, false,
+            meridian.protocol.packets.world.ServerSetHeights::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             185, "WorldGameplayConfig", meridian.protocol.packets.world.WorldGameplayConfig.class,
@@ -924,7 +939,7 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             229, "UpdatePortal", meridian.protocol.packets.interface_.UpdatePortal.class,
-            6, 16384020, false,
+            9, 16384019, false,
             meridian.protocol.packets.interface_.UpdatePortal::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
@@ -1046,6 +1061,16 @@ public final class PacketRegistry {
             254, "ConfigureIcePeer", meridian.protocol.packets.serveraccess.ConfigureIcePeer.class,
             1, 17639, false,
             meridian.protocol.packets.serveraccess.ConfigureIcePeer::toObject);
+        register(
+            PacketDirection.ToClient, NetworkChannel.Default,
+            255, "UpdateRecurringWorldEvents", meridian.protocol.packets.interface_.UpdateRecurringWorldEvents.class,
+            0, 1677721600, false,
+            meridian.protocol.packets.interface_.UpdateRecurringWorldEvents::toObject);
+        register(
+            PacketDirection.ToClient, NetworkChannel.Default,
+            256, "RemoveRecurringWorldEvents", meridian.protocol.packets.interface_.RemoveRecurringWorldEvents.class,
+            0, 65536005, false,
+            meridian.protocol.packets.interface_.RemoveRecurringWorldEvents::toObject);
         register(
             PacketDirection.ToServer, NetworkChannel.Default,
             260, "RequestMachinimaActorModel", meridian.protocol.packets.machinima.RequestMachinimaActorModel.class,
@@ -1189,23 +1214,23 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             312, "AssetEditorFetchAssetReply", meridian.protocol.packets.asseteditor.AssetEditorFetchAssetReply.class,
-            5, 4096010, false,
+            6, 4096011, false,
             meridian.protocol.packets.asseteditor.AssetEditorFetchAssetReply::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             313, "AssetEditorFetchJsonAssetWithParentsReply", meridian.protocol.packets.asseteditor.AssetEditorFetchJsonAssetWithParentsReply.class,
-            5, 1677721600, true,
+            6, 1677721600, true,
             meridian.protocol.packets.asseteditor.AssetEditorFetchJsonAssetWithParentsReply::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             314, "AssetEditorAssetPackSetup", meridian.protocol.packets.asseteditor.AssetEditorAssetPackSetup.class,
-            1, 1677721600, false,
+            0, 1677721600, false,
             meridian.protocol.packets.asseteditor.AssetEditorAssetPackSetup::toObject);
         register(
-            PacketDirection.Both, NetworkChannel.Default,
-            315, "AssetEditorUpdateAssetPack", meridian.protocol.packets.asseteditor.AssetEditorUpdateAssetPack.class,
-            1, 1677721600, false,
-            meridian.protocol.packets.asseteditor.AssetEditorUpdateAssetPack::toObject);
+            PacketDirection.ToClient, NetworkChannel.Default,
+            315, "AssetEditorAssetPackUpdated", meridian.protocol.packets.asseteditor.AssetEditorAssetPackUpdated.class,
+            0, 1677721600, false,
+            meridian.protocol.packets.asseteditor.AssetEditorAssetPackUpdated::toObject);
         register(
             PacketDirection.ToServer, NetworkChannel.Default,
             316, "AssetEditorCreateAssetPack", meridian.protocol.packets.asseteditor.AssetEditorCreateAssetPack.class,
@@ -1411,6 +1436,11 @@ public final class PacketRegistry {
             358, "AssetEditorRequestAssetInheritanceReply", meridian.protocol.packets.asseteditor.AssetEditorRequestAssetInheritanceReply.class,
             5, 1677721600, false,
             meridian.protocol.packets.asseteditor.AssetEditorRequestAssetInheritanceReply::toObject);
+        register(
+            PacketDirection.ToServer, NetworkChannel.Default,
+            359, "AssetEditorUpdateAssetPackManifest", meridian.protocol.packets.asseteditor.AssetEditorUpdateAssetPackManifest.class,
+            0, 1677721600, false,
+            meridian.protocol.packets.asseteditor.AssetEditorUpdateAssetPackManifest::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             360, "UpdateSunSettings", meridian.protocol.packets.world.UpdateSunSettings.class,
@@ -1938,4 +1968,4 @@ public final class PacketRegistry {
         ToClient,
         Both,
     }
-}
+}

@@ -108,4 +108,4 @@ public class UIFloatDataValue extends UIDataValue {
         return java.util.Objects.hash(value);
     }
 
-}
+}

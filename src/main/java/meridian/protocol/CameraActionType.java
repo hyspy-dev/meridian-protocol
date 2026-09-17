@@ -26,4 +26,4 @@ public enum CameraActionType {
         }
         throw ProtocolException.invalidEnumValue("CameraActionType", value);
     }
-}
+}

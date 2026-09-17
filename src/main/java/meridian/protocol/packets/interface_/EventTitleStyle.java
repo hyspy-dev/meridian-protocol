@@ -27,4 +27,4 @@ public enum EventTitleStyle {
         }
         throw ProtocolException.invalidEnumValue("EventTitleStyle", value);
     }
-}
+}

@@ -25,4 +25,4 @@ public enum CollisionType {
         }
         throw ProtocolException.invalidEnumValue("CollisionType", value);
     }
-}
+}

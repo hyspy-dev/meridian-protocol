@@ -401,4 +401,4 @@ public class ModelVFX {
         return java.util.Objects.hash(id, switchTo, effectDirection, animationDuration, animationRange, loopOption, curveType, highlightColor, highlightThickness, useBloomOnHighlight, useProgessiveHighlight, noiseScale, noiseScrollSpeed, postColor, postColorOpacity, opacity);
     }
 
-}
+}

@@ -108,4 +108,4 @@ public class DoubleParamValue extends ParamValue {
         return java.util.Objects.hash(value);
     }
 
-}
+}

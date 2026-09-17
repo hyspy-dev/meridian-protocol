@@ -559,4 +559,4 @@ public class MovementConditionInteraction extends SimpleInteraction {
         return result;
     }
 
-}
+}

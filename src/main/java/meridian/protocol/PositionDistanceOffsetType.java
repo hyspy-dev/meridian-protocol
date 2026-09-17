@@ -26,4 +26,4 @@ public enum PositionDistanceOffsetType {
         }
         throw ProtocolException.invalidEnumValue("PositionDistanceOffsetType", value);
     }
-}
+}

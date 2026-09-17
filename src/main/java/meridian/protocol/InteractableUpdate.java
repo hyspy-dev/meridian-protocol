@@ -132,4 +132,4 @@ public class InteractableUpdate extends ComponentUpdate {
         return java.util.Objects.hash(interactionHint);
     }
 
-}
+}

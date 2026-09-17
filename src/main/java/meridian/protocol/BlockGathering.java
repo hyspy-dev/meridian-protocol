@@ -223,4 +223,4 @@ public class BlockGathering {
         return java.util.Objects.hash(breaking, harvest, soft);
     }
 
-}
+}

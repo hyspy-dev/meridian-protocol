@@ -228,4 +228,4 @@ public class AuthorInfo {
         return java.util.Objects.hash(name, email, url);
     }
 
-}
+}

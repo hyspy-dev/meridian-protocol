@@ -177,4 +177,4 @@ public class PlayCameraSequence implements Packet, ToClientPacket {
         return java.util.Objects.hash(sequenceId, flags, baseFov, totalKeyframes);
     }
 
-}
+}

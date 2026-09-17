@@ -187,4 +187,4 @@ public class UpdateFeatures implements Packet, ToClientPacket {
         return java.util.Objects.hash(features);
     }
 
-}
+}

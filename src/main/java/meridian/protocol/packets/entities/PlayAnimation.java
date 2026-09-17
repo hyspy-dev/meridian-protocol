@@ -232,4 +232,4 @@ public class PlayAnimation implements Packet, ToClientPacket {
         return java.util.Objects.hash(entityId, itemAnimationsId, animationId, slot);
     }
 
-}
+}

@@ -199,4 +199,4 @@ public class SetAbsentChunks implements Packet, ToClientPacket {
         return result;
     }
 
-}
+}

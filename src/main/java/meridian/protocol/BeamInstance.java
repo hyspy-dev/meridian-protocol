@@ -298,4 +298,4 @@ public class BeamInstance {
         return java.util.Objects.hash(beamIndex, sourceScale, sourceNodeName, sourceOffset, targetScale, targetNetworkId, targetNodeName, targetOffset, targetPosition);
     }
 
-}
+}

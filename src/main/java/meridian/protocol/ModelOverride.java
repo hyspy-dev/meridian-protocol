@@ -279,4 +279,4 @@ size += VarInt.size(animationSets.size()) + animationSetsSize;
         return java.util.Objects.hash(model, texture, animationSets);
     }
 
-}
+}

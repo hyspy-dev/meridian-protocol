@@ -187,4 +187,4 @@ public class PointToolCreate implements Packet, ToServerPacket {
         return java.util.Objects.hash(position, rotation, name, shape);
     }
 
-}
+}

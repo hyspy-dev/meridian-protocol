@@ -28,4 +28,4 @@ public enum CameraNode {
         }
         throw ProtocolException.invalidEnumValue("CameraNode", value);
     }
-}
+}

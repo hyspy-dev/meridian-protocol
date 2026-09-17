@@ -26,4 +26,4 @@ public enum AmbienceTransitionSpeed {
         }
         throw ProtocolException.invalidEnumValue("AmbienceTransitionSpeed", value);
     }
-}
+}

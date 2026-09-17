@@ -185,4 +185,4 @@ size += VarInt.size(paths.length) + pathsSize;
         return result;
     }
 
-}
+}

@@ -102,4 +102,4 @@ public class PasswordAccepted implements Packet, ToClientPacket {
         return 0;
     }
 
-}
+}

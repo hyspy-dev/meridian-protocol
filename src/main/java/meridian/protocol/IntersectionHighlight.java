@@ -133,4 +133,4 @@ public class IntersectionHighlight {
         return java.util.Objects.hash(highlightThreshold, highlightColor);
     }
 
-}
+}

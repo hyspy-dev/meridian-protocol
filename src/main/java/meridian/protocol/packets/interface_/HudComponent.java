@@ -49,4 +49,4 @@ public enum HudComponent {
         }
         throw ProtocolException.invalidEnumValue("HudComponent", value);
     }
-}
+}

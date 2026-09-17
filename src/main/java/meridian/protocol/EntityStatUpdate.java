@@ -305,4 +305,4 @@ size += VarInt.size(modifiers.size()) + modifiersSize;
         return java.util.Objects.hash(op, predictable, value, modifiers, modifierKey, modifier);
     }
 
-}
+}

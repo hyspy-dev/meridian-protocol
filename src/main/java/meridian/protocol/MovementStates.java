@@ -434,4 +434,4 @@ public class MovementStates {
         return java.util.Objects.hash(idle, horizontalIdle, jumping, flying, walking, running, sprinting, crouching, forcedCrouching, falling, fallingFar, climbing, inFluid, swimming, swimJumping, onGround, mantling, sliding, mounting, rolling, sitting, gliding, sleeping, extraJumpsUsed);
     }
 
-}
+}

@@ -148,4 +148,4 @@ public class SetBlockCmd {
         return java.util.Objects.hash(index, blockId, filler, rotation);
     }
 
-}
+}

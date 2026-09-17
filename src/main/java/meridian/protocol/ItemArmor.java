@@ -703,4 +703,4 @@ size += VarInt.size(damageClassEnhancement.size()) + damageClassEnhancementSize;
         return result;
     }
 
-}
+}

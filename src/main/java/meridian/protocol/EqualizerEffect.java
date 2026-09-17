@@ -269,4 +269,4 @@ public class EqualizerEffect {
         return java.util.Objects.hash(id, lowGain, lowCutOff, lowMidGain, lowMidCenter, lowMidWidth, highMidGain, highMidCenter, highMidWidth, highGain, highCutOff);
     }
 
-}
+}

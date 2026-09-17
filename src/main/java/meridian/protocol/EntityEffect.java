@@ -496,4 +496,4 @@ public class EntityEffect {
         return java.util.Objects.hash(id, name, applicationEffects, worldRemovalSoundEventIndex, localRemovalSoundEventIndex, modelOverride, duration, infinite, debuff, statusEffectIcon, overlapBehavior, damageCalculatorCooldown, statModifiers, valueType);
     }
 
-}
+}

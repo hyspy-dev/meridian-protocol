@@ -225,4 +225,4 @@ size += VarInt.size(stingers.size()) + stingersSize;
         return java.util.Objects.hash(type, maxId, stingers);
     }
 
-}
+}

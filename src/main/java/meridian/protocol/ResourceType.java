@@ -189,4 +189,4 @@ public class ResourceType {
         return java.util.Objects.hash(id, icon);
     }
 
-}
+}

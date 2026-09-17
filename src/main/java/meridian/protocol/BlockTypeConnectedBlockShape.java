@@ -156,4 +156,4 @@ public class BlockTypeConnectedBlockShape extends ConnectedBlockShape {
         return java.util.Objects.hash(faceTags, relativeRotationIndex, blockId);
     }
 
-}
+}

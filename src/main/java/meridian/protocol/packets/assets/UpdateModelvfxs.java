@@ -225,4 +225,4 @@ size += VarInt.size(modelVFXs.size()) + modelVFXsSize;
         return java.util.Objects.hash(type, maxId, modelVFXs);
     }
 
-}
+}

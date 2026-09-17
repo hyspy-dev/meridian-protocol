@@ -64,4 +64,4 @@ public abstract class BreakShape {
     public int computeSizeWithTypeId() {
         return VarInt.size(getTypeId()) + computeSize();
     }
-}
+}

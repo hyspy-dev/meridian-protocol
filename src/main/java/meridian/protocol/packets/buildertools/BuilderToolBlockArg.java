@@ -143,4 +143,4 @@ public class BuilderToolBlockArg {
         return java.util.Objects.hash(defaultValue, allowPattern);
     }
 
-}
+}

@@ -603,4 +603,4 @@ public class ConditionInteraction extends SimpleInteraction {
         return result;
     }
 
-}
+}

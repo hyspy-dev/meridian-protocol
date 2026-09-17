@@ -122,4 +122,4 @@ public class UpdateMovementSettings implements Packet, ToClientPacket {
         return java.util.Objects.hash(movementSettings);
     }
 
-}
+}

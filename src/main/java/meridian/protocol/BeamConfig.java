@@ -130,4 +130,4 @@ public class BeamConfig {
         return java.util.Objects.hash(texture);
     }
 
-}
+}

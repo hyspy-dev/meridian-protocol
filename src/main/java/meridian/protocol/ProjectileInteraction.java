@@ -526,4 +526,4 @@ public class ProjectileInteraction extends SimpleInteraction {
         return result;
     }
 
-}
+}

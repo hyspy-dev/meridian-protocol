@@ -246,4 +246,4 @@ public class BuilderToolArgUpdate implements Packet, ToServerPacket {
         return java.util.Objects.hash(token, section, slot, id, value);
     }
 
-}
+}

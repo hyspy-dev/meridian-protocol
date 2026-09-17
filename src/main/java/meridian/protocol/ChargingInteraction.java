@@ -707,4 +707,4 @@ public class ChargingInteraction extends Interaction {
         return result;
     }
 
-}
+}

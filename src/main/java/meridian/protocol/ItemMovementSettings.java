@@ -13,28 +13,31 @@ import meridian.protocol.io.VarInt;
 
 public class ItemMovementSettings {
     public static final int NULLABLE_BIT_FIELD_SIZE = 1;
-    public static final int FIXED_BLOCK_SIZE = 9;
+    public static final int FIXED_BLOCK_SIZE = 13;
     public static final int VARIABLE_FIELD_COUNT = 1;
-    public static final int VARIABLE_BLOCK_START = 9;
-    public static final int MAX_SIZE = 16384014;
+    public static final int VARIABLE_BLOCK_START = 13;
+    public static final int MAX_SIZE = 16384018;
 
     public int extraJumpCount;
     @Nullable public String extraJumpParticleSystem;
     public int extraJumpSoundEventIndex;
+    public int extraJumpLocalSoundEventIndex;
 
     public ItemMovementSettings() {
     }
 
-    public ItemMovementSettings(int extraJumpCount, @Nullable String extraJumpParticleSystem, int extraJumpSoundEventIndex) {
+    public ItemMovementSettings(int extraJumpCount, @Nullable String extraJumpParticleSystem, int extraJumpSoundEventIndex, int extraJumpLocalSoundEventIndex) {
         this.extraJumpCount = extraJumpCount;
         this.extraJumpParticleSystem = extraJumpParticleSystem;
         this.extraJumpSoundEventIndex = extraJumpSoundEventIndex;
+        this.extraJumpLocalSoundEventIndex = extraJumpLocalSoundEventIndex;
     }
 
     public ItemMovementSettings(@Nonnull ItemMovementSettings other) {
         this.extraJumpCount = other.extraJumpCount;
         this.extraJumpParticleSystem = other.extraJumpParticleSystem;
         this.extraJumpSoundEventIndex = other.extraJumpSoundEventIndex;
+        this.extraJumpLocalSoundEventIndex = other.extraJumpLocalSoundEventIndex;
     }
 
     /**
@@ -43,7 +46,7 @@ public class ItemMovementSettings {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("ItemMovementSettings", offset, (int) mem.byteSize());
-        long needed = (long) offset + 9;
+        long needed = (long) offset + 13;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("ItemMovementSettings", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -62,7 +65,7 @@ public class ItemMovementSettings {
     
     @Nullable
     public static String getExtraJumpParticleSystem(MemorySegment mem, int offset) {
-        return hasExtraJumpParticleSystem(mem, offset) ? PacketIO.readVarString("ExtraJumpParticleSystem", mem, offset + 9, 4096000): null;
+        return hasExtraJumpParticleSystem(mem, offset) ? PacketIO.readVarString("ExtraJumpParticleSystem", mem, offset + 13, 4096000): null;
     }
     
     public static int getExtraJumpSoundEventIndex(MemorySegment mem) {
@@ -71,6 +74,14 @@ public class ItemMovementSettings {
     
     public static int getExtraJumpSoundEventIndex(MemorySegment mem, int offset) {
         return mem.get(PacketIO.PROTO_INT, offset + 5);
+    }
+    
+    public static int getExtraJumpLocalSoundEventIndex(MemorySegment mem) {
+        return getExtraJumpLocalSoundEventIndex(mem, 0);
+    }
+    
+    public static int getExtraJumpLocalSoundEventIndex(MemorySegment mem, int offset) {
+        return mem.get(PacketIO.PROTO_INT, offset + 9);
     }
     
     public static boolean hasExtraJumpParticleSystem(MemorySegment mem, int offset) {
@@ -96,7 +107,7 @@ public class ItemMovementSettings {
     public static ItemMovementSettings toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
-        var varBase = offset + 9;
+        var varBase = offset + 13;
         var varPos = 0;
         String v1 = null;
         if (hasExtraJumpParticleSystem(mem, offset)) {
@@ -108,7 +119,8 @@ public class ItemMovementSettings {
         var result = new ItemMovementSettings(
             mem.get(PacketIO.PROTO_INT, offset + 1),
             v1,
-            mem.get(PacketIO.PROTO_INT, offset + 5)
+            mem.get(PacketIO.PROTO_INT, offset + 5),
+            mem.get(PacketIO.PROTO_INT, offset + 9)
         );
         if (cursor != null) cursor.position = varBase + varPos;
         return result;
@@ -121,7 +133,8 @@ public class ItemMovementSettings {
         
         mem.set(PacketIO.PROTO_INT, offset + 1, this.extraJumpCount);
         mem.set(PacketIO.PROTO_INT, offset + 5, this.extraJumpSoundEventIndex);
-        var varOffset = offset + 9;
+        mem.set(PacketIO.PROTO_INT, offset + 9, this.extraJumpLocalSoundEventIndex);
+        var varOffset = offset + 13;
         if (this.extraJumpParticleSystem != null) {
             
             varOffset += PacketIO.writeVarString(mem, varOffset, this.extraJumpParticleSystem, 4096000);
@@ -130,7 +143,7 @@ public class ItemMovementSettings {
        return varOffset - offset;
     }
     public int computeSize() {
-        int size = 9;
+        int size = 13;
         if (extraJumpParticleSystem != null) size += PacketIO.stringSize(extraJumpParticleSystem);
 
         return size;
@@ -141,6 +154,7 @@ public class ItemMovementSettings {
         copy.extraJumpCount = this.extraJumpCount;
         copy.extraJumpParticleSystem = this.extraJumpParticleSystem;
         copy.extraJumpSoundEventIndex = this.extraJumpSoundEventIndex;
+        copy.extraJumpLocalSoundEventIndex = this.extraJumpLocalSoundEventIndex;
         return copy;
     }
 
@@ -149,12 +163,12 @@ public class ItemMovementSettings {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof ItemMovementSettings other)) return false;
-        return this.extraJumpCount == other.extraJumpCount && java.util.Objects.equals(this.extraJumpParticleSystem, other.extraJumpParticleSystem) && this.extraJumpSoundEventIndex == other.extraJumpSoundEventIndex;
+        return this.extraJumpCount == other.extraJumpCount && java.util.Objects.equals(this.extraJumpParticleSystem, other.extraJumpParticleSystem) && this.extraJumpSoundEventIndex == other.extraJumpSoundEventIndex && this.extraJumpLocalSoundEventIndex == other.extraJumpLocalSoundEventIndex;
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(extraJumpCount, extraJumpParticleSystem, extraJumpSoundEventIndex);
+        return java.util.Objects.hash(extraJumpCount, extraJumpParticleSystem, extraJumpSoundEventIndex, extraJumpLocalSoundEventIndex);
     }
 
-}
+}

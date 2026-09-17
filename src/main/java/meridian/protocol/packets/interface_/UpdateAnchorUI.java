@@ -335,4 +335,4 @@ size += VarInt.size(eventBindings.length) + eventBindingsSize;
         return result;
     }
 
-}
+}

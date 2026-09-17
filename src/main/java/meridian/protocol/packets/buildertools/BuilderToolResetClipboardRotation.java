@@ -102,4 +102,4 @@ public class BuilderToolResetClipboardRotation implements Packet, ToServerPacket
         return 0;
     }
 
-}
+}

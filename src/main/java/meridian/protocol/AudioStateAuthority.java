@@ -25,4 +25,4 @@ public enum AudioStateAuthority {
         }
         throw ProtocolException.invalidEnumValue("AudioStateAuthority", value);
     }
-}
+}

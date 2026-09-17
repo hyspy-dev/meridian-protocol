@@ -25,4 +25,4 @@ public enum BlockMaterial {
         }
         throw ProtocolException.invalidEnumValue("BlockMaterial", value);
     }
-}
+}

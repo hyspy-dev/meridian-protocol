@@ -285,4 +285,4 @@ public class ZoomConfig {
         return java.util.Objects.hash(magnificationMultiplier, mouseSensitivityMultiplier, overlayTexture, depthOfField, allowCameraOrbit, forcePerspective, lodMultiplier, inLerp, outLerp, overlayFade, overlayFadeInPerSecond, overlayFadeOutPerSecond);
     }
 
-}
+}

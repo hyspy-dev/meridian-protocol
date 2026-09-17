@@ -26,4 +26,4 @@ public enum TriggerVolumeShapeType {
         }
         throw ProtocolException.invalidEnumValue("TriggerVolumeShapeType", value);
     }
-}
+}

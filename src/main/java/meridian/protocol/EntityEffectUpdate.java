@@ -201,4 +201,4 @@ public class EntityEffectUpdate {
         return java.util.Objects.hash(type, id, remainingTime, infinite, debuff, statusEffectIcon);
     }
 
-}
+}

@@ -102,4 +102,4 @@ public class ClearWorldMap implements Packet, ToClientPacket {
         return 0;
     }
 
-}
+}

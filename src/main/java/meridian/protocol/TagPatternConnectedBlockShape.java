@@ -199,4 +199,4 @@ public class TagPatternConnectedBlockShape extends ConnectedBlockShape {
         return java.util.Objects.hash(faceTags, relativeRotationIndex, tagPattern);
     }
 
-}
+}

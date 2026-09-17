@@ -148,4 +148,4 @@ public class ColorLight {
         return java.util.Objects.hash(radius, red, green, blue);
     }
 
-}
+}

@@ -27,4 +27,4 @@ public enum EntityPart {
         }
         throw ProtocolException.invalidEnumValue("EntityPart", value);
     }
-}
+}

@@ -25,4 +25,4 @@ public enum ModifierTarget {
         }
         throw ProtocolException.invalidEnumValue("ModifierTarget", value);
     }
-}
+}

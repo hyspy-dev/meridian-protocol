@@ -212,4 +212,4 @@ size += VarInt.size(ruleSets.size()) + ruleSetsSize;
         return java.util.Objects.hash(type, ruleSets);
     }
 
-}
+}

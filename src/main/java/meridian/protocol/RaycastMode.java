@@ -25,4 +25,4 @@ public enum RaycastMode {
         }
         throw ProtocolException.invalidEnumValue("RaycastMode", value);
     }
-}
+}

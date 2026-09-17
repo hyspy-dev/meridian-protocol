@@ -200,4 +200,4 @@ size += VarInt.size(itemCategories.length) + itemCategoriesSize;
         return result;
     }
 
-}
+}

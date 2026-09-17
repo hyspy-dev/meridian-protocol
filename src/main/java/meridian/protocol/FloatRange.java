@@ -120,4 +120,4 @@ public class FloatRange {
         return java.util.Objects.hash(inclusiveMin, inclusiveMax);
     }
 
-}
+}

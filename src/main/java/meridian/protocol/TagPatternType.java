@@ -27,4 +27,4 @@ public enum TagPatternType {
         }
         throw ProtocolException.invalidEnumValue("TagPatternType", value);
     }
-}
+}

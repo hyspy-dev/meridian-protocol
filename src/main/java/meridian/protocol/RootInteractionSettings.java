@@ -142,4 +142,4 @@ public class RootInteractionSettings {
         return java.util.Objects.hash(allowSkipChainOnClick, cooldown);
     }
 
-}
+}

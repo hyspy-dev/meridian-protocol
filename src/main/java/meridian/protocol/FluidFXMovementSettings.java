@@ -176,4 +176,4 @@ public class FluidFXMovementSettings {
         return java.util.Objects.hash(swimUpSpeed, swimDownSpeed, sinkSpeed, horizontalSpeedMultiplier, fieldOfViewMultiplier, entryVelocityMultiplier);
     }
 
-}
+}

@@ -161,4 +161,4 @@ public class BlockAnimationEntry {
         return java.util.Objects.hash(index, expectedBlockId, speed, phase);
     }
 
-}
+}

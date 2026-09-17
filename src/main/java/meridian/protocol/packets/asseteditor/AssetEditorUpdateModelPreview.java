@@ -265,4 +265,4 @@ public class AssetEditorUpdateModelPreview implements Packet, ToClientPacket {
         return java.util.Objects.hash(assetPath, model, block, camera);
     }
 
-}
+}

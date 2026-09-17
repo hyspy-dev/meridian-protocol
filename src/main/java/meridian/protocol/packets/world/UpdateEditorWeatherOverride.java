@@ -122,4 +122,4 @@ public class UpdateEditorWeatherOverride implements Packet, ToClientPacket {
         return java.util.Objects.hash(weatherIndex);
     }
 
-}
+}

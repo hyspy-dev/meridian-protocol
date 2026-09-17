@@ -171,4 +171,4 @@ public class ForkedChainId {
         return java.util.Objects.hash(entryIndex, subIndex, forkedId);
     }
 
-}
+}

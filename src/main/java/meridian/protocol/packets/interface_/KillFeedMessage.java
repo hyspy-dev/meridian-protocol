@@ -241,4 +241,4 @@ public class KillFeedMessage implements Packet, ToClientPacket {
         return java.util.Objects.hash(killer, decedent, icon);
     }
 
-}
+}

@@ -28,4 +28,4 @@ public enum EffectDirection {
         }
         throw ProtocolException.invalidEnumValue("EffectDirection", value);
     }
-}
+}

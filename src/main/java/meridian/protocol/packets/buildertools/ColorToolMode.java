@@ -26,4 +26,4 @@ public enum ColorToolMode {
         }
         throw ProtocolException.invalidEnumValue("ColorToolMode", value);
     }
-}
+}

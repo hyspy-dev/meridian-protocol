@@ -198,4 +198,4 @@ size += VarInt.size(known.size()) + knownSize;
         return java.util.Objects.hash(known);
     }
 
-}
+}

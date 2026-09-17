@@ -477,4 +477,4 @@ public class ResetCooldownInteraction extends SimpleInteraction {
         return result;
     }
 
-}
+}

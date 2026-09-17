@@ -225,4 +225,4 @@ size += VarInt.size(effects.size()) + effectsSize;
         return java.util.Objects.hash(type, maxId, effects);
     }
 
-}
+}

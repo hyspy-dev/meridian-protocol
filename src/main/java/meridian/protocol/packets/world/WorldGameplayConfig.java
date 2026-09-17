@@ -150,4 +150,4 @@ public class WorldGameplayConfig implements Packet, ToClientPacket {
         return java.util.Objects.hash(worldConfig, combatConfig, playerConfig);
     }
 
-}
+}

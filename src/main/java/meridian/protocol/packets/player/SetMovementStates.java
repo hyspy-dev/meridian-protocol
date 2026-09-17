@@ -135,4 +135,4 @@ public class SetMovementStates implements Packet, ToClientPacket {
         return java.util.Objects.hash(movementStates);
     }
 
-}
+}

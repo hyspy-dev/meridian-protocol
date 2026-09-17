@@ -106,4 +106,4 @@ public class BuilderToolBrushShapeArg {
         return java.util.Objects.hash(defaultValue);
     }
 
-}
+}

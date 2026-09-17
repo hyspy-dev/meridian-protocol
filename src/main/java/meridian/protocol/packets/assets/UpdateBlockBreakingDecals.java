@@ -197,4 +197,4 @@ size += VarInt.size(blockBreakingDecals.size()) + blockBreakingDecalsSize;
         return java.util.Objects.hash(type, blockBreakingDecals);
     }
 
-}
+}

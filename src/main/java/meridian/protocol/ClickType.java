@@ -27,4 +27,4 @@ public enum ClickType {
         }
         throw ProtocolException.invalidEnumValue("ClickType", value);
     }
-}
+}

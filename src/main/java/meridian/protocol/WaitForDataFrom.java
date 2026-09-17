@@ -26,4 +26,4 @@ public enum WaitForDataFrom {
         }
         throw ProtocolException.invalidEnumValue("WaitForDataFrom", value);
     }
-}
+}

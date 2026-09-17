@@ -25,4 +25,4 @@ public enum PointShapeType {
         }
         throw ProtocolException.invalidEnumValue("PointShapeType", value);
     }
-}
+}

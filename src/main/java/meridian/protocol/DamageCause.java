@@ -189,4 +189,4 @@ public class DamageCause {
         return java.util.Objects.hash(id, damageTextColor);
     }
 
-}
+}

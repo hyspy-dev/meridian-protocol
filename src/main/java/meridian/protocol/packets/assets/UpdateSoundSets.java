@@ -225,4 +225,4 @@ size += VarInt.size(soundSets.size()) + soundSetsSize;
         return java.util.Objects.hash(type, maxId, soundSets);
     }
 
-}
+}

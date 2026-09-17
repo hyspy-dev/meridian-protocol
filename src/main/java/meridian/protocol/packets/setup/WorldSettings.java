@@ -185,4 +185,4 @@ size += VarInt.size(requiredAssets.length) + requiredAssetsSize;
         return result;
     }
 
-}
+}

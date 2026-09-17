@@ -26,4 +26,4 @@ public enum MovementForceRotationType {
         }
         throw ProtocolException.invalidEnumValue("MovementForceRotationType", value);
     }
-}
+}

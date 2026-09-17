@@ -25,4 +25,4 @@ public enum PositionType {
         }
         throw ProtocolException.invalidEnumValue("PositionType", value);
     }
-}
+}

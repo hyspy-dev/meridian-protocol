@@ -312,4 +312,4 @@ size += VarInt.size(removedRecipes.length) + removedRecipesSize;
         return result;
     }
 
-}
+}

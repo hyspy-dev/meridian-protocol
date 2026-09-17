@@ -201,4 +201,4 @@ public class TemplatedConnectedBlockShape extends ConnectedBlockShape {
         return java.util.Objects.hash(faceTags, relativeRotationIndex, templateId);
     }
 
-}
+}

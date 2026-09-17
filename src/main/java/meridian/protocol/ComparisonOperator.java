@@ -29,4 +29,4 @@ public enum ComparisonOperator {
         }
         throw ProtocolException.invalidEnumValue("ComparisonOperator", value);
     }
-}
+}

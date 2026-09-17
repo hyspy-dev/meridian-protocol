@@ -186,4 +186,4 @@ public class VoiceData implements Packet, ToServerPacket {
         return result;
     }
 
-}
+}

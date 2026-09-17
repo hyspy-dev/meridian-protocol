@@ -122,4 +122,4 @@ public class ServerSetPaused implements Packet, ToClientPacket {
         return java.util.Objects.hash(paused);
     }
 
-}
+}

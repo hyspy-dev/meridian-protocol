@@ -102,4 +102,4 @@ public class SetupFinalize implements Packet, ToServerPacket {
         return 0;
     }
 
-}
+}

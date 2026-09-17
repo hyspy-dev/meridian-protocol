@@ -158,4 +158,4 @@ public class CancelInteractionChain implements Packet, ToClientPacket {
         return java.util.Objects.hash(chainId, forkedId);
     }
 
-}
+}

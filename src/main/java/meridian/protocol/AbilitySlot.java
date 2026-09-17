@@ -25,4 +25,4 @@ public enum AbilitySlot {
         }
         throw ProtocolException.invalidEnumValue("AbilitySlot", value);
     }
-}
+}

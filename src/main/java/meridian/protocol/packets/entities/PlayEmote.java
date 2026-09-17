@@ -146,4 +146,4 @@ public class PlayEmote implements Packet, ToServerPacket {
         return java.util.Objects.hash(emoteId);
     }
 
-}
+}

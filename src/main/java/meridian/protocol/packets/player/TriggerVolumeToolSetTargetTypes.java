@@ -147,4 +147,4 @@ public class TriggerVolumeToolSetTargetTypes implements Packet, ToServerPacket {
         return java.util.Objects.hash(volumeId, targetTypes);
     }
 
-}
+}

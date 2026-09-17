@@ -225,4 +225,4 @@ size += VarInt.size(categories.size()) + categoriesSize;
         return java.util.Objects.hash(type, maxId, categories);
     }
 
-}
+}

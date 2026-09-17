@@ -135,4 +135,4 @@ public class UpdateTime implements Packet, ToClientPacket {
         return java.util.Objects.hash(gameTime);
     }
 
-}
+}

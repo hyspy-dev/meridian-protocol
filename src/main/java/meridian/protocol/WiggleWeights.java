@@ -232,4 +232,4 @@ public class WiggleWeights {
         return java.util.Objects.hash(x, xDeceleration, y, yDeceleration, z, zDeceleration, roll, rollDeceleration, pitch, pitchDeceleration);
     }
 
-}
+}

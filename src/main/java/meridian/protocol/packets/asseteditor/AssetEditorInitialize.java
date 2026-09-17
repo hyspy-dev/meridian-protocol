@@ -102,4 +102,4 @@ public class AssetEditorInitialize implements Packet, ToServerPacket {
         return 0;
     }
 
-}
+}

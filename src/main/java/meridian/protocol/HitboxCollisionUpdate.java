@@ -108,4 +108,4 @@ public class HitboxCollisionUpdate extends ComponentUpdate {
         return java.util.Objects.hash(hitboxCollisionConfigIndex);
     }
 
-}
+}

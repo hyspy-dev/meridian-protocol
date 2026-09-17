@@ -122,4 +122,4 @@ public class TriggerVolumeToolEquip implements Packet, ToServerPacket {
         return java.util.Objects.hash(active);
     }
 
-}
+}

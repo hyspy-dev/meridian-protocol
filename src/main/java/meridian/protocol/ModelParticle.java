@@ -324,4 +324,4 @@ public class ModelParticle {
         return java.util.Objects.hash(systemId, scale, color, targetEntityPart, targetNodeName, positionOffset, rotationOffset, detachedFromModel, clearParticlesOnRemove);
     }
 
-}
+}

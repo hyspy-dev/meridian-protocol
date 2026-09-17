@@ -157,4 +157,4 @@ public class ItemToolSpec {
         return java.util.Objects.hash(gatherType, power, quality);
     }
 
-}
+}

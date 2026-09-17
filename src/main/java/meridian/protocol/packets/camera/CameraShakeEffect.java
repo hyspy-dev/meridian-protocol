@@ -150,4 +150,4 @@ public class CameraShakeEffect implements Packet, ToClientPacket {
         return java.util.Objects.hash(cameraShakeId, intensity, mode);
     }
 
-}
+}

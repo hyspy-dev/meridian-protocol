@@ -267,4 +267,4 @@ public class CommandOptionalArgEntry {
         return java.util.Objects.hash(name, hint, argTypeId, description);
     }
 
-}
+}

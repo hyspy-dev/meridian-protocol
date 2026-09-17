@@ -70,4 +70,4 @@ public abstract class ServersideUICommand {
     public int computeSizeWithTypeId() {
         return VarInt.size(getTypeId()) + computeSize();
     }
-}
+}

@@ -31,4 +31,4 @@ public enum WindowType {
         }
         throw ProtocolException.invalidEnumValue("WindowType", value);
     }
-}
+}

@@ -482,4 +482,4 @@ size += VarInt.size(settings.size()) + settingsSize;
         return result;
     }
 
-}
+}

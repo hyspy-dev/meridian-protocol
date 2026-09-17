@@ -122,4 +122,4 @@ public class UpdateForcedMusic implements Packet, ToClientPacket {
         return java.util.Objects.hash(containerIndex);
     }
 
-}
+}

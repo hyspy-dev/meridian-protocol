@@ -175,4 +175,4 @@ public class TriggerVolumeToolGroupCreateResponse implements Packet, ToClientPac
         return java.util.Objects.hash(groupId, color, success, skippedCount);
     }
 
-}
+}

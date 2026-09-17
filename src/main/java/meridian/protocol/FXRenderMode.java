@@ -27,4 +27,4 @@ public enum FXRenderMode {
         }
         throw ProtocolException.invalidEnumValue("FXRenderMode", value);
     }
-}
+}

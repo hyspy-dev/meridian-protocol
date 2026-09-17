@@ -312,4 +312,4 @@ size += VarInt.size(removedParticleSystems.length) + removedParticleSystemsSize;
         return result;
     }
 
-}
+}

@@ -36,4 +36,4 @@ public enum Cosmetic {
         }
         throw ProtocolException.invalidEnumValue("Cosmetic", value);
     }
-}
+}

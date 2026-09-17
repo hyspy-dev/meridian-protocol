@@ -27,4 +27,4 @@ public enum AmbienceFXSoundPlay3D {
         }
         throw ProtocolException.invalidEnumValue("AmbienceFXSoundPlay3D", value);
     }
-}
+}

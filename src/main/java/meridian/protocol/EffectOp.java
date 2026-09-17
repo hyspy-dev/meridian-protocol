@@ -25,4 +25,4 @@ public enum EffectOp {
         }
         throw ProtocolException.invalidEnumValue("EffectOp", value);
     }
-}
+}

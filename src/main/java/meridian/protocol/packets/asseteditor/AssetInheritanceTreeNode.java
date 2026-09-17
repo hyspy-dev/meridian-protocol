@@ -13,28 +13,31 @@ import meridian.protocol.io.VarInt;
 
 public class AssetInheritanceTreeNode {
     public static final int NULLABLE_BIT_FIELD_SIZE = 1;
-    public static final int FIXED_BLOCK_SIZE = 1;
+    public static final int FIXED_BLOCK_SIZE = 2;
     public static final int VARIABLE_FIELD_COUNT = 3;
-    public static final int VARIABLE_BLOCK_START = 13;
+    public static final int VARIABLE_BLOCK_START = 14;
     public static final int MAX_SIZE = 1677721600;
 
     @Nullable public AssetPath reference;
     @Nullable public String jsonContent;
     @Nullable public AssetInheritanceTreeNode[] ancestors;
+    public boolean isReadOnly;
 
     public AssetInheritanceTreeNode() {
     }
 
-    public AssetInheritanceTreeNode(@Nullable AssetPath reference, @Nullable String jsonContent, @Nullable AssetInheritanceTreeNode[] ancestors) {
+    public AssetInheritanceTreeNode(@Nullable AssetPath reference, @Nullable String jsonContent, @Nullable AssetInheritanceTreeNode[] ancestors, boolean isReadOnly) {
         this.reference = reference;
         this.jsonContent = jsonContent;
         this.ancestors = ancestors;
+        this.isReadOnly = isReadOnly;
     }
 
     public AssetInheritanceTreeNode(@Nonnull AssetInheritanceTreeNode other) {
         this.reference = other.reference;
         this.jsonContent = other.jsonContent;
         this.ancestors = other.ancestors;
+        this.isReadOnly = other.isReadOnly;
     }
 
     /**
@@ -43,7 +46,7 @@ public class AssetInheritanceTreeNode {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("AssetInheritanceTreeNode", offset, (int) mem.byteSize());
-        long needed = (long) offset + 13;
+        long needed = (long) offset + 14;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("AssetInheritanceTreeNode", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -54,7 +57,7 @@ public class AssetInheritanceTreeNode {
     
     @Nullable
     public static AssetPath getReference(MemorySegment mem, int offset) {
-        return hasReference(mem, offset) ? AssetPath.toObject(mem, offset + getValidatedOffset(mem, offset, 1, 13, "Reference")): null;
+        return hasReference(mem, offset) ? AssetPath.toObject(mem, offset + getValidatedOffset(mem, offset, 2, 14, "Reference")): null;
     }
     
     @Nullable
@@ -64,7 +67,7 @@ public class AssetInheritanceTreeNode {
     
     @Nullable
     public static String getJsonContent(MemorySegment mem, int offset) {
-        return hasJsonContent(mem, offset) ? PacketIO.readVarString("JsonContent", mem, offset + getValidatedOffset(mem, offset, 5, 13, "JsonContent"), 4096000): null;
+        return hasJsonContent(mem, offset) ? PacketIO.readVarString("JsonContent", mem, offset + getValidatedOffset(mem, offset, 6, 14, "JsonContent"), 4096000): null;
     }
     
     @Nullable
@@ -76,13 +79,13 @@ public class AssetInheritanceTreeNode {
     public static AssetInheritanceTreeNode[] getAncestors(MemorySegment mem, int offset) {
         if (!hasAncestors(mem, offset)) return null;
         var walkCursor = new ReadCursor();
-        var off = offset + getValidatedOffset(mem, offset, 9, 13, "Ancestors");
+        var off = offset + getValidatedOffset(mem, offset, 10, 14, "Ancestors");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("Ancestors");
         var len = (int) packed;
         if (len > 4096000) throw ProtocolException.arrayTooLong("Ancestors", len, 4096000);
         var lenOffset = (int) (packed >>> 32);
-        if (off + lenOffset + (long) len * 13 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Ancestors", (int) java.lang.Math.min(off + lenOffset + (long) len * 13, Integer.MAX_VALUE), (int) mem.byteSize());
+        if (off + lenOffset + (long) len * 14 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Ancestors", (int) java.lang.Math.min(off + lenOffset + (long) len * 14, Integer.MAX_VALUE), (int) mem.byteSize());
         off += lenOffset;
         var data = new AssetInheritanceTreeNode[len];
         for (var i = 0; i < len; i++) {
@@ -90,6 +93,14 @@ public class AssetInheritanceTreeNode {
             off = walkCursor.position;
         }
         return data;
+    }
+    
+    public static boolean getIsReadOnly(MemorySegment mem) {
+        return getIsReadOnly(mem, 0);
+    }
+    
+    public static boolean getIsReadOnly(MemorySegment mem, int offset) {
+        return mem.get(PacketIO.PROTO_BOOL, offset + 1);
     }
     
     public static boolean hasReference(MemorySegment mem, int offset) {
@@ -155,39 +166,39 @@ public class AssetInheritanceTreeNode {
     private static AssetInheritanceTreeNode toObjectUncounted(MemorySegment mem, int offset, ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
-        var varBase = offset + 13;
+        var varBase = offset + 14;
         var varPos = 0;
         var walkCursor = cursor != null ? cursor : new ReadCursor();
         AssetPath v0 = null;
         if (hasReference(mem, offset)) {
-            requireSlot(mem, offset + 1, varPos, "Reference");
+            requireSlot(mem, offset + 2, varPos, "Reference");
             v0 = AssetPath.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
         } else {
-            requireSlot(mem, offset + 1, -1, "Reference");
+            requireSlot(mem, offset + 2, -1, "Reference");
         }
         
         String v1 = null;
         if (hasJsonContent(mem, offset)) {
-            requireSlot(mem, offset + 5, varPos, "JsonContent");
+            requireSlot(mem, offset + 6, varPos, "JsonContent");
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
             v1 = PacketIO.readVarString("JsonContent", mem, off, 0, 4096000, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         } else {
-            requireSlot(mem, offset + 5, -1, "JsonContent");
+            requireSlot(mem, offset + 6, -1, "JsonContent");
         }
         
         AssetInheritanceTreeNode[] v2 = null;
         if (hasAncestors(mem, offset)) {
-            requireSlot(mem, offset + 9, varPos, "Ancestors");
+            requireSlot(mem, offset + 10, varPos, "Ancestors");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("Ancestors");
             var len = (int) packed;
             if (len > 4096000) throw ProtocolException.arrayTooLong("Ancestors", len, 4096000);
             var lenOffset = (int) (packed >>> 32);
-            if (off + lenOffset + (long) len * 13 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Ancestors", (int) java.lang.Math.min(off + lenOffset + (long) len * 13, Integer.MAX_VALUE), (int) mem.byteSize());
+            if (off + lenOffset + (long) len * 14 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Ancestors", (int) java.lang.Math.min(off + lenOffset + (long) len * 14, Integer.MAX_VALUE), (int) mem.byteSize());
             off += lenOffset;
             v2 = new AssetInheritanceTreeNode[len];
             for (var i = 0; i < len; i++) {
@@ -196,12 +207,13 @@ public class AssetInheritanceTreeNode {
             }
             varPos = off - varBase;
         } else {
-            requireSlot(mem, offset + 9, -1, "Ancestors");
+            requireSlot(mem, offset + 10, -1, "Ancestors");
         }
         var result = new AssetInheritanceTreeNode(
             v0,
             v1,
-            v2
+            v2,
+            mem.get(PacketIO.PROTO_BOOL, offset + 1)
         );
         if (cursor != null) cursor.position = varBase + varPos;
         return result;
@@ -214,22 +226,22 @@ public class AssetInheritanceTreeNode {
         if (this.ancestors != null) nullBits |= 0x04;
         mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         
-        
-        var varOffset = offset + 13;
+        mem.set(PacketIO.PROTO_BOOL, offset + 1, this.isReadOnly);
+        var varOffset = offset + 14;
         if (this.reference != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 1, varOffset - offset - 13);
+            mem.set(PacketIO.PROTO_INT, offset + 2, varOffset - offset - 14);
             varOffset += this.reference.serialize(mem, varOffset);
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 1, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 2, -1);
         }
         if (this.jsonContent != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 5, varOffset - offset - 13);
+            mem.set(PacketIO.PROTO_INT, offset + 6, varOffset - offset - 14);
             varOffset += PacketIO.writeVarString(mem, varOffset, this.jsonContent, 4096000);
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 5, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 6, -1);
         }
         if (this.ancestors != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 9, varOffset - offset - 13);
+            mem.set(PacketIO.PROTO_INT, offset + 10, varOffset - offset - 14);
             if (ancestors.length > 4096000) throw ProtocolException.arrayTooLong("Ancestors", ancestors.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.ancestors.length);
             
@@ -239,13 +251,13 @@ public class AssetInheritanceTreeNode {
             }
             varOffset += ancestorsValueOffset;
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 9, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 10, -1);
         }
     
        return varOffset - offset;
     }
     public int computeSize() {
-        int size = 13;
+        int size = 14;
         if (reference != null) size += reference.computeSize();
     if (jsonContent != null) size += PacketIO.stringSize(jsonContent);
     if (ancestors != null) {
@@ -262,6 +274,7 @@ size += VarInt.size(ancestors.length) + ancestorsSize;
         copy.reference = this.reference != null ? this.reference.clone() : null;
         copy.jsonContent = this.jsonContent;
         copy.ancestors = this.ancestors != null ? java.util.Arrays.stream(this.ancestors).map(e -> e.clone()).toArray(AssetInheritanceTreeNode[]::new) : null;
+        copy.isReadOnly = this.isReadOnly;
         return copy;
     }
 
@@ -270,7 +283,7 @@ size += VarInt.size(ancestors.length) + ancestorsSize;
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof AssetInheritanceTreeNode other)) return false;
-        return java.util.Objects.equals(this.reference, other.reference) && java.util.Objects.equals(this.jsonContent, other.jsonContent) && java.util.Arrays.equals(this.ancestors, other.ancestors);
+        return java.util.Objects.equals(this.reference, other.reference) && java.util.Objects.equals(this.jsonContent, other.jsonContent) && java.util.Arrays.equals(this.ancestors, other.ancestors) && this.isReadOnly == other.isReadOnly;
     }
 
     @Override
@@ -279,7 +292,8 @@ size += VarInt.size(ancestors.length) + ancestorsSize;
         result = 31 * result + java.util.Objects.hashCode(reference);
         result = 31 * result + java.util.Objects.hashCode(jsonContent);
         result = 31 * result + java.util.Arrays.hashCode(ancestors);
+        result = 31 * result + Boolean.hashCode(isReadOnly);
         return result;
     }
 
-}
+}

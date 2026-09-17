@@ -463,4 +463,4 @@ size += VarInt.size(benchRequirement.length) + benchRequirementSize;
         return result;
     }
 
-}
+}

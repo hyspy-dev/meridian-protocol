@@ -156,4 +156,4 @@ size += VarInt.size(entityEffectUpdates.length) + entityEffectUpdatesSize;
         return result;
     }
 
-}
+}

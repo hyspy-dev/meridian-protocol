@@ -25,4 +25,4 @@ public enum ConnectedBlockMatchType {
         }
         throw ProtocolException.invalidEnumValue("ConnectedBlockMatchType", value);
     }
-}
+}

@@ -27,4 +27,4 @@ public enum NotificationStyle {
         }
         throw ProtocolException.invalidEnumValue("NotificationStyle", value);
     }
-}
+}

@@ -243,4 +243,4 @@ public class SetMachinimaActorModel implements Packet, ToClientPacket {
         return java.util.Objects.hash(model, sceneName, actorName);
     }
 
-}
+}

@@ -134,4 +134,4 @@ public class AmbienceFXSoundEffect {
         return java.util.Objects.hash(reverbEffectIndex, equalizerEffectIndex, isInstant);
     }
 
-}
+}

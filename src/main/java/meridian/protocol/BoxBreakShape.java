@@ -191,4 +191,4 @@ public class BoxBreakShape extends BreakShape {
         return java.util.Objects.hash(width, height, depth, centered, offset, orientation);
     }
 
-}
+}

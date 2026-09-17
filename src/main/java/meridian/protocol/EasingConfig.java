@@ -120,4 +120,4 @@ public class EasingConfig {
         return java.util.Objects.hash(time, type);
     }
 
-}
+}

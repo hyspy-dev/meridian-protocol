@@ -18,10 +18,10 @@ public class SetColumn implements Packet, ToClientPacket {
     public static final int PACKET_ID = 138;
     public static final boolean IS_COMPRESSED = true;
     public static final int NULLABLE_BIT_FIELD_SIZE = 0;
-    public static final int FIXED_BLOCK_SIZE = 8;
-    public static final int VARIABLE_FIELD_COUNT = 3;
-    public static final int VARIABLE_BLOCK_START = 20;
-    public static final int MAX_SIZE = 12288035;
+    public static final int FIXED_BLOCK_SIZE = 4104;
+    public static final int VARIABLE_FIELD_COUNT = 1;
+    public static final int VARIABLE_BLOCK_START = 4104;
+    public static final int MAX_SIZE = 4100109;
 
     @Override
     public int getId() {
@@ -35,19 +35,17 @@ public class SetColumn implements Packet, ToClientPacket {
 
     public int x;
     public int z;
-    @Nonnull public byte[] heightmap = new byte[0];
+    @Nonnull public int[] heightmap = new int[0];
     @Nonnull public byte[] tintmap = new byte[0];
-    @Nonnull public byte[] environments = new byte[0];
 
     public SetColumn() {
     }
 
-    public SetColumn(int x, int z, @Nonnull byte[] heightmap, @Nonnull byte[] tintmap, @Nonnull byte[] environments) {
+    public SetColumn(int x, int z, @Nonnull int[] heightmap, @Nonnull byte[] tintmap) {
         this.x = x;
         this.z = z;
         this.heightmap = heightmap;
         this.tintmap = tintmap;
-        this.environments = environments;
     }
 
     public SetColumn(@Nonnull SetColumn other) {
@@ -55,7 +53,6 @@ public class SetColumn implements Packet, ToClientPacket {
         this.z = other.z;
         this.heightmap = other.heightmap;
         this.tintmap = other.tintmap;
-        this.environments = other.environments;
     }
 
     /**
@@ -64,7 +61,7 @@ public class SetColumn implements Packet, ToClientPacket {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("SetColumn", offset, (int) mem.byteSize());
-        long needed = (long) offset + 20;
+        long needed = (long) offset + 4104;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("SetColumn", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -84,21 +81,18 @@ public class SetColumn implements Packet, ToClientPacket {
         return mem.get(PacketIO.PROTO_INT, offset + 4);
     }
     
-    public static byte[] getHeightmap(MemorySegment mem) {
+    public static int[] getHeightmap(MemorySegment mem) {
         return getHeightmap(mem, 0);
     }
     
-    public static byte[] getHeightmap(MemorySegment mem, int offset) {
-        var off = offset + getValidatedOffset(mem, offset, 8, 20, "Heightmap");
-        var packed = VarInt.getWithLength(mem, off);
-        if (packed == -1L) throw ProtocolException.invalidVarInt("Heightmap");
-        var len = (int) packed;
-        if (len > 4096000) throw ProtocolException.arrayTooLong("Heightmap", len, 4096000);
-        var lenOffset = (int) (packed >>> 32);
-        if (off + lenOffset + len > mem.byteSize()) throw ProtocolException.bufferTooSmall("Heightmap", (int) java.lang.Math.min(off + lenOffset + len, Integer.MAX_VALUE), (int) mem.byteSize());
+    public static int[] getHeightmap(MemorySegment mem, int offset) {
+        var off = offset + 8;
+        var len = 1024;
+        var lenOffset = 0;
+        if (off + lenOffset + (long) len * 4 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Heightmap", (int) java.lang.Math.min(off + lenOffset + (long) len * 4, Integer.MAX_VALUE), (int) mem.byteSize());
         off += lenOffset;
-        var data = new byte[len];
-        MemorySegment.copy(mem, PacketIO.PROTO_BYTE, off, data, 0, len);
+        var data = new int[len];
+        MemorySegment.copy(mem, PacketIO.PROTO_INT, off, data, 0, len);
         return data;
     }
     
@@ -107,7 +101,7 @@ public class SetColumn implements Packet, ToClientPacket {
     }
     
     public static byte[] getTintmap(MemorySegment mem, int offset) {
-        var off = offset + getValidatedOffset(mem, offset, 12, 20, "Tintmap");
+        var off = offset + 4104;
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("Tintmap");
         var len = (int) packed;
@@ -120,42 +114,9 @@ public class SetColumn implements Packet, ToClientPacket {
         return data;
     }
     
-    public static byte[] getEnvironments(MemorySegment mem) {
-        return getEnvironments(mem, 0);
-    }
-    
-    public static byte[] getEnvironments(MemorySegment mem, int offset) {
-        var off = offset + getValidatedOffset(mem, offset, 16, 20, "Environments");
-        var packed = VarInt.getWithLength(mem, off);
-        if (packed == -1L) throw ProtocolException.invalidVarInt("Environments");
-        var len = (int) packed;
-        if (len > 4096000) throw ProtocolException.arrayTooLong("Environments", len, 4096000);
-        var lenOffset = (int) (packed >>> 32);
-        if (off + lenOffset + len > mem.byteSize()) throw ProtocolException.bufferTooSmall("Environments", (int) java.lang.Math.min(off + lenOffset + len, Integer.MAX_VALUE), (int) mem.byteSize());
-        off += lenOffset;
-        var data = new byte[len];
-        MemorySegment.copy(mem, PacketIO.PROTO_BYTE, off, data, 0, len);
-        return data;
-    }
     
     
     
-    private static int getValidatedOffset(MemorySegment buffer, int base, int slotPosition, int varBlockStart, String fieldName) {
-        int offset = buffer.get(PacketIO.PROTO_INT, base + slotPosition);
-        if (offset < 0 || offset > buffer.byteSize() - base - varBlockStart)
-            throw ProtocolException.invalidOffset(fieldName, offset, (int) buffer.byteSize());
-        return varBlockStart + offset;
-    }
-    
-    /**
-     * Rejects an offset slot that does not name the position the field-order walk reached. A
-     * present field must sit where the previous field ended, and an absent field carries -1, so
-     * the slot a random-access getter resolves and the walk describe the same bytes.
-     */
-    private static void requireSlot(MemorySegment mem, int slotPosition, int expected, String fieldName) {
-        int slot = mem.get(PacketIO.PROTO_INT, slotPosition);
-        if (slot != expected) throw ProtocolException.nonCanonicalLayout(fieldName, slot, expected);
-    }
     
     public static SetColumn toObject(MemorySegment mem) {
         return toObject(mem, 0, null);
@@ -173,26 +134,20 @@ public class SetColumn implements Packet, ToClientPacket {
     public static SetColumn toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
-        var varBase = offset + 20;
+        var varBase = offset + 4104;
         var varPos = 0;
-        byte[] v2;
-        requireSlot(mem, offset + 8, varPos, "Heightmap");
+        int[] v2;
         {
-            var off = varBase + varPos;
-            var packed = VarInt.getWithLength(mem, off);
-            if (packed == -1L) throw ProtocolException.invalidVarInt("Heightmap");
-            var len = (int) packed;
-            if (len > 4096000) throw ProtocolException.arrayTooLong("Heightmap", len, 4096000);
-            var lenOffset = (int) (packed >>> 32);
-            if (off + lenOffset + len > mem.byteSize()) throw ProtocolException.bufferTooSmall("Heightmap", (int) java.lang.Math.min(off + lenOffset + len, Integer.MAX_VALUE), (int) mem.byteSize());
+            var off = offset + 8;
+            var len = 1024;
+            var lenOffset = 0;
+            if (off + lenOffset + (long) len * 4 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Heightmap", (int) java.lang.Math.min(off + lenOffset + (long) len * 4, Integer.MAX_VALUE), (int) mem.byteSize());
             off += lenOffset;
-            v2 = new byte[len];
-            MemorySegment.copy(mem, PacketIO.PROTO_BYTE, off, v2, 0, len);
-            varPos = off + len - varBase;
+            v2 = new int[len];
+            MemorySegment.copy(mem, PacketIO.PROTO_INT, off, v2, 0, len);
         }
         
         byte[] v3;
-        requireSlot(mem, offset + 12, varPos, "Tintmap");
         {
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
@@ -206,28 +161,11 @@ public class SetColumn implements Packet, ToClientPacket {
             MemorySegment.copy(mem, PacketIO.PROTO_BYTE, off, v3, 0, len);
             varPos = off + len - varBase;
         }
-        
-        byte[] v4;
-        requireSlot(mem, offset + 16, varPos, "Environments");
-        {
-            var off = varBase + varPos;
-            var packed = VarInt.getWithLength(mem, off);
-            if (packed == -1L) throw ProtocolException.invalidVarInt("Environments");
-            var len = (int) packed;
-            if (len > 4096000) throw ProtocolException.arrayTooLong("Environments", len, 4096000);
-            var lenOffset = (int) (packed >>> 32);
-            if (off + lenOffset + len > mem.byteSize()) throw ProtocolException.bufferTooSmall("Environments", (int) java.lang.Math.min(off + lenOffset + len, Integer.MAX_VALUE), (int) mem.byteSize());
-            off += lenOffset;
-            v4 = new byte[len];
-            MemorySegment.copy(mem, PacketIO.PROTO_BYTE, off, v4, 0, len);
-            varPos = off + len - varBase;
-        }
         var result = new SetColumn(
             mem.get(PacketIO.PROTO_INT, offset + 0),
             mem.get(PacketIO.PROTO_INT, offset + 4),
             v2,
-            v3,
-            v4
+            v3
         );
         if (cursor != null) cursor.position = varBase + varPos;
         return result;
@@ -237,33 +175,20 @@ public class SetColumn implements Packet, ToClientPacket {
         
         mem.set(PacketIO.PROTO_INT, offset + 0, this.x);
         mem.set(PacketIO.PROTO_INT, offset + 4, this.z);
-        var varOffset = offset + 20;
-        mem.set(PacketIO.PROTO_INT, offset + 8, varOffset - offset - 20);
-        if (heightmap.length > 4096000) throw ProtocolException.arrayTooLong("Heightmap", heightmap.length, 4096000);
-        varOffset += VarInt.set(mem, varOffset, this.heightmap.length);
         
-        MemorySegment.copy(this.heightmap, 0, mem, PacketIO.PROTO_BYTE, varOffset, this.heightmap.length);
-        varOffset += this.heightmap.length * 1;
-        mem.set(PacketIO.PROTO_INT, offset + 12, varOffset - offset - 20);
+        MemorySegment.copy(this.heightmap, 0, mem, PacketIO.PROTO_INT, offset + 8, this.heightmap.length);
+        var varOffset = offset + 4104;
         if (tintmap.length > 4096000) throw ProtocolException.arrayTooLong("Tintmap", tintmap.length, 4096000);
         varOffset += VarInt.set(mem, varOffset, this.tintmap.length);
         
         MemorySegment.copy(this.tintmap, 0, mem, PacketIO.PROTO_BYTE, varOffset, this.tintmap.length);
         varOffset += this.tintmap.length * 1;
-        mem.set(PacketIO.PROTO_INT, offset + 16, varOffset - offset - 20);
-        if (environments.length > 4096000) throw ProtocolException.arrayTooLong("Environments", environments.length, 4096000);
-        varOffset += VarInt.set(mem, varOffset, this.environments.length);
-        
-        MemorySegment.copy(this.environments, 0, mem, PacketIO.PROTO_BYTE, varOffset, this.environments.length);
-        varOffset += this.environments.length * 1;
     
        return varOffset - offset;
     }
     public int computeSize() {
-        int size = 20;
-        size += VarInt.size(heightmap.length) + heightmap.length * 1;
-    size += VarInt.size(tintmap.length) + tintmap.length * 1;
-    size += VarInt.size(environments.length) + environments.length * 1;
+        int size = 4104;
+        size += VarInt.size(tintmap.length) + tintmap.length * 1;
 
         return size;
     }
@@ -274,7 +199,6 @@ public class SetColumn implements Packet, ToClientPacket {
         copy.z = this.z;
         copy.heightmap = java.util.Arrays.copyOf(this.heightmap, this.heightmap.length);
         copy.tintmap = java.util.Arrays.copyOf(this.tintmap, this.tintmap.length);
-        copy.environments = java.util.Arrays.copyOf(this.environments, this.environments.length);
         return copy;
     }
 
@@ -283,7 +207,7 @@ public class SetColumn implements Packet, ToClientPacket {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof SetColumn other)) return false;
-        return this.x == other.x && this.z == other.z && java.util.Arrays.equals(this.heightmap, other.heightmap) && java.util.Arrays.equals(this.tintmap, other.tintmap) && java.util.Arrays.equals(this.environments, other.environments);
+        return this.x == other.x && this.z == other.z && java.util.Arrays.equals(this.heightmap, other.heightmap) && java.util.Arrays.equals(this.tintmap, other.tintmap);
     }
 
     @Override
@@ -293,8 +217,7 @@ public class SetColumn implements Packet, ToClientPacket {
         result = 31 * result + Integer.hashCode(z);
         result = 31 * result + java.util.Arrays.hashCode(heightmap);
         result = 31 * result + java.util.Arrays.hashCode(tintmap);
-        result = 31 * result + java.util.Arrays.hashCode(environments);
         return result;
     }
 
-}
+}

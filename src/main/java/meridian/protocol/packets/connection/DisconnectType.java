@@ -25,4 +25,4 @@ public enum DisconnectType {
         }
         throw ProtocolException.invalidEnumValue("DisconnectType", value);
     }
-}
+}

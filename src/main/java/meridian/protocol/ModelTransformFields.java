@@ -32,4 +32,4 @@ public final class ModelTransformFields {
     public static short none() {
         return (short) 0;
     }
-}
+}

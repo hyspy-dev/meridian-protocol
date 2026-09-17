@@ -234,4 +234,4 @@ public class BuilderToolLaserPointer implements Packet, ToClientPacket {
         return java.util.Objects.hash(playerNetworkId, startX, startY, startZ, endX, endY, endZ, color, durationMs);
     }
 
-}
+}

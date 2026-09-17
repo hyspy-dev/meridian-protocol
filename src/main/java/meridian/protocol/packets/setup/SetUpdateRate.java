@@ -122,4 +122,4 @@ public class SetUpdateRate implements Packet, ToClientPacket {
         return java.util.Objects.hash(updatesPerSecond);
     }
 
-}
+}

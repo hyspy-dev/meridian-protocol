@@ -212,4 +212,4 @@ size += VarInt.size(blockSets.size()) + blockSetsSize;
         return java.util.Objects.hash(type, blockSets);
     }
 
-}
+}

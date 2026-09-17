@@ -134,4 +134,4 @@ public class UpdateLanguage implements Packet, ToServerPacket {
         return java.util.Objects.hash(language);
     }
 
-}
+}

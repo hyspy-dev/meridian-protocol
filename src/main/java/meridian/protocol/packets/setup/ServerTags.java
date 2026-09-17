@@ -192,4 +192,4 @@ size += VarInt.size(tags.size()) + tagsSize;
         return java.util.Objects.hash(tags);
     }
 
-}
+}

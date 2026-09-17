@@ -234,4 +234,4 @@ public class BuilderToolExtrudeAction implements Packet, ToServerPacket {
         return java.util.Objects.hash(x, y, z, xNormal, yNormal, zNormal, mode, isHoldDownInteraction, undoGroupSize);
     }
 
-}
+}

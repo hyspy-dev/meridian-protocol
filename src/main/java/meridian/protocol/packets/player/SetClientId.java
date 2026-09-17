@@ -122,4 +122,4 @@ public class SetClientId implements Packet, ToClientPacket {
         return java.util.Objects.hash(clientId);
     }
 
-}
+}

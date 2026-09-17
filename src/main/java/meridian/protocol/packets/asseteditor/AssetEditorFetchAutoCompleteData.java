@@ -218,4 +218,4 @@ public class AssetEditorFetchAutoCompleteData implements Packet, ToServerPacket 
         return java.util.Objects.hash(token, dataset, query);
     }
 
-}
+}

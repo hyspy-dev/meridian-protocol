@@ -225,4 +225,4 @@ size += VarInt.size(physicalMaterials.size()) + physicalMaterialsSize;
         return java.util.Objects.hash(type, maxId, physicalMaterials);
     }
 
-}
+}

@@ -170,4 +170,4 @@ public class PasswordResponse implements Packet, ToServerPacket {
         return result;
     }
 
-}
+}

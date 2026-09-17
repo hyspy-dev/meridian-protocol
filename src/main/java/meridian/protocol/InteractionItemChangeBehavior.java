@@ -27,4 +27,4 @@ public enum InteractionItemChangeBehavior {
         }
         throw ProtocolException.invalidEnumValue("InteractionItemChangeBehavior", value);
     }
-}
+}

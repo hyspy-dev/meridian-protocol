@@ -136,4 +136,4 @@ public class NetworkTick implements Packet, ToClientPacket {
         return java.util.Objects.hash(tickDurationMicros, serverTick);
     }
 
-}
+}

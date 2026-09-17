@@ -226,4 +226,4 @@ public class CameraShakeConfig {
         return java.util.Objects.hash(duration, startTime, continuous, easeIn, easeOut, offset, rotation);
     }
 
-}
+}

@@ -158,4 +158,4 @@ public class AssetEditorRequestAssetInheritanceReply implements Packet, ToClient
         return java.util.Objects.hash(token, asset);
     }
 
-}
+}

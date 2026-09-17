@@ -67,6 +67,7 @@ public abstract class ComponentUpdate {
                 case 28 -> PrefabPreviewUpdate.toObject(mem, offset + typeIdLen, walkCursor);
                 case 29 -> PreventEmotesUpdate.toObject(mem, offset + typeIdLen, walkCursor);
                 case 30 -> BeamsUpdate.toObject(mem, offset + typeIdLen, walkCursor);
+                case 31 -> PreventDebugScreensUpdate.toObject(mem, offset + typeIdLen, walkCursor);
                 default -> throw ProtocolException.unknownPolymorphicType("ComponentUpdate", typeId);
             };
         } finally {
@@ -107,6 +108,7 @@ public abstract class ComponentUpdate {
             if (this instanceof PrefabPreviewUpdate sub) { return 28; }
             if (this instanceof PreventEmotesUpdate sub) { return 29; }
             if (this instanceof BeamsUpdate sub) { return 30; }
+            if (this instanceof PreventDebugScreensUpdate sub) { return 31; }
         throw new IllegalStateException("Unknown subtype: " + getClass().getName());
     }
 
@@ -122,4 +124,4 @@ public abstract class ComponentUpdate {
     public int computeSizeWithTypeId() {
         return VarInt.size(getTypeId()) + computeSize();
     }
-}
+}

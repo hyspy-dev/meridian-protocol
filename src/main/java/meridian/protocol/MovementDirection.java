@@ -32,4 +32,4 @@ public enum MovementDirection {
         }
         throw ProtocolException.invalidEnumValue("MovementDirection", value);
     }
-}
+}

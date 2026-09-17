@@ -154,4 +154,4 @@ public class DropItemStack implements Packet, ToServerPacket {
         return java.util.Objects.hash(inventorySectionId, slotId, quantity);
     }
 
-}
+}

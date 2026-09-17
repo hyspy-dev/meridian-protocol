@@ -158,4 +158,4 @@ public class ServerDisconnect implements Packet, ToClientPacket {
         return java.util.Objects.hash(reason, type);
     }
 
-}
+}

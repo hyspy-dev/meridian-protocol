@@ -225,4 +225,4 @@ size += VarInt.size(itemQualities.size()) + itemQualitiesSize;
         return java.util.Objects.hash(type, maxId, itemQualities);
     }
 
-}
+}

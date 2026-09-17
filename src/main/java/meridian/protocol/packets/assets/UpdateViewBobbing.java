@@ -197,4 +197,4 @@ size += VarInt.size(profiles.size()) + profilesSize;
         return java.util.Objects.hash(type, profiles);
     }
 
-}
+}

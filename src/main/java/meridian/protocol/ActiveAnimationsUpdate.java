@@ -199,4 +199,4 @@ size += VarInt.size(activeAnimations.length) + (activeAnimations.length + 7) / 8
         return result;
     }
 
-}
+}

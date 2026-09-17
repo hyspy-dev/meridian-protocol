@@ -171,4 +171,4 @@ public class AOECircleSelector extends Selector {
         return java.util.Objects.hash(range, offset, sizeAttribute);
     }
 
-}
+}

@@ -16,7 +16,7 @@ public class AmbienceStateWrite {
     public static final int FIXED_BLOCK_SIZE = 9;
     public static final int VARIABLE_FIELD_COUNT = 1;
     public static final int VARIABLE_BLOCK_START = 9;
-    public static final int MAX_SIZE = 16384029;
+    public static final int MAX_SIZE = 32768079;
 
     public int audioStateIndex;
     public int valueIndex;
@@ -156,4 +156,4 @@ public class AmbienceStateWrite {
         return java.util.Objects.hash(audioStateIndex, valueIndex, transitionOverride);
     }
 
-}
+}

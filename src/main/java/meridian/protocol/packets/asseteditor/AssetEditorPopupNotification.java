@@ -158,4 +158,4 @@ public class AssetEditorPopupNotification implements Packet, ToClientPacket {
         return java.util.Objects.hash(type, message);
     }
 
-}
+}

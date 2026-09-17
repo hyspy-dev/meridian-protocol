@@ -178,4 +178,4 @@ public class PlaySoundEventLocalPlayer implements Packet, ToClientPacket {
         return java.util.Objects.hash(localSoundEventIndex, worldSoundEventIndex, category, volumeModifier, pitchModifier);
     }
 
-}
+}

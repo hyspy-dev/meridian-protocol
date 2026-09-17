@@ -132,4 +132,4 @@ public class CarriedBlockUpdate extends ComponentUpdate {
         return java.util.Objects.hash(itemId);
     }
 
-}
+}

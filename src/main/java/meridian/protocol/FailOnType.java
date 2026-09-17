@@ -27,4 +27,4 @@ public enum FailOnType {
         }
         throw ProtocolException.invalidEnumValue("FailOnType", value);
     }
-}
+}

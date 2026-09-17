@@ -315,4 +315,4 @@ size += VarInt.size(patterns.length) + patternsSize;
         return result;
     }
 
-}
+}

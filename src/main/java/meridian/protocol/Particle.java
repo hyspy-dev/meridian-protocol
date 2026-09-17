@@ -436,4 +436,4 @@ public class Particle {
         return java.util.Objects.hash(texturePath, frameSize, uvOption, scaleRatioConstraint, softParticles, softParticlesFadeFactor, cameraNearFadeStartDistance, cameraNearFadeEndDistance, cameraFarFadeStartDistance, cameraFarFadeEndDistance, useSpriteBlending, initialAnimationFrame, collisionAnimationFrame, animationFrames);
     }
 
-}
+}

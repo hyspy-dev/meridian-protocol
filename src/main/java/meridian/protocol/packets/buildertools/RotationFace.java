@@ -30,4 +30,4 @@ public enum RotationFace {
         }
         throw ProtocolException.invalidEnumValue("RotationFace", value);
     }
-}
+}

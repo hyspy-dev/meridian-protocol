@@ -279,4 +279,4 @@ size += VarInt.size(worldParticles.length) + worldParticlesSize;
         return result;
     }
 
-}
+}

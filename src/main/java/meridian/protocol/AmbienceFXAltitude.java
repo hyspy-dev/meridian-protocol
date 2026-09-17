@@ -27,4 +27,4 @@ public enum AmbienceFXAltitude {
         }
         throw ProtocolException.invalidEnumValue("AmbienceFXAltitude", value);
     }
-}
+}

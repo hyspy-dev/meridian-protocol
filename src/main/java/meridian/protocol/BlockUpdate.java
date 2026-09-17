@@ -122,4 +122,4 @@ public class BlockUpdate extends ComponentUpdate {
         return java.util.Objects.hash(blockId, entityScale);
     }
 
-}
+}

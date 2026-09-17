@@ -408,4 +408,4 @@ size += VarInt.size(clientEvents.size()) + clientEventsSize;
         return result;
     }
 
-}
+}

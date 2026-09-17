@@ -134,4 +134,4 @@ public class RepulsionConfig {
         return java.util.Objects.hash(radius, minForce, maxForce);
     }
 
-}
+}

@@ -325,4 +325,4 @@ size += VarInt.size(animations.size()) + animationsSize;
         return java.util.Objects.hash(id, animations, wiggleWeights, camera, pullbackConfig, useFirstPersonOverride);
     }
 
-}
+}

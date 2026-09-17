@@ -24,4 +24,4 @@ public enum PhysicsType {
         }
         throw ProtocolException.invalidEnumValue("PhysicsType", value);
     }
-}
+}

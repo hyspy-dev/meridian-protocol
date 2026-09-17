@@ -25,4 +25,4 @@ public enum VelocityThresholdStyle {
         }
         throw ProtocolException.invalidEnumValue("VelocityThresholdStyle", value);
     }
-}
+}

@@ -154,4 +154,4 @@ size += VarInt.size(stageTextures.length) + stageTexturesSize;
         return result;
     }
 
-}
+}

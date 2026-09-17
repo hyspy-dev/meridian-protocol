@@ -26,4 +26,4 @@ public enum ParticleScaleRatioConstraint {
         }
         throw ProtocolException.invalidEnumValue("ParticleScaleRatioConstraint", value);
     }
-}
+}

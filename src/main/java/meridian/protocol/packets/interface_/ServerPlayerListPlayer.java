@@ -223,4 +223,4 @@ public class ServerPlayerListPlayer {
         return java.util.Objects.hash(uuid, username, worldUuid, ping, spectating, livesRemaining);
     }
 
-}
+}

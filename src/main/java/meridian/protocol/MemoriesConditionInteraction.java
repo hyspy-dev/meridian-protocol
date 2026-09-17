@@ -492,4 +492,4 @@ public class MemoriesConditionInteraction extends Interaction {
         return result;
     }
 
-}
+}

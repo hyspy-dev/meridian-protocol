@@ -26,4 +26,4 @@ public enum ConnectedBlockUpdateMode {
         }
         throw ProtocolException.invalidEnumValue("ConnectedBlockUpdateMode", value);
     }
-}
+}

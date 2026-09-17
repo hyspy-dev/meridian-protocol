@@ -134,4 +134,4 @@ public class BuilderToolFloatArg {
         return java.util.Objects.hash(defaultValue, min, max);
     }
 
-}
+}

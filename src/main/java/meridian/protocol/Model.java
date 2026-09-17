@@ -981,4 +981,4 @@ size += VarInt.size(detailBoxes.size()) + detailBoxesSize;
         return result;
     }
 
-}
+}

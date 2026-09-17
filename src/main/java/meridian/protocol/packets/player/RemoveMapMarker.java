@@ -134,4 +134,4 @@ public class RemoveMapMarker implements Packet, ToServerPacket {
         return java.util.Objects.hash(markerId);
     }
 
-}
+}

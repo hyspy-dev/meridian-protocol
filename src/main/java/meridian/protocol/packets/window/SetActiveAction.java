@@ -108,4 +108,4 @@ public class SetActiveAction extends WindowAction {
         return java.util.Objects.hash(state);
     }
 
-}
+}

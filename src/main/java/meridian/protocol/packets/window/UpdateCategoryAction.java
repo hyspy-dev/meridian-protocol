@@ -162,4 +162,4 @@ public class UpdateCategoryAction extends WindowAction {
         return java.util.Objects.hash(category, itemCategory);
     }
 
-}
+}

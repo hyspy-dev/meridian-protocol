@@ -159,4 +159,4 @@ public class BuilderToolSetEntityType implements Packet, ToServerPacket {
         return java.util.Objects.hash(entityId, typeKey);
     }
 
-}
+}

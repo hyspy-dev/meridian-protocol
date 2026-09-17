@@ -120,4 +120,4 @@ public class ConditionalBlockSound {
         return java.util.Objects.hash(soundEventIndex, ambienceFXIndex);
     }
 
-}
+}

@@ -253,4 +253,4 @@ public class ConnectedBlockPattern {
         return result;
     }
 
-}
+}

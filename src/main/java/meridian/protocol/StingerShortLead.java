@@ -27,4 +27,4 @@ public enum StingerShortLead {
         }
         throw ProtocolException.invalidEnumValue("StingerShortLead", value);
     }
-}
+}

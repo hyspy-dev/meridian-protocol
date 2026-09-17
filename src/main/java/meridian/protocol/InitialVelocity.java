@@ -171,4 +171,4 @@ public class InitialVelocity {
         return java.util.Objects.hash(yaw, pitch, speed);
     }
 
-}
+}

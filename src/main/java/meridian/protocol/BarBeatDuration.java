@@ -19,13 +19,13 @@ public class BarBeatDuration {
     public static final int MAX_SIZE = 12;
 
     public int bars;
-    public int beats;
+    public float beats;
     public float ms;
 
     public BarBeatDuration() {
     }
 
-    public BarBeatDuration(int bars, int beats, float ms) {
+    public BarBeatDuration(int bars, float beats, float ms) {
         this.bars = bars;
         this.beats = beats;
         this.ms = ms;
@@ -55,12 +55,12 @@ public class BarBeatDuration {
         return mem.get(PacketIO.PROTO_INT, offset + 0);
     }
     
-    public static int getBeats(MemorySegment mem) {
+    public static float getBeats(MemorySegment mem) {
         return getBeats(mem, 0);
     }
     
-    public static int getBeats(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_INT, offset + 4);
+    public static float getBeats(MemorySegment mem, int offset) {
+        return PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 4), "Beats");
     }
     
     public static float getMs(MemorySegment mem) {
@@ -93,7 +93,7 @@ public class BarBeatDuration {
         requireBounds(mem, offset);
         var result = new BarBeatDuration(
             mem.get(PacketIO.PROTO_INT, offset + 0),
-            mem.get(PacketIO.PROTO_INT, offset + 4),
+            PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 4), "Beats"),
             PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 8), "Ms")
         );
         if (cursor != null) cursor.position = offset + 12;
@@ -102,7 +102,7 @@ public class BarBeatDuration {
     public int serialize(@Nonnull MemorySegment mem, int offset) {
         
         mem.set(PacketIO.PROTO_INT, offset + 0, this.bars);
-        mem.set(PacketIO.PROTO_INT, offset + 4, this.beats);
+        PacketIO.requireFinite(this.beats, "Beats"); mem.set(PacketIO.PROTO_FLOAT, offset + 4, this.beats);
         PacketIO.requireFinite(this.ms, "Ms"); mem.set(PacketIO.PROTO_FLOAT, offset + 8, this.ms);
         
         
@@ -134,4 +134,4 @@ public class BarBeatDuration {
         return java.util.Objects.hash(bars, beats, ms);
     }
 
-}
+}

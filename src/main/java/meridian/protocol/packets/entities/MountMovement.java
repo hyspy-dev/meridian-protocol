@@ -152,4 +152,4 @@ public class MountMovement implements Packet, ToServerPacket {
         return java.util.Objects.hash(absolutePosition, bodyOrientation, movementStates);
     }
 
-}
+}

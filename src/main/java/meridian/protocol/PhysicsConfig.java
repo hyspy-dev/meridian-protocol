@@ -402,4 +402,4 @@ public class PhysicsConfig {
         return java.util.Objects.hash(type, density, gravity, bounciness, bounceCount, bounceLimit, sticksVertically, computeYaw, computePitch, rotationMode, moveOutOfSolidSpeed, terminalVelocityAir, densityAir, terminalVelocityWater, densityWater, hitWaterImpulseLoss, rotationForce, speedRotationFactor, swimmingDampingFactor, allowRolling, rollingFrictionFactor, rollingSpeed);
     }
 
-}
+}

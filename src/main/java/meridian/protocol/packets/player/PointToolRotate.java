@@ -147,4 +147,4 @@ public class PointToolRotate implements Packet, ToServerPacket {
         return java.util.Objects.hash(pointId, newRotation);
     }
 
-}
+}

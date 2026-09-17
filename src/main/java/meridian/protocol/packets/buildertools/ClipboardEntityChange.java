@@ -310,4 +310,4 @@ public class ClipboardEntityChange {
         return java.util.Objects.hash(x, y, z, blockId, model, itemId, bodyOrientation, lookOrientation, scale);
     }
 
-}
+}

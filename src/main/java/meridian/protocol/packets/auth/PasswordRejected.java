@@ -184,4 +184,4 @@ public class PasswordRejected implements Packet, ToClientPacket {
         return result;
     }
 
-}
+}

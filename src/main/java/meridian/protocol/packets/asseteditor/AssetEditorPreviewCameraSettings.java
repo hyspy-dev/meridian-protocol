@@ -134,4 +134,4 @@ public class AssetEditorPreviewCameraSettings {
         return java.util.Objects.hash(modelScale, cameraPosition, cameraOrientation);
     }
 
-}
+}

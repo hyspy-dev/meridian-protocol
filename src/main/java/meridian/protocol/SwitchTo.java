@@ -28,4 +28,4 @@ public enum SwitchTo {
         }
         throw ProtocolException.invalidEnumValue("SwitchTo", value);
     }
-}
+}

@@ -481,4 +481,4 @@ public class DragEraseBlockInteraction extends DragPlaceBlockInteraction {
         return result;
     }
 
-}
+}

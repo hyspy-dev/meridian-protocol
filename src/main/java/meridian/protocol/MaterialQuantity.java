@@ -216,4 +216,4 @@ public class MaterialQuantity {
         return java.util.Objects.hash(itemId, itemTag, resourceTypeId, quantity);
     }
 
-}
+}

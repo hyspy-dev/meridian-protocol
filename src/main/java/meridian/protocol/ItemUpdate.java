@@ -132,4 +132,4 @@ public class ItemUpdate extends ComponentUpdate {
         return java.util.Objects.hash(item, entityScale);
     }
 
-}
+}

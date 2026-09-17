@@ -312,4 +312,4 @@ size += VarInt.size(removedConfigs.length) + removedConfigsSize;
         return result;
     }
 
-}
+}

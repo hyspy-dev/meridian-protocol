@@ -143,4 +143,4 @@ public class ModelTexture {
         return java.util.Objects.hash(texture, weight);
     }
 
-}
+}

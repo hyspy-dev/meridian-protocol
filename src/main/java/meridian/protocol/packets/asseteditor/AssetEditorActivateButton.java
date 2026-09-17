@@ -146,4 +146,4 @@ public class AssetEditorActivateButton implements Packet, ToServerPacket {
         return java.util.Objects.hash(buttonId);
     }
 
-}
+}

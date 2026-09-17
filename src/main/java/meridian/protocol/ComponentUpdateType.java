@@ -34,7 +34,8 @@ public enum ComponentUpdateType {
     PreventInventoryAccess(27),
     PrefabPreview(28),
     PreventEmotes(29),
-    Beams(30);
+    Beams(30),
+    PreventDebugScreens(31);
 
     public static final ComponentUpdateType[] VALUES = values();
 
@@ -54,4 +55,4 @@ public enum ComponentUpdateType {
         }
         throw ProtocolException.invalidEnumValue("ComponentUpdateType", value);
     }
-}
+}

@@ -108,4 +108,4 @@ public class DynamicLightUpdate extends ComponentUpdate {
         return java.util.Objects.hash(dynamicLight);
     }
 
-}
+}

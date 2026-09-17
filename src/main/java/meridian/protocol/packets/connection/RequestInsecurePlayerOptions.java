@@ -102,4 +102,4 @@ public class RequestInsecurePlayerOptions implements Packet, ToClientPacket {
         return 0;
     }
 
-}
+}

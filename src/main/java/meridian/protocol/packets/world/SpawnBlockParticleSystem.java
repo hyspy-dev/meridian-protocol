@@ -164,4 +164,4 @@ public class SpawnBlockParticleSystem implements Packet, ToClientPacket {
         return java.util.Objects.hash(blockId, particleType, position);
     }
 
-}
+}

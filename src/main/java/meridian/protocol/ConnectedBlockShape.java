@@ -68,4 +68,4 @@ public abstract class ConnectedBlockShape {
     public int computeSizeWithTypeId() {
         return VarInt.size(getTypeId()) + computeSize();
     }
-}
+}

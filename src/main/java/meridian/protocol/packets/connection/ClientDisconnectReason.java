@@ -27,4 +27,4 @@ public enum ClientDisconnectReason {
         }
         throw ProtocolException.invalidEnumValue("ClientDisconnectReason", value);
     }
-}
+}

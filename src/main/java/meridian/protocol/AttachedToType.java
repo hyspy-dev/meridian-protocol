@@ -26,4 +26,4 @@ public enum AttachedToType {
         }
         throw ProtocolException.invalidEnumValue("AttachedToType", value);
     }
-}
+}

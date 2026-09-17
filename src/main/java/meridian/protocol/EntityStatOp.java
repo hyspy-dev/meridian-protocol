@@ -34,4 +34,4 @@ public enum EntityStatOp {
         }
         throw ProtocolException.invalidEnumValue("EntityStatOp", value);
     }
-}
+}

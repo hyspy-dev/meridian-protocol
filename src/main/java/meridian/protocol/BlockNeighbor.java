@@ -49,4 +49,4 @@ public enum BlockNeighbor {
         }
         throw ProtocolException.invalidEnumValue("BlockNeighbor", value);
     }
-}
+}

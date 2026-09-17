@@ -164,4 +164,4 @@ public class PlaySoundEvent2D implements Packet, ToClientPacket {
         return java.util.Objects.hash(soundEventIndex, category, volumeModifier, pitchModifier);
     }
 
-}
+}

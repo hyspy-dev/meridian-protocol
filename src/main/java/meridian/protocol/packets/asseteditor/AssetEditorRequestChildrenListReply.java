@@ -244,4 +244,4 @@ size += VarInt.size(childrenIds.length) + childrenIdsSize;
         return result;
     }
 
-}
+}

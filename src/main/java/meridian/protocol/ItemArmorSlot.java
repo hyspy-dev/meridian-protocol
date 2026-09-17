@@ -27,4 +27,4 @@ public enum ItemArmorSlot {
         }
         throw ProtocolException.invalidEnumValue("ItemArmorSlot", value);
     }
-}
+}

@@ -275,4 +275,4 @@ public class InteractionCooldown {
         return result;
     }
 
-}
+}

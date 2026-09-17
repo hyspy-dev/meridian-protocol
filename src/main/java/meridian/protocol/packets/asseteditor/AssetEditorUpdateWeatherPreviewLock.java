@@ -122,4 +122,4 @@ public class AssetEditorUpdateWeatherPreviewLock implements Packet, ToServerPack
         return java.util.Objects.hash(locked);
     }
 
-}
+}

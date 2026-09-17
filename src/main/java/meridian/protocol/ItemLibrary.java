@@ -299,4 +299,4 @@ size += VarInt.size(blockMap.length) + blockMapSize;
         return result;
     }
 
-}
+}

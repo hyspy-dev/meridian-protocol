@@ -106,4 +106,4 @@ public class BuilderToolBrushAxisArg {
         return java.util.Objects.hash(defaultValue);
     }
 
-}
+}

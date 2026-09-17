@@ -26,4 +26,4 @@ public enum FlyMode {
         }
         throw ProtocolException.invalidEnumValue("FlyMode", value);
     }
-}
+}

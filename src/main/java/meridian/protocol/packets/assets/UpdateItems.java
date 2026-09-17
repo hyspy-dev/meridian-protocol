@@ -344,4 +344,4 @@ size += VarInt.size(removedItems.length) + removedItemsSize;
         return result;
     }
 
-}
+}

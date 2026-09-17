@@ -176,4 +176,4 @@ public class EditorSelection {
         return java.util.Objects.hash(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
-}
+}

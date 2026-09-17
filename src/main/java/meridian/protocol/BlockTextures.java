@@ -358,4 +358,4 @@ public class BlockTextures {
         return java.util.Objects.hash(top, bottom, front, back, left, right, weight);
     }
 
-}
+}

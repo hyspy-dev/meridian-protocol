@@ -211,4 +211,4 @@ public class ParticleAnimationFrame {
         return java.util.Objects.hash(frameIndex, scale, rotation, color, opacity);
     }
 
-}
+}

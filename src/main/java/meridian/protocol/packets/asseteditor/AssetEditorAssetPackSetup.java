@@ -17,10 +17,10 @@ import java.util.HashMap;
 public class AssetEditorAssetPackSetup implements Packet, ToClientPacket {
     public static final int PACKET_ID = 314;
     public static final boolean IS_COMPRESSED = false;
-    public static final int NULLABLE_BIT_FIELD_SIZE = 1;
-    public static final int FIXED_BLOCK_SIZE = 1;
+    public static final int NULLABLE_BIT_FIELD_SIZE = 0;
+    public static final int FIXED_BLOCK_SIZE = 0;
     public static final int VARIABLE_FIELD_COUNT = 1;
-    public static final int VARIABLE_BLOCK_START = 1;
+    public static final int VARIABLE_BLOCK_START = 0;
     public static final int MAX_SIZE = 1677721600;
 
     @Override
@@ -33,12 +33,12 @@ public class AssetEditorAssetPackSetup implements Packet, ToClientPacket {
         return NetworkChannel.Default;
     }
 
-    @Nullable public java.util.Map<String, AssetPackManifest> packs;
+    @Nonnull public java.util.Map<String, AssetPack> packs = new java.util.HashMap<>();
 
     public AssetEditorAssetPackSetup() {
     }
 
-    public AssetEditorAssetPackSetup(@Nullable java.util.Map<String, AssetPackManifest> packs) {
+    public AssetEditorAssetPackSetup(@Nonnull java.util.Map<String, AssetPack> packs) {
         this.packs = packs;
     }
 
@@ -52,33 +52,30 @@ public class AssetEditorAssetPackSetup implements Packet, ToClientPacket {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("AssetEditorAssetPackSetup", offset, (int) mem.byteSize());
-        long needed = (long) offset + 1;
+        long needed = (long) offset + 0;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("AssetEditorAssetPackSetup", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
-    @Nullable
-    public static java.util.Map<String, AssetPackManifest> getPacks(MemorySegment mem) {
+    public static java.util.Map<String, AssetPack> getPacks(MemorySegment mem) {
         return getPacks(mem, 0);
     }
     
-    @Nullable
-    public static java.util.Map<String, AssetPackManifest> getPacks(MemorySegment mem, int offset) {
-        if (!hasPacks(mem, offset)) return null;
+    public static java.util.Map<String, AssetPack> getPacks(MemorySegment mem, int offset) {
         var walkCursor = new ReadCursor();
-        var off = offset + 1;
+        var off = offset + 0;
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("Packs");
         var len = (int) packed;
         if (len > 4096000) throw ProtocolException.dictionaryTooLarge("Packs", len, 4096000);
         
         off += (int) (packed >>> 32);
-        if (off + (long) len * 30 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Packs", (int) java.lang.Math.min(off + (long) len * 30, Integer.MAX_VALUE), (int) mem.byteSize());
-        java.util.Map<String, AssetPackManifest> data = new HashMap<>(len);
+        if (off + (long) len * 2 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Packs", (int) java.lang.Math.min(off + (long) len * 2, Integer.MAX_VALUE), (int) mem.byteSize());
+        java.util.Map<String, AssetPack> data = new HashMap<>(len);
         for (var i = 0; i < len; i++) {
             var keyPacked = VarInt.getWithLength(mem, off);
                 var key = PacketIO.readVarString("key", mem, off, 0, 4096000, keyPacked);
                 off += (int) keyPacked + (int) (keyPacked >>> 32);
-            var value = AssetPackManifest.toObject(mem, off, walkCursor);
+            var value = AssetPack.toObject(mem, off, walkCursor);
                 off = walkCursor.position;
             if (data.put(key, value) != null) {
                 throw ProtocolException.duplicateKey("Packs", key);
@@ -87,10 +84,7 @@ public class AssetEditorAssetPackSetup implements Packet, ToClientPacket {
         return data;
     }
     
-    public static boolean hasPacks(MemorySegment mem, int offset) {
-        var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
-        return (b & 0x01) != 0;
-    }
+    
     
     
     
@@ -110,11 +104,11 @@ public class AssetEditorAssetPackSetup implements Packet, ToClientPacket {
     public static AssetEditorAssetPackSetup toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
-        var varBase = offset + 1;
+        var varBase = offset + 0;
         var varPos = 0;
         var walkCursor = cursor != null ? cursor : new ReadCursor();
-        java.util.Map<String, AssetPackManifest> v0 = null;
-        if (hasPacks(mem, offset)) {
+        java.util.Map<String, AssetPack> v0;
+        {
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("Packs");
@@ -122,13 +116,13 @@ public class AssetEditorAssetPackSetup implements Packet, ToClientPacket {
             if (len > 4096000) throw ProtocolException.dictionaryTooLarge("Packs", len, 4096000);
             
             off += (int) (packed >>> 32);
-            if (off + (long) len * 30 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Packs", (int) java.lang.Math.min(off + (long) len * 30, Integer.MAX_VALUE), (int) mem.byteSize());
+            if (off + (long) len * 2 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Packs", (int) java.lang.Math.min(off + (long) len * 2, Integer.MAX_VALUE), (int) mem.byteSize());
             v0 = new HashMap<>(len);
             for (var i = 0; i < len; i++) {
                 var keyPacked = VarInt.getWithLength(mem, off);
                     var key = PacketIO.readVarString("key", mem, off, 0, 4096000, keyPacked);
                     off += (int) keyPacked + (int) (keyPacked >>> 32);
-                var value = AssetPackManifest.toObject(mem, off, walkCursor);
+                var value = AssetPack.toObject(mem, off, walkCursor);
                     off = walkCursor.position;
                 if (v0.put(key, value) != null) {
                     throw ProtocolException.duplicateKey("Packs", key);
@@ -144,40 +138,31 @@ public class AssetEditorAssetPackSetup implements Packet, ToClientPacket {
     }
     @Override
     public int serialize(@Nonnull MemorySegment mem, int offset) {
-        byte nullBits;
-        nullBits = 0;
-        if (this.packs != null) nullBits |= 0x01;
-        mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         
         
-        var varOffset = offset + 1;
-        if (this.packs != null) {
-            
-            if (this.packs.size() > 4096000) throw ProtocolException.dictionaryTooLarge("Packs", packs.size(), 4096000);
-            varOffset += VarInt.set(mem, varOffset, this.packs.size());
-            for (var e : this.packs.entrySet()) {
-                varOffset += PacketIO.writeVarString(mem, varOffset, e.getKey(), 4096000);
-                varOffset += e.getValue().serialize(mem, varOffset);
-            }
+        var varOffset = offset + 0;
+        if (this.packs.size() > 4096000) throw ProtocolException.dictionaryTooLarge("Packs", packs.size(), 4096000);
+        varOffset += VarInt.set(mem, varOffset, this.packs.size());
+        for (var e : this.packs.entrySet()) {
+            varOffset += PacketIO.writeVarString(mem, varOffset, e.getKey(), 4096000);
+            varOffset += e.getValue().serialize(mem, varOffset);
         }
     
        return varOffset - offset;
     }
     public int computeSize() {
-        int size = 1;
-        if (packs != null) {
+        int size = 0;
         int packsSize = 0;
 for (var kvp : packs.entrySet()) packsSize += PacketIO.stringSize(kvp.getKey()) + kvp.getValue().computeSize();
 size += VarInt.size(packs.size()) + packsSize;
-    }
 
         return size;
     }
 
     public AssetEditorAssetPackSetup clone() {
         AssetEditorAssetPackSetup copy = new AssetEditorAssetPackSetup();
-        if (this.packs != null) {
-            java.util.Map<String, AssetPackManifest> m = new java.util.HashMap<>();
+        {
+            java.util.Map<String, AssetPack> m = new java.util.HashMap<>();
             for (var e : this.packs.entrySet()) { m.put(e.getKey(), e.getValue().clone()); }
             copy.packs = m;
         }
@@ -197,4 +182,4 @@ size += VarInt.size(packs.size()) + packsSize;
         return java.util.Objects.hash(packs);
     }
 
-}
+}

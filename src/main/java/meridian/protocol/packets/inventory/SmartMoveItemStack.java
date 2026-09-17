@@ -168,4 +168,4 @@ public class SmartMoveItemStack implements Packet, ToServerPacket, ToClientPacke
         return java.util.Objects.hash(fromSectionId, fromSlotId, quantity, moveType);
     }
 
-}
+}

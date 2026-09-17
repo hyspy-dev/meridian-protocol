@@ -24,4 +24,4 @@ public enum ChatType {
         }
         throw ProtocolException.invalidEnumValue("ChatType", value);
     }
-}
+}

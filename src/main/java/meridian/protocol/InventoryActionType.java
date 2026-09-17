@@ -27,4 +27,4 @@ public enum InventoryActionType {
         }
         throw ProtocolException.invalidEnumValue("InventoryActionType", value);
     }
-}
+}

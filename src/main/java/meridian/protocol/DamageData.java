@@ -169,4 +169,4 @@ size += VarInt.size(entries.length) + entriesSize;
         return result;
     }
 
-}
+}

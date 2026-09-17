@@ -106,4 +106,4 @@ public class SavedMovementStates {
         return java.util.Objects.hash(flying);
     }
 
-}
+}

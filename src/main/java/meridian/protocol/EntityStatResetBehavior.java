@@ -25,4 +25,4 @@ public enum EntityStatResetBehavior {
         }
         throw ProtocolException.invalidEnumValue("EntityStatResetBehavior", value);
     }
-}
+}

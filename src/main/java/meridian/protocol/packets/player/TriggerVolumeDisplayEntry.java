@@ -450,4 +450,4 @@ public class TriggerVolumeDisplayEntry {
         return java.util.Objects.hash(volumeId, shapeType, position, dimensions, color, opacity, name, groupId, groupColor, effectAssetRef, targetTypes, keepLoaded, cancelDelayedOnExit, cooldown, cooldownMode, activationDelay, conditionTiming, rotation);
     }
 
-}
+}

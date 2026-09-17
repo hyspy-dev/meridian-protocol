@@ -364,4 +364,4 @@ public class ClientMovement implements Packet, ToServerPacket {
         return java.util.Objects.hash(movementStates, relativePosition, absolutePosition, bodyOrientation, lookOrientation, teleportAck, wishMovement, velocity, mountedTo, riderMovementStates);
     }
 
-}
+}

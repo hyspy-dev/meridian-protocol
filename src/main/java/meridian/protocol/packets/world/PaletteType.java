@@ -27,4 +27,4 @@ public enum PaletteType {
         }
         throw ProtocolException.invalidEnumValue("PaletteType", value);
     }
-}
+}

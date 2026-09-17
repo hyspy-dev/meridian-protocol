@@ -172,4 +172,4 @@ public class AssetEditorFetchAsset implements Packet, ToServerPacket {
         return java.util.Objects.hash(token, path, isFromOpenedTab);
     }
 
-}
+}

@@ -426,4 +426,4 @@ public class ChangeActiveSlotInteraction extends Interaction {
         return result;
     }
 
-}
+}

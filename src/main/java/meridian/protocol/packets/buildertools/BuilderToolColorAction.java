@@ -430,4 +430,4 @@ public class BuilderToolColorAction implements Packet, ToServerPacket {
         return java.util.Objects.hash(mode, x, y, z, gradientStartX, gradientStartY, gradientStartZ, gradientEndX, gradientEndY, gradientEndZ, gradientMaterials, gradientShape, playerX, playerY, playerZ, shadingLighten, isHoldDownInteraction, undoGroupSize);
     }
 
-}
+}

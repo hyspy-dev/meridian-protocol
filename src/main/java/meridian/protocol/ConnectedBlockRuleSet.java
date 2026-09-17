@@ -66,4 +66,4 @@ public abstract class ConnectedBlockRuleSet {
     public int computeSizeWithTypeId() {
         return VarInt.size(getTypeId()) + computeSize();
     }
-}
+}

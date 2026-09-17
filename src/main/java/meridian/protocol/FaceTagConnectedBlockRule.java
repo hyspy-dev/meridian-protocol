@@ -158,4 +158,4 @@ public class FaceTagConnectedBlockRule extends ConnectedBlockRule {
         return java.util.Objects.hash(positionOffset, faceTags, matchType);
     }
 
-}
+}

@@ -26,4 +26,4 @@ public enum EntityToolAction {
         }
         throw ProtocolException.invalidEnumValue("EntityToolAction", value);
     }
-}
+}

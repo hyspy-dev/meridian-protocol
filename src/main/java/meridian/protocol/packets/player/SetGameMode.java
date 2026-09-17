@@ -122,4 +122,4 @@ public class SetGameMode implements Packet, ToClientPacket {
         return java.util.Objects.hash(gameMode);
     }
 
-}
+}

@@ -102,4 +102,4 @@ public class BuilderToolHideAnchors implements Packet, ToClientPacket {
         return 0;
     }
 
-}
+}

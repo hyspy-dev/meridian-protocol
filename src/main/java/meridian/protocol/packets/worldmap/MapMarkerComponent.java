@@ -68,4 +68,4 @@ public abstract class MapMarkerComponent {
     public int computeSizeWithTypeId() {
         return VarInt.size(getTypeId()) + computeSize();
     }
-}
+}

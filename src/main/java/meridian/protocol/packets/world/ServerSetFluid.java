@@ -178,4 +178,4 @@ public class ServerSetFluid implements Packet, ToClientPacket {
         return java.util.Objects.hash(x, y, z, fluidId, fluidLevel);
     }
 
-}
+}

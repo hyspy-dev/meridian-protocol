@@ -719,4 +719,4 @@ size += VarInt.size(entityStatsOnHit.length) + entityStatsOnHitSize;
         return result;
     }
 
-}
+}

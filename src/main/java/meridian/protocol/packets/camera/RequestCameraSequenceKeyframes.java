@@ -150,4 +150,4 @@ public class RequestCameraSequenceKeyframes implements Packet, ToServerPacket {
         return java.util.Objects.hash(sequenceId, fromIndex, count);
     }
 
-}
+}

@@ -192,4 +192,4 @@ public class BuilderToolSelectionUpdate implements Packet, ToServerPacket {
         return java.util.Objects.hash(xMin, yMin, zMin, xMax, yMax, zMax);
     }
 
-}
+}

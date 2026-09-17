@@ -202,4 +202,4 @@ public class UpdateUnarmedInteractions implements Packet, ToClientPacket {
         return java.util.Objects.hash(type, interactions);
     }
 
-}
+}

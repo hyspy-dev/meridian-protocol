@@ -170,4 +170,4 @@ public class BenchTierLevel {
         return java.util.Objects.hash(benchUpgradeRequirement, craftingTimeReductionModifier, extraInputSlot, extraOutputSlot);
     }
 
-}
+}

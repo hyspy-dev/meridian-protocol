@@ -28,4 +28,4 @@ public enum ShelterType {
         }
         throw ProtocolException.invalidEnumValue("ShelterType", value);
     }
-}
+}

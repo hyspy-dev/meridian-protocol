@@ -159,4 +159,4 @@ public class SetServerAccess implements Packet, ToServerPacket {
         return java.util.Objects.hash(access, password);
     }
 
-}
+}

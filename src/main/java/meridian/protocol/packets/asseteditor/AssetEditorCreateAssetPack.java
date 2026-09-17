@@ -172,4 +172,4 @@ public class AssetEditorCreateAssetPack implements Packet, ToServerPacket {
         return java.util.Objects.hash(token, manifest, targetDirectoryIndex);
     }
 
-}
+}

@@ -26,4 +26,4 @@ public enum SupportMatch {
         }
         throw ProtocolException.invalidEnumValue("SupportMatch", value);
     }
-}
+}

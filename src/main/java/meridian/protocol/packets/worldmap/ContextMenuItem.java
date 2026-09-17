@@ -160,4 +160,4 @@ public class ContextMenuItem {
         return java.util.Objects.hash(name, command);
     }
 
-}
+}

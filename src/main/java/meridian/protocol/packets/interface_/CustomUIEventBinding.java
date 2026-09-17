@@ -216,4 +216,4 @@ public class CustomUIEventBinding {
         return java.util.Objects.hash(type, selector, data, locksInterface);
     }
 
-}
+}

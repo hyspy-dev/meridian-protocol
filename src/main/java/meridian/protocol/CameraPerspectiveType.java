@@ -25,4 +25,4 @@ public enum CameraPerspectiveType {
         }
         throw ProtocolException.invalidEnumValue("CameraPerspectiveType", value);
     }
-}
+}

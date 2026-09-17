@@ -159,4 +159,4 @@ public class CustomPageEvent implements Packet, ToServerPacket {
         return java.util.Objects.hash(type, data);
     }
 
-}
+}

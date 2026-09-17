@@ -150,4 +150,4 @@ public class PrefabSetAnchor implements Packet, ToServerPacket {
         return java.util.Objects.hash(x, y, z);
     }
 
-}
+}

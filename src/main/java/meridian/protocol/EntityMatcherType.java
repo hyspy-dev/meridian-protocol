@@ -26,4 +26,4 @@ public enum EntityMatcherType {
         }
         throw ProtocolException.invalidEnumValue("EntityMatcherType", value);
     }
-}
+}

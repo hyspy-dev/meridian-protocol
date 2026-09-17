@@ -131,4 +131,4 @@ public class Asset {
         return java.util.Objects.hash(hash, name);
     }
 
-}
+}

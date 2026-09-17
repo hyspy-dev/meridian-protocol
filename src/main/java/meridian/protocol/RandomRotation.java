@@ -28,4 +28,4 @@ public enum RandomRotation {
         }
         throw ProtocolException.invalidEnumValue("RandomRotation", value);
     }
-}
+}

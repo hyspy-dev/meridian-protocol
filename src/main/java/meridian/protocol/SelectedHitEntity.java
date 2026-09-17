@@ -185,4 +185,4 @@ public class SelectedHitEntity {
         return java.util.Objects.hash(networkId, hitLocation, position, bodyRotation);
     }
 
-}
+}

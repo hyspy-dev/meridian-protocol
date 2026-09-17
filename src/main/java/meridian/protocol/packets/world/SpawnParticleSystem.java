@@ -253,4 +253,4 @@ public class SpawnParticleSystem implements Packet, ToClientPacket {
         return java.util.Objects.hash(particleSystemId, position, rotation, scale, color, maxDuration);
     }
 
-}
+}

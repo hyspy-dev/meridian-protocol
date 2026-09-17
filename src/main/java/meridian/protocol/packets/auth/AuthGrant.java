@@ -205,4 +205,4 @@ public class AuthGrant implements Packet, ToClientPacket {
         return java.util.Objects.hash(authorizationGrant, serverIdentityToken);
     }
 
-}
+}

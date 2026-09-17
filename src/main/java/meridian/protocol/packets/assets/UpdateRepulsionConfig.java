@@ -219,4 +219,4 @@ public class UpdateRepulsionConfig implements Packet, ToClientPacket {
         return java.util.Objects.hash(type, maxId, repulsionConfigs);
     }
 
-}
+}

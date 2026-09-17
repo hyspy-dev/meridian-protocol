@@ -147,4 +147,4 @@ public class PointToolMove implements Packet, ToServerPacket {
         return java.util.Objects.hash(pointId, newPosition);
     }
 
-}
+}

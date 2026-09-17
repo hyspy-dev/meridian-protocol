@@ -143,4 +143,4 @@ public class ItemResourceType {
         return java.util.Objects.hash(id, quantity);
     }
 
-}
+}

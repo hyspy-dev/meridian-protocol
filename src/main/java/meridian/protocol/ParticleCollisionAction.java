@@ -26,4 +26,4 @@ public enum ParticleCollisionAction {
         }
         throw ProtocolException.invalidEnumValue("ParticleCollisionAction", value);
     }
-}
+}

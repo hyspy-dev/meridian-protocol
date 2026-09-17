@@ -88,4 +88,4 @@ public class CancelCraftingAction extends WindowAction {
         return 0;
     }
 
-}
+}

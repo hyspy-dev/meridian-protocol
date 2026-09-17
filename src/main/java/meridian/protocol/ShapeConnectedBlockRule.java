@@ -216,4 +216,4 @@ public class ShapeConnectedBlockRule extends ConnectedBlockRule {
         return result;
     }
 
-}
+}

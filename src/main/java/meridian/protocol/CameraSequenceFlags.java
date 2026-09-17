@@ -26,4 +26,4 @@ public final class CameraSequenceFlags {
     public static byte none() {
         return (byte) 0;
     }
-}
+}

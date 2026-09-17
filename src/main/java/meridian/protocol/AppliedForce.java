@@ -134,4 +134,4 @@ public class AppliedForce {
         return java.util.Objects.hash(direction, adjustVertical, force);
     }
 
-}
+}

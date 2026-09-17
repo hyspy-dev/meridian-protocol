@@ -158,4 +158,4 @@ public class FailureReply implements Packet, ToServerPacket, ToClientPacket {
         return java.util.Objects.hash(token, message);
     }
 
-}
+}

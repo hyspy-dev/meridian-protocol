@@ -150,4 +150,4 @@ public class InventoryAction implements Packet, ToServerPacket {
         return java.util.Objects.hash(inventorySectionId, inventoryActionType, actionData);
     }
 
-}
+}

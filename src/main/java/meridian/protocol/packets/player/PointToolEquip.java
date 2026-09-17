@@ -122,4 +122,4 @@ public class PointToolEquip implements Packet, ToServerPacket {
         return java.util.Objects.hash(active);
     }
 
-}
+}

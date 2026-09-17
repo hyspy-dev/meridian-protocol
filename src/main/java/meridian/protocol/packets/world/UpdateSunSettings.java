@@ -136,4 +136,4 @@ public class UpdateSunSettings implements Packet, ToClientPacket {
         return java.util.Objects.hash(heightPercentage, angleRadians);
     }
 
-}
+}

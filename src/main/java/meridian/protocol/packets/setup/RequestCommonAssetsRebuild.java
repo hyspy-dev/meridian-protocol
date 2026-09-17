@@ -102,4 +102,4 @@ public class RequestCommonAssetsRebuild implements Packet, ToClientPacket {
         return 0;
     }
 
-}
+}

@@ -516,4 +516,4 @@ public class EffectConditionInteraction extends SimpleInteraction {
         return result;
     }
 
-}
+}

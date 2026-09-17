@@ -335,4 +335,4 @@ public class Stinger {
         return result;
     }
 
-}
+}

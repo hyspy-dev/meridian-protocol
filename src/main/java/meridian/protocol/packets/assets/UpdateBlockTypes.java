@@ -283,4 +283,4 @@ size += VarInt.size(blockTypes.size()) + blockTypesSize;
         return java.util.Objects.hash(type, maxId, blockTypes, updateBlockTextures, updateModelTextures, updateModels, updateMapGeometry);
     }
 
-}
+}

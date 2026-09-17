@@ -212,4 +212,4 @@ size += VarInt.size(groups.size()) + groupsSize;
         return java.util.Objects.hash(type, groups);
     }
 
-}
+}

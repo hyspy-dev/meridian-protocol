@@ -32,4 +32,4 @@ public enum UVMotionCurveType {
         }
         throw ProtocolException.invalidEnumValue("UVMotionCurveType", value);
     }
-}
+}

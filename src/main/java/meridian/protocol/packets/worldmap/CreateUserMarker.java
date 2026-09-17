@@ -272,4 +272,4 @@ public class CreateUserMarker implements Packet, ToServerPacket {
         return java.util.Objects.hash(x, z, name, markerImage, tintColor, shared);
     }
 
-}
+}

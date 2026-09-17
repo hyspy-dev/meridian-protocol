@@ -25,4 +25,4 @@ public enum ItemSoundEvent {
         }
         throw ProtocolException.invalidEnumValue("ItemSoundEvent", value);
     }
-}
+}

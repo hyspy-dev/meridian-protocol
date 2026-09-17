@@ -255,4 +255,4 @@ public class UpdateWindow implements Packet, ToClientPacket {
         return java.util.Objects.hash(id, windowData, inventory, extraResources);
     }
 
-}
+}

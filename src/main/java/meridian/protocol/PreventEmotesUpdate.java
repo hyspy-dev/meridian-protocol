@@ -88,4 +88,4 @@ public class PreventEmotesUpdate extends ComponentUpdate {
         return 0;
     }
 
-}
+}

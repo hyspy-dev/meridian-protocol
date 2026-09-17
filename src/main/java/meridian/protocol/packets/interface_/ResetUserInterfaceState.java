@@ -102,4 +102,4 @@ public class ResetUserInterfaceState implements Packet, ToClientPacket {
         return 0;
     }
 
-}
+}

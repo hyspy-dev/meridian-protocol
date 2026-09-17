@@ -218,4 +218,4 @@ public class HeightDeltaIconComponent extends MapMarkerComponent {
         return java.util.Objects.hash(upDelta, upImage, downDelta, downImage);
     }
 
-}
+}

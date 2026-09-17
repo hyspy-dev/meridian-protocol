@@ -387,4 +387,4 @@ size += VarInt.size(firstCreatedProperty.length) + firstCreatedPropertySize;
         return result;
     }
 
-}
+}

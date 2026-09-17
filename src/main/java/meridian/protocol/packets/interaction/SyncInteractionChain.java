@@ -689,4 +689,4 @@ size += VarInt.size(interactionData.length) + (interactionData.length + 7) / 8 +
         return result;
     }
 
-}
+}

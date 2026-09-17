@@ -229,4 +229,4 @@ public class AssetEditorAssetUpdated implements Packet, ToClientPacket {
         return result;
     }
 
-}
+}

@@ -14,9 +14,9 @@ import meridian.protocol.Transform;
 
 public class MapMarker {
     public static final int NULLABLE_BIT_FIELD_SIZE = 1;
-    public static final int FIXED_BLOCK_SIZE = 38;
-    public static final int VARIABLE_FIELD_COUNT = 5;
-    public static final int VARIABLE_BLOCK_START = 58;
+    public static final int FIXED_BLOCK_SIZE = 39;
+    public static final int VARIABLE_FIELD_COUNT = 6;
+    public static final int VARIABLE_BLOCK_START = 63;
     public static final int MAX_SIZE = 1677721600;
 
     @Nonnull public String id = "";
@@ -25,17 +25,21 @@ public class MapMarker {
     @Nonnull public Transform transform = new Transform();
     @Nullable public ContextMenuItem[] contextMenuItems;
     @Nullable public MapMarkerComponent[] components;
+    @Nonnull public MapMarkerIconSize iconSize = MapMarkerIconSize.Default;
+    @Nullable public String compassImage;
 
     public MapMarker() {
     }
 
-    public MapMarker(@Nonnull String id, @Nullable FormattedMessage name, @Nonnull String markerImage, @Nonnull Transform transform, @Nullable ContextMenuItem[] contextMenuItems, @Nullable MapMarkerComponent[] components) {
+    public MapMarker(@Nonnull String id, @Nullable FormattedMessage name, @Nonnull String markerImage, @Nonnull Transform transform, @Nullable ContextMenuItem[] contextMenuItems, @Nullable MapMarkerComponent[] components, @Nonnull MapMarkerIconSize iconSize, @Nullable String compassImage) {
         this.id = id;
         this.name = name;
         this.markerImage = markerImage;
         this.transform = transform;
         this.contextMenuItems = contextMenuItems;
         this.components = components;
+        this.iconSize = iconSize;
+        this.compassImage = compassImage;
     }
 
     public MapMarker(@Nonnull MapMarker other) {
@@ -45,6 +49,8 @@ public class MapMarker {
         this.transform = other.transform;
         this.contextMenuItems = other.contextMenuItems;
         this.components = other.components;
+        this.iconSize = other.iconSize;
+        this.compassImage = other.compassImage;
     }
 
     /**
@@ -53,7 +59,7 @@ public class MapMarker {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("MapMarker", offset, (int) mem.byteSize());
-        long needed = (long) offset + 58;
+        long needed = (long) offset + 63;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("MapMarker", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -62,7 +68,7 @@ public class MapMarker {
     }
     
     public static String getId(MemorySegment mem, int offset) {
-        return PacketIO.readVarString("Id", mem, offset + getValidatedOffset(mem, offset, 38, 58, "Id"), 4096000);
+        return PacketIO.readVarString("Id", mem, offset + getValidatedOffset(mem, offset, 39, 63, "Id"), 4096000);
     }
     
     @Nullable
@@ -72,7 +78,7 @@ public class MapMarker {
     
     @Nullable
     public static FormattedMessage getName(MemorySegment mem, int offset) {
-        return hasName(mem, offset) ? FormattedMessage.toObject(mem, offset + getValidatedOffset(mem, offset, 42, 58, "Name")): null;
+        return hasName(mem, offset) ? FormattedMessage.toObject(mem, offset + getValidatedOffset(mem, offset, 43, 63, "Name")): null;
     }
     
     public static String getMarkerImage(MemorySegment mem) {
@@ -80,7 +86,7 @@ public class MapMarker {
     }
     
     public static String getMarkerImage(MemorySegment mem, int offset) {
-        return PacketIO.readVarString("MarkerImage", mem, offset + getValidatedOffset(mem, offset, 46, 58, "MarkerImage"), 4096000);
+        return PacketIO.readVarString("MarkerImage", mem, offset + getValidatedOffset(mem, offset, 47, 63, "MarkerImage"), 4096000);
     }
     
     public static Transform getTransform(MemorySegment mem) {
@@ -100,7 +106,7 @@ public class MapMarker {
     public static ContextMenuItem[] getContextMenuItems(MemorySegment mem, int offset) {
         if (!hasContextMenuItems(mem, offset)) return null;
         var walkCursor = new ReadCursor();
-        var off = offset + getValidatedOffset(mem, offset, 50, 58, "ContextMenuItems");
+        var off = offset + getValidatedOffset(mem, offset, 51, 63, "ContextMenuItems");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("ContextMenuItems");
         var len = (int) packed;
@@ -125,7 +131,7 @@ public class MapMarker {
     public static MapMarkerComponent[] getComponents(MemorySegment mem, int offset) {
         if (!hasComponents(mem, offset)) return null;
         var walkCursor = new ReadCursor();
-        var off = offset + getValidatedOffset(mem, offset, 54, 58, "Components");
+        var off = offset + getValidatedOffset(mem, offset, 55, 63, "Components");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("Components");
         var len = (int) packed;
@@ -141,6 +147,24 @@ public class MapMarker {
         return data;
     }
     
+    public static MapMarkerIconSize getIconSize(MemorySegment mem) {
+        return getIconSize(mem, 0);
+    }
+    
+    public static MapMarkerIconSize getIconSize(MemorySegment mem, int offset) {
+        return MapMarkerIconSize.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 38));
+    }
+    
+    @Nullable
+    public static String getCompassImage(MemorySegment mem) {
+        return getCompassImage(mem, 0);
+    }
+    
+    @Nullable
+    public static String getCompassImage(MemorySegment mem, int offset) {
+        return hasCompassImage(mem, offset) ? PacketIO.readVarString("CompassImage", mem, offset + getValidatedOffset(mem, offset, 59, 63, "CompassImage"), 4096000): null;
+    }
+    
     public static boolean hasName(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
         return (b & 0x01) != 0;
@@ -154,6 +178,11 @@ public class MapMarker {
     public static boolean hasComponents(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
         return (b & 0x04) != 0;
+    }
+    
+    public static boolean hasCompassImage(MemorySegment mem, int offset) {
+        var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
+        return (b & 0x08) != 0;
     }
     
     private static int getValidatedOffset(MemorySegment buffer, int base, int slotPosition, int varBlockStart, String fieldName) {
@@ -189,11 +218,11 @@ public class MapMarker {
     public static MapMarker toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
-        var varBase = offset + 58;
+        var varBase = offset + 63;
         var varPos = 0;
         var walkCursor = cursor != null ? cursor : new ReadCursor();
         String v0;
-        requireSlot(mem, offset + 38, varPos, "Id");
+        requireSlot(mem, offset + 39, varPos, "Id");
         {
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
@@ -203,15 +232,15 @@ public class MapMarker {
         
         FormattedMessage v1 = null;
         if (hasName(mem, offset)) {
-            requireSlot(mem, offset + 42, varPos, "Name");
+            requireSlot(mem, offset + 43, varPos, "Name");
             v1 = FormattedMessage.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
         } else {
-            requireSlot(mem, offset + 42, -1, "Name");
+            requireSlot(mem, offset + 43, -1, "Name");
         }
         
         String v2;
-        requireSlot(mem, offset + 46, varPos, "MarkerImage");
+        requireSlot(mem, offset + 47, varPos, "MarkerImage");
         {
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
@@ -221,7 +250,7 @@ public class MapMarker {
         
         ContextMenuItem[] v4 = null;
         if (hasContextMenuItems(mem, offset)) {
-            requireSlot(mem, offset + 50, varPos, "ContextMenuItems");
+            requireSlot(mem, offset + 51, varPos, "ContextMenuItems");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("ContextMenuItems");
@@ -237,12 +266,12 @@ public class MapMarker {
             }
             varPos = off - varBase;
         } else {
-            requireSlot(mem, offset + 50, -1, "ContextMenuItems");
+            requireSlot(mem, offset + 51, -1, "ContextMenuItems");
         }
         
         MapMarkerComponent[] v5 = null;
         if (hasComponents(mem, offset)) {
-            requireSlot(mem, offset + 54, varPos, "Components");
+            requireSlot(mem, offset + 55, varPos, "Components");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("Components");
@@ -258,7 +287,18 @@ public class MapMarker {
             }
             varPos = off - varBase;
         } else {
-            requireSlot(mem, offset + 54, -1, "Components");
+            requireSlot(mem, offset + 55, -1, "Components");
+        }
+        
+        String v7 = null;
+        if (hasCompassImage(mem, offset)) {
+            requireSlot(mem, offset + 59, varPos, "CompassImage");
+            var off = varBase + varPos;
+            var sp = VarInt.getWithLength(mem, off);
+            v7 = PacketIO.readVarString("CompassImage", mem, off, 0, 4096000, sp);
+            varPos += (int) sp + (int) (sp >>> 32);
+        } else {
+            requireSlot(mem, offset + 59, -1, "CompassImage");
         }
         var result = new MapMarker(
             v0,
@@ -266,7 +306,9 @@ public class MapMarker {
             v2,
             Transform.toObject(mem, offset + 1),
             v4,
-            v5
+            v5,
+            MapMarkerIconSize.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 38)),
+            v7
         );
         if (cursor != null) cursor.position = varBase + varPos;
         return result;
@@ -277,22 +319,24 @@ public class MapMarker {
         if (this.name != null) nullBits |= 0x01;
         if (this.contextMenuItems != null) nullBits |= 0x02;
         if (this.components != null) nullBits |= 0x04;
+        if (this.compassImage != null) nullBits |= 0x08;
         mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         
         this.transform.serialize(mem, offset + 1);
-        var varOffset = offset + 58;
-        mem.set(PacketIO.PROTO_INT, offset + 38, varOffset - offset - 58);
+        mem.set(PacketIO.PROTO_BYTE, offset + 38, (byte) this.iconSize.getValue());
+        var varOffset = offset + 63;
+        mem.set(PacketIO.PROTO_INT, offset + 39, varOffset - offset - 63);
         varOffset += PacketIO.writeVarString(mem, varOffset, this.id, 4096000);
         if (this.name != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 42, varOffset - offset - 58);
+            mem.set(PacketIO.PROTO_INT, offset + 43, varOffset - offset - 63);
             varOffset += this.name.serialize(mem, varOffset);
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 42, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 43, -1);
         }
-        mem.set(PacketIO.PROTO_INT, offset + 46, varOffset - offset - 58);
+        mem.set(PacketIO.PROTO_INT, offset + 47, varOffset - offset - 63);
         varOffset += PacketIO.writeVarString(mem, varOffset, this.markerImage, 4096000);
         if (this.contextMenuItems != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 50, varOffset - offset - 58);
+            mem.set(PacketIO.PROTO_INT, offset + 51, varOffset - offset - 63);
             if (contextMenuItems.length > 4096000) throw ProtocolException.arrayTooLong("ContextMenuItems", contextMenuItems.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.contextMenuItems.length);
             
@@ -302,10 +346,10 @@ public class MapMarker {
             }
             varOffset += contextMenuItemsValueOffset;
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 50, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 51, -1);
         }
         if (this.components != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 54, varOffset - offset - 58);
+            mem.set(PacketIO.PROTO_INT, offset + 55, varOffset - offset - 63);
             if (components.length > 4096000) throw ProtocolException.arrayTooLong("Components", components.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.components.length);
             
@@ -315,13 +359,19 @@ public class MapMarker {
             }
             varOffset += componentsValueOffset;
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 54, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 55, -1);
+        }
+        if (this.compassImage != null) {
+            mem.set(PacketIO.PROTO_INT, offset + 59, varOffset - offset - 63);
+            varOffset += PacketIO.writeVarString(mem, varOffset, this.compassImage, 4096000);
+        } else {
+            mem.set(PacketIO.PROTO_INT, offset + 59, -1);
         }
     
        return varOffset - offset;
     }
     public int computeSize() {
-        int size = 58;
+        int size = 63;
         size += PacketIO.stringSize(id);
     if (name != null) size += name.computeSize();
     size += PacketIO.stringSize(markerImage);
@@ -335,6 +385,7 @@ size += VarInt.size(contextMenuItems.length) + contextMenuItemsSize;
 for (var elem : components) componentsSize += elem.computeSizeWithTypeId();
 size += VarInt.size(components.length) + componentsSize;
     }
+    if (compassImage != null) size += PacketIO.stringSize(compassImage);
 
         return size;
     }
@@ -347,6 +398,8 @@ size += VarInt.size(components.length) + componentsSize;
         copy.transform = this.transform.clone();
         copy.contextMenuItems = this.contextMenuItems != null ? java.util.Arrays.stream(this.contextMenuItems).map(e -> e.clone()).toArray(ContextMenuItem[]::new) : null;
         copy.components = this.components != null ? java.util.Arrays.copyOf(this.components, this.components.length) : null;
+        copy.iconSize = this.iconSize;
+        copy.compassImage = this.compassImage;
         return copy;
     }
 
@@ -355,7 +408,7 @@ size += VarInt.size(components.length) + componentsSize;
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof MapMarker other)) return false;
-        return java.util.Objects.equals(this.id, other.id) && java.util.Objects.equals(this.name, other.name) && java.util.Objects.equals(this.markerImage, other.markerImage) && java.util.Objects.equals(this.transform, other.transform) && java.util.Arrays.equals(this.contextMenuItems, other.contextMenuItems) && java.util.Arrays.equals(this.components, other.components);
+        return java.util.Objects.equals(this.id, other.id) && java.util.Objects.equals(this.name, other.name) && java.util.Objects.equals(this.markerImage, other.markerImage) && java.util.Objects.equals(this.transform, other.transform) && java.util.Arrays.equals(this.contextMenuItems, other.contextMenuItems) && java.util.Arrays.equals(this.components, other.components) && java.util.Objects.equals(this.iconSize, other.iconSize) && java.util.Objects.equals(this.compassImage, other.compassImage);
     }
 
     @Override
@@ -367,7 +420,9 @@ size += VarInt.size(components.length) + componentsSize;
         result = 31 * result + java.util.Objects.hashCode(transform);
         result = 31 * result + java.util.Arrays.hashCode(contextMenuItems);
         result = 31 * result + java.util.Arrays.hashCode(components);
+        result = 31 * result + java.util.Objects.hashCode(iconSize);
+        result = 31 * result + java.util.Objects.hashCode(compassImage);
         return result;
     }
 
-}
+}

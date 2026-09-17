@@ -106,4 +106,4 @@ public class BuilderToolBoolArg {
         return java.util.Objects.hash(defaultValue);
     }
 
-}
+}

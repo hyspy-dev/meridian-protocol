@@ -28,4 +28,4 @@ public enum BrushAxis {
         }
         throw ProtocolException.invalidEnumValue("BrushAxis", value);
     }
-}
+}

@@ -288,4 +288,4 @@ public class PlayInteractionFor implements Packet, ToClientPacket {
         return java.util.Objects.hash(entityId, chainId, forkedId, operationIndex, interactionId, interactedItemId, interactionType, cancel);
     }
 
-}
+}

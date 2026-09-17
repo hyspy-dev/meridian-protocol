@@ -170,4 +170,4 @@ public class ConnectAccept implements Packet, ToClientPacket {
         return result;
     }
 
-}
+}

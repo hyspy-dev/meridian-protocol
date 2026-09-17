@@ -176,4 +176,4 @@ public class FogOptions {
         return java.util.Objects.hash(ignoreFogLimits, effectiveViewDistanceMultiplier, fogFarViewDistance, fogHeightCameraOffset, fogHeightCameraOverriden, fogHeightCameraFixed);
     }
 
-}
+}

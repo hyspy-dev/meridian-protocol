@@ -119,4 +119,4 @@ public class NotConnectedBlockRule extends ConnectedBlockRule {
         return java.util.Objects.hash(rule);
     }
 
-}
+}

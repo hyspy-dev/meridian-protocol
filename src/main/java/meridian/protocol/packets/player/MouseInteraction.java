@@ -300,4 +300,4 @@ public class MouseInteraction implements Packet, ToServerPacket {
         return java.util.Objects.hash(clientTimestamp, activeSlot, itemInHandId, screenPoint, mouseButton, mouseMotion, worldInteraction);
     }
 
-}
+}

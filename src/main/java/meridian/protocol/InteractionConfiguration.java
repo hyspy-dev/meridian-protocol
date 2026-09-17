@@ -323,4 +323,4 @@ size += VarInt.size(priorities.size()) + prioritiesSize;
         return java.util.Objects.hash(displayOutlines, debugOutlines, useDistance, allEntities, priorities);
     }
 
-}
+}

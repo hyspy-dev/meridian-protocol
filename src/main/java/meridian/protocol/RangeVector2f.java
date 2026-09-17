@@ -145,4 +145,4 @@ public class RangeVector2f {
         return java.util.Objects.hash(x, y);
     }
 
-}
+}

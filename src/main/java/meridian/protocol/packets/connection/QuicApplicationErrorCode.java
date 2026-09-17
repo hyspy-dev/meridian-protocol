@@ -31,4 +31,4 @@ public enum QuicApplicationErrorCode {
         }
         throw ProtocolException.invalidEnumValue("QuicApplicationErrorCode", value);
     }
-}
+}

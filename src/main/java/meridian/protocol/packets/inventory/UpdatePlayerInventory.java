@@ -424,4 +424,4 @@ public class UpdatePlayerInventory implements Packet, ToClientPacket {
         return java.util.Objects.hash(storage, armor, hotbar, utility, tools, backpack, abilitySlots, runeBag);
     }
 
-}
+}

@@ -220,4 +220,4 @@ public class VoiceConfig implements Packet, ToClientPacket {
         return java.util.Objects.hash(voiceEnabled, codec, sampleRate, channels, maxHearingDistance, referenceDistance, supportsVoiceStream, maxPacketsPerSecond);
     }
 
-}
+}

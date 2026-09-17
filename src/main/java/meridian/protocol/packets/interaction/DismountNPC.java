@@ -122,4 +122,4 @@ public class DismountNPC implements Packet, ToServerPacket, ToClientPacket {
         return java.util.Objects.hash(mountEntityId);
     }
 
-}
+}

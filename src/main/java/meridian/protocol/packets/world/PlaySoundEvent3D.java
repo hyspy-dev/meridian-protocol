@@ -192,4 +192,4 @@ public class PlaySoundEvent3D implements Packet, ToClientPacket {
         return java.util.Objects.hash(soundEventIndex, category, position, volumeModifier, pitchModifier);
     }
 
-}
+}

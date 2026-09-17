@@ -122,4 +122,4 @@ public class BuilderToolSetTransformationModeState implements Packet, ToServerPa
         return java.util.Objects.hash(enabled);
     }
 
-}
+}

@@ -192,4 +192,4 @@ public class ServerSetBlock implements Packet, ToClientPacket {
         return java.util.Objects.hash(x, y, z, blockId, filler, rotation);
     }
 
-}
+}

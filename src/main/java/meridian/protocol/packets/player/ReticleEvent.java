@@ -122,4 +122,4 @@ public class ReticleEvent implements Packet, ToClientPacket {
         return java.util.Objects.hash(eventIndex);
     }
 
-}
+}

@@ -92,4 +92,4 @@ public abstract class UIDataValue {
     public int computeSizeWithTypeId() {
         return VarInt.size(getTypeId()) + computeSize();
     }
-}
+}

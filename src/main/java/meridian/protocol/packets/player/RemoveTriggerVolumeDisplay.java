@@ -134,4 +134,4 @@ public class RemoveTriggerVolumeDisplay implements Packet, ToClientPacket {
         return java.util.Objects.hash(volumeId);
     }
 
-}
+}

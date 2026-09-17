@@ -27,4 +27,4 @@ public enum MouseInputType {
         }
         throw ProtocolException.invalidEnumValue("MouseInputType", value);
     }
-}
+}

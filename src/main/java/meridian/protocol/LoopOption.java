@@ -26,4 +26,4 @@ public enum LoopOption {
         }
         throw ProtocolException.invalidEnumValue("LoopOption", value);
     }
-}
+}

@@ -471,4 +471,4 @@ public class ParticleSpawnerGroup {
         return result;
     }
 
-}
+}

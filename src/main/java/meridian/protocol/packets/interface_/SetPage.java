@@ -136,4 +136,4 @@ public class SetPage implements Packet, ToClientPacket {
         return java.util.Objects.hash(page, canCloseThroughInteraction);
     }
 
-}
+}

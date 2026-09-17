@@ -158,4 +158,4 @@ public class AssetEditorUndoRedoReply implements Packet, ToClientPacket {
         return java.util.Objects.hash(token, command);
     }
 
-}
+}

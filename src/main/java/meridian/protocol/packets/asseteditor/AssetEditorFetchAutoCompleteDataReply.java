@@ -199,4 +199,4 @@ size += VarInt.size(results.length) + resultsSize;
         return result;
     }
 
-}
+}

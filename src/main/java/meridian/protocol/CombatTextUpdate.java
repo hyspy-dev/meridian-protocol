@@ -160,4 +160,4 @@ public class CombatTextUpdate extends ComponentUpdate {
         return java.util.Objects.hash(hitAngleDeg, text, color);
     }
 
-}
+}

@@ -70,4 +70,4 @@ public abstract class ConnectedBlockRule {
     public int computeSizeWithTypeId() {
         return VarInt.size(getTypeId()) + computeSize();
     }
-}
+}

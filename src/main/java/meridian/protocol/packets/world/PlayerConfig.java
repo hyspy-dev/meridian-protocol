@@ -106,4 +106,4 @@ public class PlayerConfig {
         return java.util.Objects.hash(armorVisibilityOption);
     }
 
-}
+}

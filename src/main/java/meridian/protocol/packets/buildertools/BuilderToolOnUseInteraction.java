@@ -362,4 +362,4 @@ public class BuilderToolOnUseInteraction implements Packet, ToServerPacket {
         return java.util.Objects.hash(type, x, y, z, offsetForPaintModeX, offsetForPaintModeY, offsetForPaintModeZ, isAltPlaySculptBrushModDown, isHoldDownInteraction, isDoServerRaytraceForPosition, maxLengthToolIgnoreHistory, raycastOriginX, raycastOriginY, raycastOriginZ, raycastDirectionX, raycastDirectionY, raycastDirectionZ, undoGroupSize);
     }
 
-}
+}

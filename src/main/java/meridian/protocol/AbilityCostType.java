@@ -27,4 +27,4 @@ public enum AbilityCostType {
         }
         throw ProtocolException.invalidEnumValue("AbilityCostType", value);
     }
-}
+}

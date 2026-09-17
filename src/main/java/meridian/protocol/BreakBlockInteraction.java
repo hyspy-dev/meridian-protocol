@@ -485,4 +485,4 @@ public class BreakBlockInteraction extends SimpleBlockInteraction {
         return result;
     }
 
-}
+}

@@ -136,4 +136,4 @@ public class UpdateWeather implements Packet, ToClientPacket {
         return java.util.Objects.hash(weatherIndex, transitionSeconds);
     }
 
-}
+}

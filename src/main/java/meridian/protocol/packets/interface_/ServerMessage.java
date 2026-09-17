@@ -158,4 +158,4 @@ public class ServerMessage implements Packet, ToClientPacket {
         return java.util.Objects.hash(type, message);
     }
 
-}
+}

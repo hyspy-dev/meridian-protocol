@@ -88,4 +88,4 @@ public class NewSpawnUpdate extends ComponentUpdate {
         return 0;
     }
 
-}
+}

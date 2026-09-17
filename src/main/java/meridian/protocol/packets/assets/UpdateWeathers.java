@@ -225,4 +225,4 @@ size += VarInt.size(weathers.size()) + weathersSize;
         return java.util.Objects.hash(type, maxId, weathers);
     }
 
-}
+}

@@ -25,4 +25,4 @@ public enum CalculationType {
         }
         throw ProtocolException.invalidEnumValue("CalculationType", value);
     }
-}
+}

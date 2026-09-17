@@ -149,4 +149,4 @@ public class AssetEditorSetGameTime implements Packet, ToServerPacket {
         return java.util.Objects.hash(gameTime, paused);
     }
 
-}
+}

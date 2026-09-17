@@ -158,4 +158,4 @@ public class AssetEditorDeleteAsset implements Packet, ToServerPacket {
         return java.util.Objects.hash(token, path);
     }
 
-}
+}

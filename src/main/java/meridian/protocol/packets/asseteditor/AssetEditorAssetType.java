@@ -294,4 +294,4 @@ public class AssetEditorAssetType {
         return java.util.Objects.hash(id, icon, isColoredIcon, path, fileExtension, editorType);
     }
 
-}
+}

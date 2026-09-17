@@ -268,4 +268,4 @@ public class ModelTrail {
         return java.util.Objects.hash(trailId, targetEntityPart, targetNodeName, positionOffset, rotationOffset, fixedRotation);
     }
 
-}
+}

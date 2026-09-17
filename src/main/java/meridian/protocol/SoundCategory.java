@@ -28,4 +28,4 @@ public enum SoundCategory {
         }
         throw ProtocolException.invalidEnumValue("SoundCategory", value);
     }
-}
+}

@@ -25,4 +25,4 @@ public enum TriggerVolumeConditionTiming {
         }
         throw ProtocolException.invalidEnumValue("TriggerVolumeConditionTiming", value);
     }
-}
+}

@@ -133,4 +133,4 @@ public class AmbienceFXPhysicalMaterial {
         return java.util.Objects.hash(physicalMaterialIndex, percent);
     }
 
-}
+}

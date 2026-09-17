@@ -185,4 +185,4 @@ size += VarInt.size(asset.length) + assetSize;
         return result;
     }
 
-}
+}

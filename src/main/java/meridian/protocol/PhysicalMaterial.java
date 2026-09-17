@@ -185,4 +185,4 @@ public class PhysicalMaterial {
         return java.util.Objects.hash(id, reflectionCoeff, attenuationPerBlock, hFAttenuationPerBlock, shelterOpacity);
     }
 
-}
+}

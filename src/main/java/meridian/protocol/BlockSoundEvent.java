@@ -32,4 +32,4 @@ public enum BlockSoundEvent {
         }
         throw ProtocolException.invalidEnumValue("BlockSoundEvent", value);
     }
-}
+}

@@ -26,4 +26,4 @@ public enum OverlapBehavior {
         }
         throw ProtocolException.invalidEnumValue("OverlapBehavior", value);
     }
-}
+}

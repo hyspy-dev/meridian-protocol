@@ -296,4 +296,4 @@ public class ShowEventTitle implements Packet, ToClientPacket {
         return java.util.Objects.hash(fadeInDuration, fadeOutDuration, duration, icon, style, primaryTitle, secondaryTitle);
     }
 
-}
+}

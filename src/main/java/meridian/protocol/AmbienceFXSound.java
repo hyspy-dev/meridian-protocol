@@ -300,4 +300,4 @@ size += VarInt.size(stateBindings.length) + stateBindingsSize;
         return result;
     }
 
-}
+}

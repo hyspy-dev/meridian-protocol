@@ -697,4 +697,4 @@ public class ServerCameraSettings {
         return java.util.Objects.hash(positionLerpSpeed, rotationLerpSpeed, distance, speedModifier, allowPitchControls, displayCursor, displayReticle, mouseInputTargetType, sendMouseMotion, skipCharacterPhysics, isFirstPerson, hideHeldItem, movementForceRotationType, movementForceRotation, attachedToType, attachedToEntityId, eyeOffset, followAttachedEntity, positionDistanceOffsetType, positionOffset, rotationOffset, positionType, position, rotationType, rotation, canMoveType, applyMovementType, movementMultiplier, applyLookType, lookMultiplier, mouseInputType, planeNormal, baseFov, depthOfField);
     }
 
-}
+}

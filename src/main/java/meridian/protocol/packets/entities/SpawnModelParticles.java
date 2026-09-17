@@ -199,4 +199,4 @@ size += VarInt.size(modelParticles.length) + modelParticlesSize;
         return result;
     }
 
-}
+}

@@ -26,4 +26,4 @@ public enum CustomPageEventType {
         }
         throw ProtocolException.invalidEnumValue("CustomPageEventType", value);
     }
-}
+}

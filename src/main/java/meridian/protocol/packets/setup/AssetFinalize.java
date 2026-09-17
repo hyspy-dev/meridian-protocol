@@ -102,4 +102,4 @@ public class AssetFinalize implements Packet, ToClientPacket {
         return 0;
     }
 
-}
+}

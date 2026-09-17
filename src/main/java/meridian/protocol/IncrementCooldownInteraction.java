@@ -539,4 +539,4 @@ public class IncrementCooldownInteraction extends SimpleInteraction {
         return result;
     }
 
-}
+}

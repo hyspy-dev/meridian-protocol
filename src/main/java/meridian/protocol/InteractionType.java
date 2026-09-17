@@ -51,4 +51,4 @@ public enum InteractionType {
         }
         throw ProtocolException.invalidEnumValue("InteractionType", value);
     }
-}
+}

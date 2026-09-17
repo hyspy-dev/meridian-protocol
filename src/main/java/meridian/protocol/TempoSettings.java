@@ -134,4 +134,4 @@ public class TempoSettings {
         return java.util.Objects.hash(bpm, beatsPerBar, beatValue);
     }
 
-}
+}

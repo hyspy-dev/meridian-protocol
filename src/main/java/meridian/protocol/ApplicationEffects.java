@@ -580,4 +580,4 @@ size += VarInt.size(firstPersonParticles.length) + firstPersonParticlesSize;
         return result;
     }
 
-}
+}

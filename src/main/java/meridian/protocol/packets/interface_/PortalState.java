@@ -13,25 +13,25 @@ import meridian.protocol.io.VarInt;
 
 public class PortalState {
     public static final int NULLABLE_BIT_FIELD_SIZE = 0;
-    public static final int FIXED_BLOCK_SIZE = 5;
+    public static final int FIXED_BLOCK_SIZE = 8;
     public static final int VARIABLE_FIELD_COUNT = 0;
-    public static final int VARIABLE_BLOCK_START = 5;
-    public static final int MAX_SIZE = 5;
+    public static final int VARIABLE_BLOCK_START = 8;
+    public static final int MAX_SIZE = 8;
 
     public int remainingSeconds;
-    public boolean breaching;
+    public int bonusSeconds;
 
     public PortalState() {
     }
 
-    public PortalState(int remainingSeconds, boolean breaching) {
+    public PortalState(int remainingSeconds, int bonusSeconds) {
         this.remainingSeconds = remainingSeconds;
-        this.breaching = breaching;
+        this.bonusSeconds = bonusSeconds;
     }
 
     public PortalState(@Nonnull PortalState other) {
         this.remainingSeconds = other.remainingSeconds;
-        this.breaching = other.breaching;
+        this.bonusSeconds = other.bonusSeconds;
     }
 
     /**
@@ -40,7 +40,7 @@ public class PortalState {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("PortalState", offset, (int) mem.byteSize());
-        long needed = (long) offset + 5;
+        long needed = (long) offset + 8;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("PortalState", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -52,12 +52,12 @@ public class PortalState {
         return mem.get(PacketIO.PROTO_INT, offset + 0);
     }
     
-    public static boolean getBreaching(MemorySegment mem) {
-        return getBreaching(mem, 0);
+    public static int getBonusSeconds(MemorySegment mem) {
+        return getBonusSeconds(mem, 0);
     }
     
-    public static boolean getBreaching(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_BOOL, offset + 4);
+    public static int getBonusSeconds(MemorySegment mem, int offset) {
+        return mem.get(PacketIO.PROTO_INT, offset + 4);
     }
     
     
@@ -82,28 +82,28 @@ public class PortalState {
         requireBounds(mem, offset);
         var result = new PortalState(
             mem.get(PacketIO.PROTO_INT, offset + 0),
-            mem.get(PacketIO.PROTO_BOOL, offset + 4)
+            mem.get(PacketIO.PROTO_INT, offset + 4)
         );
-        if (cursor != null) cursor.position = offset + 5;
+        if (cursor != null) cursor.position = offset + 8;
         return result;
     }
     public int serialize(@Nonnull MemorySegment mem, int offset) {
         
         mem.set(PacketIO.PROTO_INT, offset + 0, this.remainingSeconds);
-        mem.set(PacketIO.PROTO_BOOL, offset + 4, this.breaching);
+        mem.set(PacketIO.PROTO_INT, offset + 4, this.bonusSeconds);
         
         
     
-       return 5;
+       return 8;
     }
     public int computeSize() {
-        return 5;
+        return 8;
     }
 
     public PortalState clone() {
         PortalState copy = new PortalState();
         copy.remainingSeconds = this.remainingSeconds;
-        copy.breaching = this.breaching;
+        copy.bonusSeconds = this.bonusSeconds;
         return copy;
     }
 
@@ -112,12 +112,12 @@ public class PortalState {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof PortalState other)) return false;
-        return this.remainingSeconds == other.remainingSeconds && this.breaching == other.breaching;
+        return this.remainingSeconds == other.remainingSeconds && this.bonusSeconds == other.bonusSeconds;
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(remainingSeconds, breaching);
+        return java.util.Objects.hash(remainingSeconds, bonusSeconds);
     }
 
-}
+}

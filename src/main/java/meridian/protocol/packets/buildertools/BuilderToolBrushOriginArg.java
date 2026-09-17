@@ -106,4 +106,4 @@ public class BuilderToolBrushOriginArg {
         return java.util.Objects.hash(defaultValue);
     }
 
-}
+}

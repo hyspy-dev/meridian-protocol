@@ -469,4 +469,4 @@ public class ApplyEffectInteraction extends SimpleInteraction {
         return result;
     }
 
-}
+}

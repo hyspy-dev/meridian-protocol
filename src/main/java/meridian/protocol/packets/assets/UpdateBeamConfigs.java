@@ -225,4 +225,4 @@ size += VarInt.size(beamConfigs.size()) + beamConfigsSize;
         return java.util.Objects.hash(type, maxId, beamConfigs);
     }
 
-}
+}

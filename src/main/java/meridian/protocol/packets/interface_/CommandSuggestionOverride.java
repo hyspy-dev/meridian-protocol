@@ -157,4 +157,4 @@ public class CommandSuggestionOverride {
         return java.util.Objects.hash(argStart, argCount, argTypeId);
     }
 
-}
+}

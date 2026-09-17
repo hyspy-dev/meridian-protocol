@@ -161,4 +161,4 @@ public class PointToolSetShape implements Packet, ToServerPacket {
         return java.util.Objects.hash(pointId, shape, newPosition);
     }
 
-}
+}

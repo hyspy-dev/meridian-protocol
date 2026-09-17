@@ -225,4 +225,4 @@ size += VarInt.size(patterns.size()) + patternsSize;
         return java.util.Objects.hash(type, maxId, patterns);
     }
 
-}
+}

@@ -157,4 +157,4 @@ public class DamageEntry {
         return java.util.Objects.hash(labelKey, min, max);
     }
 
-}
+}

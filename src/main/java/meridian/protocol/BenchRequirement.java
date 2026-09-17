@@ -321,4 +321,4 @@ size += VarInt.size(requiredAugmentTags.length) + requiredAugmentTagsSize;
         return result;
     }
 
-}
+}

@@ -30,4 +30,4 @@ public enum ParticleUVOption {
         }
         throw ProtocolException.invalidEnumValue("ParticleUVOption", value);
     }
-}
+}

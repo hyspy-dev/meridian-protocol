@@ -164,4 +164,4 @@ public class AssetEditorRebuildCaches {
         return java.util.Objects.hash(blockTextures, models, modelTextures, mapGeometry, itemIcons);
     }
 
-}
+}

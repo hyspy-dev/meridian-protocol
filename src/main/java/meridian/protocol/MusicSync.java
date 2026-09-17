@@ -183,4 +183,4 @@ public class MusicSync {
         return java.util.Objects.hash(point, markerName, offset, barMultiple);
     }
 
-}
+}

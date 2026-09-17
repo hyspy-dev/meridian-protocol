@@ -186,4 +186,4 @@ public class SetChunkTintmap implements Packet, ToClientPacket {
         return result;
     }
 
-}
+}

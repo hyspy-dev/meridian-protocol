@@ -26,4 +26,4 @@ public enum PongType {
         }
         throw ProtocolException.invalidEnumValue("PongType", value);
     }
-}
+}

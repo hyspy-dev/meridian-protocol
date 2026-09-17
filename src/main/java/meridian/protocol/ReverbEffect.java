@@ -325,4 +325,4 @@ public class ReverbEffect {
         return java.util.Objects.hash(id, dryGain, modalDensity, diffusion, gain, highFrequencyGain, decayTime, highFrequencyDecayRatio, reflectionGain, reflectionDelay, lateReverbGain, lateReverbDelay, roomRolloffFactor, airAbsorptionHighFrequencyGain, limitDecayHighFrequency);
     }
 
-}
+}

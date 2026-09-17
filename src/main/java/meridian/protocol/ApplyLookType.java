@@ -25,4 +25,4 @@ public enum ApplyLookType {
         }
         throw ProtocolException.invalidEnumValue("ApplyLookType", value);
     }
-}
+}

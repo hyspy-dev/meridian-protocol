@@ -453,4 +453,4 @@ public class ItemQuality {
         return java.util.Objects.hash(id, itemTooltipTexture, itemTooltipArrowTexture, slotTexture, blockSlotTexture, specialSlotTexture, textColor, localizationKey, visibleQualityLabel, renderSpecialSlot, hideFromSearch);
     }
 
-}
+}

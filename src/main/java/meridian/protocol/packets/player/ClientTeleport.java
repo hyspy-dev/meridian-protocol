@@ -178,4 +178,4 @@ public class ClientTeleport implements Packet, ToClientPacket {
         return java.util.Objects.hash(teleportId, ignoredTransformFields, relativeTransformFields, modelTransform, resetVelocity);
     }
 
-}
+}

@@ -158,4 +158,4 @@ public class SuccessReply implements Packet, ToServerPacket, ToClientPacket {
         return java.util.Objects.hash(token, message);
     }
 
-}
+}

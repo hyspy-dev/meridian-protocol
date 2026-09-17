@@ -28,4 +28,4 @@ public enum ItemReticleClientEvent {
         }
         throw ProtocolException.invalidEnumValue("ItemReticleClientEvent", value);
     }
-}
+}

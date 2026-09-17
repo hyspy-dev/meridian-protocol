@@ -159,4 +159,4 @@ public class BuilderToolSetEntityCollision implements Packet, ToServerPacket {
         return java.util.Objects.hash(entityId, collisionType);
     }
 
-}
+}

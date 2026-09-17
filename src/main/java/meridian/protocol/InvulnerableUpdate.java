@@ -88,4 +88,4 @@ public class InvulnerableUpdate extends ComponentUpdate {
         return 0;
     }
 
-}
+}

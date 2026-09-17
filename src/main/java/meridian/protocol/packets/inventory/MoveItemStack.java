@@ -182,4 +182,4 @@ public class MoveItemStack implements Packet, ToServerPacket {
         return java.util.Objects.hash(fromSectionId, fromSlotId, quantity, toSectionId, toSlotId);
     }
 
-}
+}

@@ -25,4 +25,4 @@ public enum SelectorAnchor {
         }
         throw ProtocolException.invalidEnumValue("SelectorAnchor", value);
     }
-}
+}

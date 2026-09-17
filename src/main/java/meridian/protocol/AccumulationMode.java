@@ -26,4 +26,4 @@ public enum AccumulationMode {
         }
         throw ProtocolException.invalidEnumValue("AccumulationMode", value);
     }
-}
+}

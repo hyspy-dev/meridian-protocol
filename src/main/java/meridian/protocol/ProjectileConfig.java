@@ -421,4 +421,4 @@ public class ProjectileConfig {
         return java.util.Objects.hash(physicsConfig, model, launchForce, spawnOffset, rotationOffset, rotateSpawnOffsetByPitch, rotateSpawnOffsetByYaw, interactions, launchLocalSoundEventIndex, launchWorldSoundEventIndex, projectileSoundEventIndex, minScale, maxScale);
     }
 
-}
+}

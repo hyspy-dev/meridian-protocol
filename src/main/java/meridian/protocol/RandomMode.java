@@ -25,4 +25,4 @@ public enum RandomMode {
         }
         throw ProtocolException.invalidEnumValue("RandomMode", value);
     }
-}
+}

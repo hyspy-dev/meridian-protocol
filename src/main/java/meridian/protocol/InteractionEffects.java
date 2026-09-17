@@ -634,4 +634,4 @@ size += VarInt.size(trails.length) + trailsSize;
         return result;
     }
 
-}
+}

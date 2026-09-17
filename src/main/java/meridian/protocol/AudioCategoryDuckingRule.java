@@ -204,4 +204,4 @@ public class AudioCategoryDuckingRule {
         return java.util.Objects.hash(targetAudioCategoryIndex, duckingVolumeDb, attackMs, holdMs, releaseMs, curve, releaseCurve, priority);
     }
 
-}
+}

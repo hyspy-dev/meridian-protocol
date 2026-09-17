@@ -13,16 +13,16 @@ import meridian.protocol.io.VarInt;
 
 public class AudioState {
     public static final int NULLABLE_BIT_FIELD_SIZE = 1;
-    public static final int FIXED_BLOCK_SIZE = 8;
-    public static final int VARIABLE_FIELD_COUNT = 4;
-    public static final int VARIABLE_BLOCK_START = 24;
+    public static final int FIXED_BLOCK_SIZE = 7;
+    public static final int VARIABLE_FIELD_COUNT = 5;
+    public static final int VARIABLE_BLOCK_START = 27;
     public static final int MAX_SIZE = 1677721600;
 
     @Nullable public String id;
     @Nonnull public AudioStateAuthority authority = AudioStateAuthority.Server;
     @Nullable public String[] values;
     public int defaultValueIndex;
-    @Nonnull public SyncPoint defaultSyncTo = SyncPoint.Immediate;
+    @Nullable public MusicSync defaultSyncTo;
     @Nullable public StateTransition defaultTransition;
     @Nullable public StateTransition[] transitions;
     public boolean revertWhenInactive;
@@ -30,7 +30,7 @@ public class AudioState {
     public AudioState() {
     }
 
-    public AudioState(@Nullable String id, @Nonnull AudioStateAuthority authority, @Nullable String[] values, int defaultValueIndex, @Nonnull SyncPoint defaultSyncTo, @Nullable StateTransition defaultTransition, @Nullable StateTransition[] transitions, boolean revertWhenInactive) {
+    public AudioState(@Nullable String id, @Nonnull AudioStateAuthority authority, @Nullable String[] values, int defaultValueIndex, @Nullable MusicSync defaultSyncTo, @Nullable StateTransition defaultTransition, @Nullable StateTransition[] transitions, boolean revertWhenInactive) {
         this.id = id;
         this.authority = authority;
         this.values = values;
@@ -58,7 +58,7 @@ public class AudioState {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("AudioState", offset, (int) mem.byteSize());
-        long needed = (long) offset + 24;
+        long needed = (long) offset + 27;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("AudioState", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -69,7 +69,7 @@ public class AudioState {
     
     @Nullable
     public static String getId(MemorySegment mem, int offset) {
-        return hasId(mem, offset) ? PacketIO.readVarString("Id", mem, offset + getValidatedOffset(mem, offset, 8, 24, "Id"), 4096000): null;
+        return hasId(mem, offset) ? PacketIO.readVarString("Id", mem, offset + getValidatedOffset(mem, offset, 7, 27, "Id"), 4096000): null;
     }
     
     public static AudioStateAuthority getAuthority(MemorySegment mem) {
@@ -88,7 +88,7 @@ public class AudioState {
     @Nullable
     public static String[] getValues(MemorySegment mem, int offset) {
         if (!hasValues(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 12, 24, "Values");
+        var off = offset + getValidatedOffset(mem, offset, 11, 27, "Values");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("Values");
         var len = (int) packed;
@@ -113,12 +113,14 @@ public class AudioState {
         return mem.get(PacketIO.PROTO_INT, offset + 2);
     }
     
-    public static SyncPoint getDefaultSyncTo(MemorySegment mem) {
+    @Nullable
+    public static MusicSync getDefaultSyncTo(MemorySegment mem) {
         return getDefaultSyncTo(mem, 0);
     }
     
-    public static SyncPoint getDefaultSyncTo(MemorySegment mem, int offset) {
-        return SyncPoint.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 6));
+    @Nullable
+    public static MusicSync getDefaultSyncTo(MemorySegment mem, int offset) {
+        return hasDefaultSyncTo(mem, offset) ? MusicSync.toObject(mem, offset + getValidatedOffset(mem, offset, 15, 27, "DefaultSyncTo")): null;
     }
     
     @Nullable
@@ -128,7 +130,7 @@ public class AudioState {
     
     @Nullable
     public static StateTransition getDefaultTransition(MemorySegment mem, int offset) {
-        return hasDefaultTransition(mem, offset) ? StateTransition.toObject(mem, offset + getValidatedOffset(mem, offset, 16, 24, "DefaultTransition")): null;
+        return hasDefaultTransition(mem, offset) ? StateTransition.toObject(mem, offset + getValidatedOffset(mem, offset, 19, 27, "DefaultTransition")): null;
     }
     
     @Nullable
@@ -140,13 +142,13 @@ public class AudioState {
     public static StateTransition[] getTransitions(MemorySegment mem, int offset) {
         if (!hasTransitions(mem, offset)) return null;
         var walkCursor = new ReadCursor();
-        var off = offset + getValidatedOffset(mem, offset, 20, 24, "Transitions");
+        var off = offset + getValidatedOffset(mem, offset, 23, 27, "Transitions");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("Transitions");
         var len = (int) packed;
         if (len > 4096000) throw ProtocolException.arrayTooLong("Transitions", len, 4096000);
         var lenOffset = (int) (packed >>> 32);
-        if (off + lenOffset + (long) len * 15 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Transitions", (int) java.lang.Math.min(off + lenOffset + (long) len * 15, Integer.MAX_VALUE), (int) mem.byteSize());
+        if (off + lenOffset + (long) len * 42 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Transitions", (int) java.lang.Math.min(off + lenOffset + (long) len * 42, Integer.MAX_VALUE), (int) mem.byteSize());
         off += lenOffset;
         var data = new StateTransition[len];
         for (var i = 0; i < len; i++) {
@@ -161,7 +163,7 @@ public class AudioState {
     }
     
     public static boolean getRevertWhenInactive(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_BOOL, offset + 7);
+        return mem.get(PacketIO.PROTO_BOOL, offset + 6);
     }
     
     public static boolean hasId(MemorySegment mem, int offset) {
@@ -174,14 +176,19 @@ public class AudioState {
         return (b & 0x02) != 0;
     }
     
-    public static boolean hasDefaultTransition(MemorySegment mem, int offset) {
+    public static boolean hasDefaultSyncTo(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
         return (b & 0x04) != 0;
     }
     
-    public static boolean hasTransitions(MemorySegment mem, int offset) {
+    public static boolean hasDefaultTransition(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
         return (b & 0x08) != 0;
+    }
+    
+    public static boolean hasTransitions(MemorySegment mem, int offset) {
+        var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
+        return (b & 0x10) != 0;
     }
     
     private static int getValidatedOffset(MemorySegment buffer, int base, int slotPosition, int varBlockStart, String fieldName) {
@@ -217,23 +224,23 @@ public class AudioState {
     public static AudioState toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
-        var varBase = offset + 24;
+        var varBase = offset + 27;
         var varPos = 0;
         var walkCursor = cursor != null ? cursor : new ReadCursor();
         String v0 = null;
         if (hasId(mem, offset)) {
-            requireSlot(mem, offset + 8, varPos, "Id");
+            requireSlot(mem, offset + 7, varPos, "Id");
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
             v0 = PacketIO.readVarString("Id", mem, off, 0, 4096000, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         } else {
-            requireSlot(mem, offset + 8, -1, "Id");
+            requireSlot(mem, offset + 7, -1, "Id");
         }
         
         String[] v2 = null;
         if (hasValues(mem, offset)) {
-            requireSlot(mem, offset + 12, varPos, "Values");
+            requireSlot(mem, offset + 11, varPos, "Values");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("Values");
@@ -250,28 +257,37 @@ public class AudioState {
             }
             varPos = off - varBase;
         } else {
-            requireSlot(mem, offset + 12, -1, "Values");
+            requireSlot(mem, offset + 11, -1, "Values");
+        }
+        
+        MusicSync v4 = null;
+        if (hasDefaultSyncTo(mem, offset)) {
+            requireSlot(mem, offset + 15, varPos, "DefaultSyncTo");
+            v4 = MusicSync.toObject(mem, varBase + varPos, walkCursor);
+            varPos = walkCursor.position - varBase;
+        } else {
+            requireSlot(mem, offset + 15, -1, "DefaultSyncTo");
         }
         
         StateTransition v5 = null;
         if (hasDefaultTransition(mem, offset)) {
-            requireSlot(mem, offset + 16, varPos, "DefaultTransition");
+            requireSlot(mem, offset + 19, varPos, "DefaultTransition");
             v5 = StateTransition.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
         } else {
-            requireSlot(mem, offset + 16, -1, "DefaultTransition");
+            requireSlot(mem, offset + 19, -1, "DefaultTransition");
         }
         
         StateTransition[] v6 = null;
         if (hasTransitions(mem, offset)) {
-            requireSlot(mem, offset + 20, varPos, "Transitions");
+            requireSlot(mem, offset + 23, varPos, "Transitions");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("Transitions");
             var len = (int) packed;
             if (len > 4096000) throw ProtocolException.arrayTooLong("Transitions", len, 4096000);
             var lenOffset = (int) (packed >>> 32);
-            if (off + lenOffset + (long) len * 15 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Transitions", (int) java.lang.Math.min(off + lenOffset + (long) len * 15, Integer.MAX_VALUE), (int) mem.byteSize());
+            if (off + lenOffset + (long) len * 42 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Transitions", (int) java.lang.Math.min(off + lenOffset + (long) len * 42, Integer.MAX_VALUE), (int) mem.byteSize());
             off += lenOffset;
             v6 = new StateTransition[len];
             for (var i = 0; i < len; i++) {
@@ -280,17 +296,17 @@ public class AudioState {
             }
             varPos = off - varBase;
         } else {
-            requireSlot(mem, offset + 20, -1, "Transitions");
+            requireSlot(mem, offset + 23, -1, "Transitions");
         }
         var result = new AudioState(
             v0,
             AudioStateAuthority.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 1)),
             v2,
             mem.get(PacketIO.PROTO_INT, offset + 2),
-            SyncPoint.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 6)),
+            v4,
             v5,
             v6,
-            mem.get(PacketIO.PROTO_BOOL, offset + 7)
+            mem.get(PacketIO.PROTO_BOOL, offset + 6)
         );
         if (cursor != null) cursor.position = varBase + varPos;
         return result;
@@ -300,23 +316,23 @@ public class AudioState {
         nullBits = 0;
         if (this.id != null) nullBits |= 0x01;
         if (this.values != null) nullBits |= 0x02;
-        if (this.defaultTransition != null) nullBits |= 0x04;
-        if (this.transitions != null) nullBits |= 0x08;
+        if (this.defaultSyncTo != null) nullBits |= 0x04;
+        if (this.defaultTransition != null) nullBits |= 0x08;
+        if (this.transitions != null) nullBits |= 0x10;
         mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         
         mem.set(PacketIO.PROTO_BYTE, offset + 1, (byte) this.authority.getValue());
         mem.set(PacketIO.PROTO_INT, offset + 2, this.defaultValueIndex);
-        mem.set(PacketIO.PROTO_BYTE, offset + 6, (byte) this.defaultSyncTo.getValue());
-        mem.set(PacketIO.PROTO_BOOL, offset + 7, this.revertWhenInactive);
-        var varOffset = offset + 24;
+        mem.set(PacketIO.PROTO_BOOL, offset + 6, this.revertWhenInactive);
+        var varOffset = offset + 27;
         if (this.id != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 8, varOffset - offset - 24);
+            mem.set(PacketIO.PROTO_INT, offset + 7, varOffset - offset - 27);
             varOffset += PacketIO.writeVarString(mem, varOffset, this.id, 4096000);
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 8, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 7, -1);
         }
         if (this.values != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 12, varOffset - offset - 24);
+            mem.set(PacketIO.PROTO_INT, offset + 11, varOffset - offset - 27);
             if (values.length > 4096000) throw ProtocolException.arrayTooLong("Values", values.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.values.length);
             
@@ -326,16 +342,22 @@ public class AudioState {
             }
             varOffset += valuesValueOffset;
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 12, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 11, -1);
+        }
+        if (this.defaultSyncTo != null) {
+            mem.set(PacketIO.PROTO_INT, offset + 15, varOffset - offset - 27);
+            varOffset += this.defaultSyncTo.serialize(mem, varOffset);
+        } else {
+            mem.set(PacketIO.PROTO_INT, offset + 15, -1);
         }
         if (this.defaultTransition != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 16, varOffset - offset - 24);
+            mem.set(PacketIO.PROTO_INT, offset + 19, varOffset - offset - 27);
             varOffset += this.defaultTransition.serialize(mem, varOffset);
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 16, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 19, -1);
         }
         if (this.transitions != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 20, varOffset - offset - 24);
+            mem.set(PacketIO.PROTO_INT, offset + 23, varOffset - offset - 27);
             if (transitions.length > 4096000) throw ProtocolException.arrayTooLong("Transitions", transitions.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.transitions.length);
             
@@ -345,19 +367,20 @@ public class AudioState {
             }
             varOffset += transitionsValueOffset;
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 20, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 23, -1);
         }
     
        return varOffset - offset;
     }
     public int computeSize() {
-        int size = 24;
+        int size = 27;
         if (id != null) size += PacketIO.stringSize(id);
     if (values != null) {
         int valuesSize = 0;
 for (var elem : values) valuesSize += PacketIO.stringSize(elem);
 size += VarInt.size(values.length) + valuesSize;
     }
+    if (defaultSyncTo != null) size += defaultSyncTo.computeSize();
     if (defaultTransition != null) size += defaultTransition.computeSize();
     if (transitions != null) {
         int transitionsSize = 0;
@@ -374,7 +397,7 @@ size += VarInt.size(transitions.length) + transitionsSize;
         copy.authority = this.authority;
         copy.values = this.values != null ? java.util.Arrays.copyOf(this.values, this.values.length) : null;
         copy.defaultValueIndex = this.defaultValueIndex;
-        copy.defaultSyncTo = this.defaultSyncTo;
+        copy.defaultSyncTo = this.defaultSyncTo != null ? this.defaultSyncTo.clone() : null;
         copy.defaultTransition = this.defaultTransition != null ? this.defaultTransition.clone() : null;
         copy.transitions = this.transitions != null ? java.util.Arrays.stream(this.transitions).map(e -> e.clone()).toArray(StateTransition[]::new) : null;
         copy.revertWhenInactive = this.revertWhenInactive;
@@ -403,4 +426,4 @@ size += VarInt.size(transitions.length) + transitionsSize;
         return result;
     }
 
-}
+}

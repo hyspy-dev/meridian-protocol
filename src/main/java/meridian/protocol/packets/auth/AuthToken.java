@@ -205,4 +205,4 @@ public class AuthToken implements Packet, ToServerPacket {
         return java.util.Objects.hash(accessToken, serverAuthorizationGrant);
     }
 
-}
+}

@@ -134,4 +134,4 @@ public class AngledWielding {
         return java.util.Objects.hash(angleRad, angleDistanceRad, hasModifiers);
     }
 
-}
+}

@@ -176,4 +176,4 @@ public class UpdateVisibleHudComponents implements Packet, ToClientPacket {
         return result;
     }
 
-}
+}

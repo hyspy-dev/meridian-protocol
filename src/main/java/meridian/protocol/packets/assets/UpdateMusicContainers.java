@@ -221,4 +221,4 @@ size += VarInt.size(musicContainers.size()) + musicContainersSize;
         return java.util.Objects.hash(type, maxId, musicContainers);
     }
 
-}
+}

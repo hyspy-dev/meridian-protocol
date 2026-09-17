@@ -30,4 +30,4 @@ public enum BlockFace {
         }
         throw ProtocolException.invalidEnumValue("BlockFace", value);
     }
-}
+}

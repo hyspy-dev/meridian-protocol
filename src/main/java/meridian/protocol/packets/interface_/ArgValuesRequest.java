@@ -205,4 +205,4 @@ public class ArgValuesRequest implements Packet, ToServerPacket {
         return java.util.Objects.hash(argTypeId, partial);
     }
 
-}
+}

@@ -200,4 +200,4 @@ public class UpdateSleepState implements Packet, ToClientPacket {
         return java.util.Objects.hash(grayFade, sleepUi, clock, multiplayer);
     }
 
-}
+}

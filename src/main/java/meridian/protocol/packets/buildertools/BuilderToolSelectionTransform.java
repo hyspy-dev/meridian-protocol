@@ -298,4 +298,4 @@ public class BuilderToolSelectionTransform implements Packet, ToServerPacket {
         return java.util.Objects.hash(rotation, translationOffset, initialSelectionMin, initialSelectionMax, initialRotationOrigin, cutOriginal, applyTransformationToSelectionMinMax, isExitingTransformMode, initialPastePointForClipboardPaste);
     }
 
-}
+}

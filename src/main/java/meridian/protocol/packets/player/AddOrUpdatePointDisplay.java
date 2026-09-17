@@ -175,4 +175,4 @@ public class AddOrUpdatePointDisplay implements Packet, ToClientPacket {
         return java.util.Objects.hash(pointId, entry);
     }
 
-}
+}

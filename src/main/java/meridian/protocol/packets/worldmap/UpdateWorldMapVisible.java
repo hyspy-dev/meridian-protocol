@@ -122,4 +122,4 @@ public class UpdateWorldMapVisible implements Packet, ToServerPacket {
         return java.util.Objects.hash(visible);
     }
 
-}
+}

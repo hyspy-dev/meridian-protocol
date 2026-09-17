@@ -492,4 +492,4 @@ public class TriggerCooldownInteraction extends SimpleInteraction {
         return result;
     }
 
-}
+}

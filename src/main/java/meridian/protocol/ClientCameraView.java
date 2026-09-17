@@ -26,4 +26,4 @@ public enum ClientCameraView {
         }
         throw ProtocolException.invalidEnumValue("ClientCameraView", value);
     }
-}
+}

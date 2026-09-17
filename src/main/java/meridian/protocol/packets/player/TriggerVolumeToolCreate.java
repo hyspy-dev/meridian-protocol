@@ -201,4 +201,4 @@ public class TriggerVolumeToolCreate implements Packet, ToServerPacket {
         return java.util.Objects.hash(shapeType, position, param1, param2, name);
     }
 
-}
+}

@@ -162,4 +162,4 @@ public class ChargingDelay {
         return java.util.Objects.hash(minDelay, maxDelay, maxTotalDelay, minHealth, maxHealth);
     }
 
-}
+}

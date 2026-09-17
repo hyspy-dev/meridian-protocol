@@ -27,4 +27,4 @@ public enum BlockPlacementRotationMode {
         }
         throw ProtocolException.invalidEnumValue("BlockPlacementRotationMode", value);
     }
-}
+}

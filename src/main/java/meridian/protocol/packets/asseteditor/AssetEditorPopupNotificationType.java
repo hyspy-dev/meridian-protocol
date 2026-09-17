@@ -27,4 +27,4 @@ public enum AssetEditorPopupNotificationType {
         }
         throw ProtocolException.invalidEnumValue("AssetEditorPopupNotificationType", value);
     }
-}
+}

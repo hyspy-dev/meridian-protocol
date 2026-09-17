@@ -197,4 +197,4 @@ public class ItemPullbackConfiguration {
         return java.util.Objects.hash(leftOffsetOverride, leftRotationOverride, rightOffsetOverride, rightRotationOverride);
     }
 
-}
+}

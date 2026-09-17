@@ -251,4 +251,4 @@ public class CameraKeyframe {
         return java.util.Objects.hash(position, look, lookAtPoint, duration, easing, fov, depthOfField);
     }
 
-}
+}

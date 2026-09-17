@@ -133,4 +133,4 @@ public class DetailBox {
         return java.util.Objects.hash(offset, box);
     }
 
-}
+}

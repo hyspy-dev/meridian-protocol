@@ -225,4 +225,4 @@ size += VarInt.size(interactions.size()) + interactionsSize;
         return java.util.Objects.hash(type, maxId, interactions);
     }
 
-}
+}

@@ -390,4 +390,4 @@ size += VarInt.size(entityChanges.length) + entityChangesSize;
         return result;
     }
 
-}
+}

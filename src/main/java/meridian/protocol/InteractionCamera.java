@@ -147,4 +147,4 @@ public class InteractionCamera {
         return java.util.Objects.hash(time, position, rotation);
     }
 
-}
+}

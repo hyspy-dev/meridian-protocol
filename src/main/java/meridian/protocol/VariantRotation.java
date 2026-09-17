@@ -31,4 +31,4 @@ public enum VariantRotation {
         }
         throw ProtocolException.invalidEnumValue("VariantRotation", value);
     }
-}
+}

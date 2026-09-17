@@ -25,4 +25,4 @@ public enum ItemHudUIType {
         }
         throw ProtocolException.invalidEnumValue("ItemHudUIType", value);
     }
-}
+}

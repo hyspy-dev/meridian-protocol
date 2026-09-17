@@ -225,4 +225,4 @@ size += VarInt.size(fluidFX.size()) + fluidFXSize;
         return java.util.Objects.hash(type, maxId, fluidFX);
     }
 
-}
+}

@@ -173,4 +173,4 @@ public class SleepClock {
         return java.util.Objects.hash(startGametime, targetGametime, progress, durationSeconds);
     }
 
-}
+}

@@ -163,4 +163,4 @@ public class RemoveFromServerPlayerList implements Packet, ToClientPacket {
         return result;
     }
 
-}
+}

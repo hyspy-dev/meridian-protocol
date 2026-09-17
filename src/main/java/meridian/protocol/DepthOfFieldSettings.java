@@ -205,4 +205,4 @@ public class DepthOfFieldSettings {
         return java.util.Objects.hash(nearBlurry, nearSharp, farSharp, farBlurry, nearBlurMax, farBlurMax);
     }
 
-}
+}

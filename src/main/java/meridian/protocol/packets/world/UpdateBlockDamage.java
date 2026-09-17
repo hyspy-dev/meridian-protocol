@@ -163,4 +163,4 @@ public class UpdateBlockDamage implements Packet, ToClientPacket {
         return java.util.Objects.hash(blockPosition, damage, delta);
     }
 
-}
+}

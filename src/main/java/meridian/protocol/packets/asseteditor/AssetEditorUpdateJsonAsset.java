@@ -312,4 +312,4 @@ size += VarInt.size(commands.length) + commandsSize;
         return result;
     }
 
-}
+}

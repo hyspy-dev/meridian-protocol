@@ -185,4 +185,4 @@ size += VarInt.size(schemas.length) + schemasSize;
         return result;
     }
 
-}
+}

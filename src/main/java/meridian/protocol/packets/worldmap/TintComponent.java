@@ -108,4 +108,4 @@ public class TintComponent extends MapMarkerComponent {
         return java.util.Objects.hash(color);
     }
 
-}
+}

@@ -303,4 +303,4 @@ size += VarInt.size(tags.size()) + tagsSize;
         return java.util.Objects.hash(id, name, position, rotation, tags, shape);
     }
 
-}
+}

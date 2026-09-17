@@ -106,4 +106,4 @@ public class BuilderToolRotationArg {
         return java.util.Objects.hash(defaultValue);
     }
 
-}
+}

@@ -170,4 +170,4 @@ public class AngledDamage {
         return java.util.Objects.hash(angle, angleDistance, damageEffects, next);
     }
 
-}
+}

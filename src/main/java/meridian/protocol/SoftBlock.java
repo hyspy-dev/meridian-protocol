@@ -202,4 +202,4 @@ public class SoftBlock {
         return java.util.Objects.hash(itemId, dropListId, isWeaponBreakable);
     }
 
-}
+}

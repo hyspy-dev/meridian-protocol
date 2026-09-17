@@ -122,4 +122,4 @@ public class BuilderToolGeneralAction implements Packet, ToServerPacket {
         return java.util.Objects.hash(action);
     }
 
-}
+}

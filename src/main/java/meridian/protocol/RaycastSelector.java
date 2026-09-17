@@ -179,4 +179,4 @@ public class RaycastSelector extends Selector {
         return java.util.Objects.hash(offset, distance, blockTagIndex, ignoreFluids, ignoreEmptyCollisionMaterial);
     }
 
-}
+}

@@ -229,4 +229,4 @@ public class ClientReferral implements Packet, ToClientPacket {
         return result;
     }
 
-}
+}

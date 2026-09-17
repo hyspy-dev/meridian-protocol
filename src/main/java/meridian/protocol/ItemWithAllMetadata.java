@@ -244,4 +244,4 @@ public class ItemWithAllMetadata {
         return java.util.Objects.hash(itemId, quantity, durability, maxDurability, quality, overrideDroppedItemAnimation, metadata);
     }
 
-}
+}

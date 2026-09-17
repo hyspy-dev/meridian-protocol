@@ -28,4 +28,4 @@ public enum MouseButtonType {
         }
         throw ProtocolException.invalidEnumValue("MouseButtonType", value);
     }
-}
+}

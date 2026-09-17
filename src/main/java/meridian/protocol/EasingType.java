@@ -54,4 +54,4 @@ public enum EasingType {
         }
         throw ProtocolException.invalidEnumValue("EasingType", value);
     }
-}
+}

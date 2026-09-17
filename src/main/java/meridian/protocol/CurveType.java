@@ -27,4 +27,4 @@ public enum CurveType {
         }
         throw ProtocolException.invalidEnumValue("CurveType", value);
     }
-}
+}

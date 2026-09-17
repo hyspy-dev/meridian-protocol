@@ -108,4 +108,4 @@ public class UIDoubleDataValue extends UIDataValue {
         return java.util.Objects.hash(value);
     }
 
-}
+}

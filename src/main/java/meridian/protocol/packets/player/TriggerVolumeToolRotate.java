@@ -147,4 +147,4 @@ public class TriggerVolumeToolRotate implements Packet, ToServerPacket {
         return java.util.Objects.hash(volumeId, rotation);
     }
 
-}
+}

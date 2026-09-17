@@ -389,4 +389,4 @@ public class FluidFX {
         return java.util.Objects.hash(id, shader, fogMode, fogColor, fogDistance, fogDepthStart, fogDepthFalloff, colorFilter, colorSaturation, distortionAmplitude, distortionFrequency, particle, movementSettings);
     }
 
-}
+}

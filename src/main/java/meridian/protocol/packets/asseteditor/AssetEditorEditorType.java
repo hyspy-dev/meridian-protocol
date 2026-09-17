@@ -30,4 +30,4 @@ public enum AssetEditorEditorType {
         }
         throw ProtocolException.invalidEnumValue("AssetEditorEditorType", value);
     }
-}
+}

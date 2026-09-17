@@ -26,4 +26,4 @@ public enum Axis {
         }
         throw ProtocolException.invalidEnumValue("Axis", value);
     }
-}
+}

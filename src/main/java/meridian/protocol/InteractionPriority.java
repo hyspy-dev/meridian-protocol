@@ -171,4 +171,4 @@ public class InteractionPriority {
         return java.util.Objects.hash(values);
     }
 
-}
+}

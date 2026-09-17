@@ -192,4 +192,4 @@ size += VarInt.size(entityStatUpdates.size()) + entityStatUpdatesSize;
         return java.util.Objects.hash(entityStatUpdates);
     }
 
-}
+}

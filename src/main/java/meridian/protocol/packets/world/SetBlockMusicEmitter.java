@@ -176,4 +176,4 @@ public class SetBlockMusicEmitter implements Packet, ToClientPacket {
         return java.util.Objects.hash(position, emitter, playbackOffsetMillis);
     }
 
-}
+}

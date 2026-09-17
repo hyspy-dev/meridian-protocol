@@ -25,4 +25,4 @@ public enum HorizontalSelectorDirection {
         }
         throw ProtocolException.invalidEnumValue("HorizontalSelectorDirection", value);
     }
-}
+}

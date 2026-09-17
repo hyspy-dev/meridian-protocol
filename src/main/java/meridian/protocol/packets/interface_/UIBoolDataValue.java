@@ -108,4 +108,4 @@ public class UIBoolDataValue extends UIDataValue {
         return java.util.Objects.hash(value);
     }
 
-}
+}

@@ -193,4 +193,4 @@ size += VarInt.size(items.size()) + itemsSize;
         return java.util.Objects.hash(items, capacity);
     }
 
-}
+}

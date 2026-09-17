@@ -465,4 +465,4 @@ public class CooldownConditionInteraction extends SimpleInteraction {
         return result;
     }
 
-}
+}

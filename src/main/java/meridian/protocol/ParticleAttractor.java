@@ -307,4 +307,4 @@ public class ParticleAttractor {
         return java.util.Objects.hash(position, radialAxis, trailPositionMultiplier, radius, radialAcceleration, radialTangentAcceleration, linearAcceleration, radialImpulse, radialTangentImpulse, linearImpulse, dampingMultiplier);
     }
 
-}
+}

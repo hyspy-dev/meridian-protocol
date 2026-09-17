@@ -131,4 +131,4 @@ public class PlayerSkinUpdate extends ComponentUpdate {
         return java.util.Objects.hash(skin);
     }
 
-}
+}

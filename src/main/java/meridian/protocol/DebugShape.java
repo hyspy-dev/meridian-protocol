@@ -31,4 +31,4 @@ public enum DebugShape {
         }
         throw ProtocolException.invalidEnumValue("DebugShape", value);
     }
-}
+}

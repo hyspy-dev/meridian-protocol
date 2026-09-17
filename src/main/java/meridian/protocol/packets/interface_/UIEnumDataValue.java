@@ -108,4 +108,4 @@ public class UIEnumDataValue extends UIDataValue {
         return java.util.Objects.hash(value);
     }
 
-}
+}

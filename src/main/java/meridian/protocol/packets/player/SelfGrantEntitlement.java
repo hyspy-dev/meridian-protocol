@@ -134,4 +134,4 @@ public class SelfGrantEntitlement implements Packet, ToClientPacket {
         return java.util.Objects.hash(entitlementId);
     }
 
-}
+}

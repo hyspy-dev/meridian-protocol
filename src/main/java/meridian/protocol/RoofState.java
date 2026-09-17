@@ -26,4 +26,4 @@ public enum RoofState {
         }
         throw ProtocolException.invalidEnumValue("RoofState", value);
     }
-}
+}

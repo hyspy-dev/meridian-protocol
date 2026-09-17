@@ -2074,4 +2074,4 @@ size += VarInt.size(states.size()) + statesSize;
         return result;
     }
 
-}
+}

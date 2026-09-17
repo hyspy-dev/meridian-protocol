@@ -25,4 +25,4 @@ public enum AssetEditorFileTree {
         }
         throw ProtocolException.invalidEnumValue("AssetEditorFileTree", value);
     }
-}
+}

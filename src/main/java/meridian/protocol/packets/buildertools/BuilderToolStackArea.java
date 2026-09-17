@@ -217,4 +217,4 @@ public class BuilderToolStackArea implements Packet, ToServerPacket {
         return java.util.Objects.hash(selectionMin, selectionMax, xNormal, yNormal, zNormal, numStacks);
     }
 
-}
+}

@@ -164,4 +164,4 @@ public class UpdateServerPlayerList implements Packet, ToClientPacket {
         return result;
     }
 
-}
+}

@@ -26,4 +26,4 @@ public enum ArmorVisibilityOption {
         }
         throw ProtocolException.invalidEnumValue("ArmorVisibilityOption", value);
     }
-}
+}

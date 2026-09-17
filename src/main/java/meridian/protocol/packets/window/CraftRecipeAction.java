@@ -150,4 +150,4 @@ public class CraftRecipeAction extends WindowAction {
         return java.util.Objects.hash(recipeId, quantity);
     }
 
-}
+}

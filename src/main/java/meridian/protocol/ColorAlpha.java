@@ -148,4 +148,4 @@ public class ColorAlpha {
         return java.util.Objects.hash(alpha, red, green, blue);
     }
 
-}
+}

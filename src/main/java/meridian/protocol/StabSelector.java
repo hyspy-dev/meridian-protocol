@@ -315,4 +315,4 @@ public class StabSelector extends Selector {
         return java.util.Objects.hash(extendTop, extendBottom, extendLeft, extendRight, yawOffset, pitchOffset, rollOffset, startDistance, endDistance, testLineOfSight, ignorePitch, ignoreYaw, anchor, sizeAttribute);
     }
 
-}
+}

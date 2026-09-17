@@ -136,4 +136,4 @@ public class BuilderToolSetNPCDebug implements Packet, ToServerPacket {
         return java.util.Objects.hash(entityId, enabled);
     }
 
-}
+}

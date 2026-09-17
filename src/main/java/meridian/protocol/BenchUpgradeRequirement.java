@@ -183,4 +183,4 @@ size += VarInt.size(material.length) + materialSize;
         return result;
     }
 
-}
+}

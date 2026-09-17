@@ -108,4 +108,4 @@ public class PredictionUpdate extends ComponentUpdate {
         return java.util.Objects.hash(predictionId);
     }
 
-}
+}

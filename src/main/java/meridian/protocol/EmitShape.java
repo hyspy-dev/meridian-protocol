@@ -25,4 +25,4 @@ public enum EmitShape {
         }
         throw ProtocolException.invalidEnumValue("EmitShape", value);
     }
-}
+}

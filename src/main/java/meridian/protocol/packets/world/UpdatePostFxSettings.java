@@ -178,4 +178,4 @@ public class UpdatePostFxSettings implements Packet, ToClientPacket {
         return java.util.Objects.hash(globalIntensity, power, sunshaftScale, sunIntensity, sunshaftIntensity);
     }
 
-}
+}

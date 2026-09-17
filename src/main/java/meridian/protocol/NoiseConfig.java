@@ -162,4 +162,4 @@ public class NoiseConfig {
         return java.util.Objects.hash(seed, type, frequency, amplitude, clamp);
     }
 
-}
+}

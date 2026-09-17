@@ -408,4 +408,4 @@ public class SyncPlayerPreferences implements Packet, ToServerPacket {
         return java.util.Objects.hash(showEntityMarkers, armorItemsPreferredPickupLocation, weaponAndToolItemsPreferredPickupLocation, usableItemsItemsPreferredPickupLocation, solidBlockItemsPreferredPickupLocation, miscItemsPreferredPickupLocation, allowNPCDetection, respondToHit, hideHelmet, hideCuirass, hideGauntlets, hidePants, placeMode, creativeInteractionDistance, showBuilderToolNotifications, noPhysics, eraserEnabled, activateTriggerVolumes, voiceChat, voiceInput, voiceInputMode);
     }
 
-}
+}

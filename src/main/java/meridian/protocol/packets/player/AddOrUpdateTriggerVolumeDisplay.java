@@ -175,4 +175,4 @@ public class AddOrUpdateTriggerVolumeDisplay implements Packet, ToClientPacket {
         return java.util.Objects.hash(volumeId, entry);
     }
 
-}
+}

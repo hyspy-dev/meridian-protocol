@@ -47,4 +47,4 @@ public enum CustomUIEventBindingType {
         }
         throw ProtocolException.invalidEnumValue("CustomUIEventBindingType", value);
     }
-}
+}

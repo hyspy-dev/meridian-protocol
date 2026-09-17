@@ -223,4 +223,4 @@ public class SetBlockAnimationSpeeds implements Packet, ToClientPacket {
         return result;
     }
 
-}
+}

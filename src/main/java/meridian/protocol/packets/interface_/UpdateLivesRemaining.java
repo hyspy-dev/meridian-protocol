@@ -135,4 +135,4 @@ public class UpdateLivesRemaining implements Packet, ToClientPacket {
         return java.util.Objects.hash(remaining);
     }
 
-}
+}

@@ -156,4 +156,4 @@ public class ObjectiveTask {
         return java.util.Objects.hash(taskDescriptionKey, currentCompletion, completionNeeded);
     }
 
-}
+}

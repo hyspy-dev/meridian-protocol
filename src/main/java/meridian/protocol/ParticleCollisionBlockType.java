@@ -27,4 +27,4 @@ public enum ParticleCollisionBlockType {
         }
         throw ProtocolException.invalidEnumValue("ParticleCollisionBlockType", value);
     }
-}
+}

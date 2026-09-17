@@ -26,4 +26,4 @@ public enum CombatTextEntityUIAnimationEventType {
         }
         throw ProtocolException.invalidEnumValue("CombatTextEntityUIAnimationEventType", value);
     }
-}
+}

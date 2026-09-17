@@ -156,4 +156,4 @@ public class TargetedDamage {
         return java.util.Objects.hash(index, damageEffects, next);
     }
 
-}
+}

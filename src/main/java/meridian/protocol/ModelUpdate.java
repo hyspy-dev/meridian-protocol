@@ -144,4 +144,4 @@ public class ModelUpdate extends ComponentUpdate {
         return java.util.Objects.hash(model, entityScale);
     }
 
-}
+}

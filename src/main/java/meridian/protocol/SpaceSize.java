@@ -29,4 +29,4 @@ public enum SpaceSize {
         }
         throw ProtocolException.invalidEnumValue("SpaceSize", value);
     }
-}
+}

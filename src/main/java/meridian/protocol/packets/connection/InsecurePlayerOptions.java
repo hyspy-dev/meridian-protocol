@@ -204,4 +204,4 @@ public class InsecurePlayerOptions implements Packet, ToServerPacket {
         return java.util.Objects.hash(uuid, username, skin);
     }
 
-}
+}

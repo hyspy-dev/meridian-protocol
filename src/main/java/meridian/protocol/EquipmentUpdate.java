@@ -271,4 +271,4 @@ size += VarInt.size(armorIds.length) + armorIdsSize;
         return result;
     }
 
-}
+}

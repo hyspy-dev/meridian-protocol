@@ -327,4 +327,4 @@ size += VarInt.size(particleSystemIds.size()) + particleSystemIdsSize;
         return java.util.Objects.hash(id, color, scale, positionOffset, rotationOffset, particleSystemIds);
     }
 
-}
+}

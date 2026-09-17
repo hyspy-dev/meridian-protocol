@@ -164,4 +164,4 @@ public class Pong implements Packet, ToServerPacket {
         return java.util.Objects.hash(id, time, type, packetQueueSize);
     }
 
-}
+}

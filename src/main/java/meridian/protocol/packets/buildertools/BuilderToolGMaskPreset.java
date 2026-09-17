@@ -218,4 +218,4 @@ public class BuilderToolGMaskPreset implements Packet, ToClientPacket {
         return java.util.Objects.hash(isSave, name, maskData);
     }
 
-}
+}

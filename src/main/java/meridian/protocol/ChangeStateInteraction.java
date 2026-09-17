@@ -555,4 +555,4 @@ size += VarInt.size(stateChanges.size()) + stateChangesSize;
         return result;
     }
 
-}
+}

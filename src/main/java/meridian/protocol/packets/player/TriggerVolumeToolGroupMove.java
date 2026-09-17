@@ -147,4 +147,4 @@ public class TriggerVolumeToolGroupMove implements Packet, ToServerPacket {
         return java.util.Objects.hash(groupId, moveDelta);
     }
 
-}
+}

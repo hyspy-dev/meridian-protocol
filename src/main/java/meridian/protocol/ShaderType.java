@@ -33,4 +33,4 @@ public enum ShaderType {
         }
         throw ProtocolException.invalidEnumValue("ShaderType", value);
     }
-}
+}

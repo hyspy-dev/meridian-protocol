@@ -26,4 +26,4 @@ public enum PrioritySlot {
         }
         throw ProtocolException.invalidEnumValue("PrioritySlot", value);
     }
-}
+}

@@ -88,4 +88,4 @@ public class RespondToHitUpdate extends ComponentUpdate {
         return 0;
     }
 
-}
+}

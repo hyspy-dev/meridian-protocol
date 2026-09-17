@@ -296,4 +296,4 @@ public class ProtocolEmote {
         return java.util.Objects.hash(id, name, animation, icon, isLooping, hideItemInHand);
     }
 
-}
+}

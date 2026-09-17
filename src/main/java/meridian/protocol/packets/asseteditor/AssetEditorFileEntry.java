@@ -143,4 +143,4 @@ public class AssetEditorFileEntry {
         return java.util.Objects.hash(path, isDirectory);
     }
 
-}
+}

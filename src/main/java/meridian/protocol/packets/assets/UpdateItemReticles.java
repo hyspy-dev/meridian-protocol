@@ -225,4 +225,4 @@ size += VarInt.size(itemReticleConfigs.size()) + itemReticleConfigsSize;
         return java.util.Objects.hash(type, maxId, itemReticleConfigs);
     }
 
-}
+}

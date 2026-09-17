@@ -134,4 +134,4 @@ public class HalfFloatPosition {
         return java.util.Objects.hash(x, y, z);
     }
 
-}
+}

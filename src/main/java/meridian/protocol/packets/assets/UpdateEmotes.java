@@ -225,4 +225,4 @@ size += VarInt.size(emotes.size()) + emotesSize;
         return java.util.Objects.hash(type, maxId, emotes);
     }
 
-}
+}

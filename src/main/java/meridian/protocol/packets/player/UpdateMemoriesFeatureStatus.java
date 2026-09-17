@@ -122,4 +122,4 @@ public class UpdateMemoriesFeatureStatus implements Packet, ToClientPacket {
         return java.util.Objects.hash(isFeatureUnlocked);
     }
 
-}
+}

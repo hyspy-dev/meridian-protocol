@@ -213,4 +213,4 @@ public class UVMotion {
         return java.util.Objects.hash(texture, addRandomUVOffset, speedX, speedY, scale, strength, strengthCurveType);
     }
 
-}
+}

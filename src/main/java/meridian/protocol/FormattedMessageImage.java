@@ -145,4 +145,4 @@ public class FormattedMessageImage {
         return java.util.Objects.hash(filePath, width, height);
     }
 
-}
+}

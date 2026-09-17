@@ -174,4 +174,4 @@ public class SetCreativeItem implements Packet, ToServerPacket {
         return java.util.Objects.hash(inventorySectionId, slotId, item, override);
     }
 
-}
+}

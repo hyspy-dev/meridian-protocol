@@ -18,9 +18,9 @@ public class AssetEditorFetchJsonAssetWithParentsReply implements Packet, ToClie
     public static final int PACKET_ID = 313;
     public static final boolean IS_COMPRESSED = true;
     public static final int NULLABLE_BIT_FIELD_SIZE = 1;
-    public static final int FIXED_BLOCK_SIZE = 5;
+    public static final int FIXED_BLOCK_SIZE = 6;
     public static final int VARIABLE_FIELD_COUNT = 1;
-    public static final int VARIABLE_BLOCK_START = 5;
+    public static final int VARIABLE_BLOCK_START = 6;
     public static final int MAX_SIZE = 1677721600;
 
     @Override
@@ -35,18 +35,21 @@ public class AssetEditorFetchJsonAssetWithParentsReply implements Packet, ToClie
 
     public int token;
     @Nullable public java.util.Map<AssetPath, String> assets;
+    public boolean isReadOnly;
 
     public AssetEditorFetchJsonAssetWithParentsReply() {
     }
 
-    public AssetEditorFetchJsonAssetWithParentsReply(int token, @Nullable java.util.Map<AssetPath, String> assets) {
+    public AssetEditorFetchJsonAssetWithParentsReply(int token, @Nullable java.util.Map<AssetPath, String> assets, boolean isReadOnly) {
         this.token = token;
         this.assets = assets;
+        this.isReadOnly = isReadOnly;
     }
 
     public AssetEditorFetchJsonAssetWithParentsReply(@Nonnull AssetEditorFetchJsonAssetWithParentsReply other) {
         this.token = other.token;
         this.assets = other.assets;
+        this.isReadOnly = other.isReadOnly;
     }
 
     /**
@@ -55,7 +58,7 @@ public class AssetEditorFetchJsonAssetWithParentsReply implements Packet, ToClie
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("AssetEditorFetchJsonAssetWithParentsReply", offset, (int) mem.byteSize());
-        long needed = (long) offset + 5;
+        long needed = (long) offset + 6;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("AssetEditorFetchJsonAssetWithParentsReply", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -76,7 +79,7 @@ public class AssetEditorFetchJsonAssetWithParentsReply implements Packet, ToClie
     public static java.util.Map<AssetPath, String> getAssets(MemorySegment mem, int offset) {
         if (!hasAssets(mem, offset)) return null;
         var walkCursor = new ReadCursor();
-        var off = offset + 5;
+        var off = offset + 6;
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("Assets");
         var len = (int) packed;
@@ -96,6 +99,14 @@ public class AssetEditorFetchJsonAssetWithParentsReply implements Packet, ToClie
             }
         }
         return data;
+    }
+    
+    public static boolean getIsReadOnly(MemorySegment mem) {
+        return getIsReadOnly(mem, 0);
+    }
+    
+    public static boolean getIsReadOnly(MemorySegment mem, int offset) {
+        return mem.get(PacketIO.PROTO_BOOL, offset + 5);
     }
     
     public static boolean hasAssets(MemorySegment mem, int offset) {
@@ -121,7 +132,7 @@ public class AssetEditorFetchJsonAssetWithParentsReply implements Packet, ToClie
     public static AssetEditorFetchJsonAssetWithParentsReply toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
-        var varBase = offset + 5;
+        var varBase = offset + 6;
         var varPos = 0;
         var walkCursor = cursor != null ? cursor : new ReadCursor();
         java.util.Map<AssetPath, String> v1 = null;
@@ -149,7 +160,8 @@ public class AssetEditorFetchJsonAssetWithParentsReply implements Packet, ToClie
         }
         var result = new AssetEditorFetchJsonAssetWithParentsReply(
             mem.get(PacketIO.PROTO_INT, offset + 1),
-            v1
+            v1,
+            mem.get(PacketIO.PROTO_BOOL, offset + 5)
         );
         if (cursor != null) cursor.position = varBase + varPos;
         return result;
@@ -162,7 +174,8 @@ public class AssetEditorFetchJsonAssetWithParentsReply implements Packet, ToClie
         mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         
         mem.set(PacketIO.PROTO_INT, offset + 1, this.token);
-        var varOffset = offset + 5;
+        mem.set(PacketIO.PROTO_BOOL, offset + 5, this.isReadOnly);
+        var varOffset = offset + 6;
         if (this.assets != null) {
             
             if (this.assets.size() > 4096000) throw ProtocolException.dictionaryTooLarge("Assets", assets.size(), 4096000);
@@ -176,7 +189,7 @@ public class AssetEditorFetchJsonAssetWithParentsReply implements Packet, ToClie
        return varOffset - offset;
     }
     public int computeSize() {
-        int size = 5;
+        int size = 6;
         if (assets != null) {
         int assetsSize = 0;
 for (var kvp : assets.entrySet()) assetsSize += kvp.getKey().computeSize() + PacketIO.stringSize(kvp.getValue());
@@ -190,6 +203,7 @@ size += VarInt.size(assets.size()) + assetsSize;
         AssetEditorFetchJsonAssetWithParentsReply copy = new AssetEditorFetchJsonAssetWithParentsReply();
         copy.token = this.token;
         copy.assets = this.assets != null ? new java.util.HashMap<>(this.assets) : null;
+        copy.isReadOnly = this.isReadOnly;
         return copy;
     }
 
@@ -198,12 +212,12 @@ size += VarInt.size(assets.size()) + assetsSize;
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof AssetEditorFetchJsonAssetWithParentsReply other)) return false;
-        return this.token == other.token && java.util.Objects.equals(this.assets, other.assets);
+        return this.token == other.token && java.util.Objects.equals(this.assets, other.assets) && this.isReadOnly == other.isReadOnly;
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(token, assets);
+        return java.util.Objects.hash(token, assets, isReadOnly);
     }
 
-}
+}

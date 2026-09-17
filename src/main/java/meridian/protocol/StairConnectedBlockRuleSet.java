@@ -201,4 +201,4 @@ public class StairConnectedBlockRuleSet extends ConnectedBlockRuleSet {
         return java.util.Objects.hash(straightBlockId, cornerLeftBlockId, cornerRightBlockId, invertedCornerLeftBlockId, invertedCornerRightBlockId, materialName);
     }
 
-}
+}

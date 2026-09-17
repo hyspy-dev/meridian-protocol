@@ -120,4 +120,4 @@ public class ResistanceModifier {
         return java.util.Objects.hash(calculationType, amount);
     }
 
-}
+}

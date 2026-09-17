@@ -122,4 +122,4 @@ public class RequestFlyCameraMode implements Packet, ToServerPacket {
         return java.util.Objects.hash(entering);
     }
 
-}
+}

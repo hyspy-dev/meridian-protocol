@@ -136,4 +136,4 @@ public class BuilderToolRotateClipboard implements Packet, ToServerPacket {
         return java.util.Objects.hash(angle, axis);
     }
 
-}
+}

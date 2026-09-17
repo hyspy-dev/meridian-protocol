@@ -122,4 +122,4 @@ public class BuilderToolsSetSoundSet implements Packet, ToClientPacket {
         return java.util.Objects.hash(soundSetIndex);
     }
 
-}
+}

@@ -469,4 +469,4 @@ public class ClearEntityEffectInteraction extends SimpleInteraction {
         return result;
     }
 
-}
+}

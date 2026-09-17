@@ -223,4 +223,4 @@ size += VarInt.size(shapeNameToBlockId.size()) + shapeNameToBlockIdSize;
         return java.util.Objects.hash(ruleSetId, shapeNameToBlockId);
     }
 
-}
+}
