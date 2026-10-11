@@ -11,25 +11,25 @@ import meridian.protocol.io.ReadCursor;
 import meridian.protocol.io.VarInt;
 
 
-public class RemoveDataContextCollectionItemServersideUIProperty extends ServersideUICommand {
+public class RemoveCollectionItemServersideUICommand extends ServersideUICommand {
     public static final int NULLABLE_BIT_FIELD_SIZE = 0;
     public static final int FIXED_BLOCK_SIZE = 4;
     public static final int VARIABLE_FIELD_COUNT = 1;
     public static final int VARIABLE_BLOCK_START = 4;
-    public static final int MAX_SIZE = 16384009;
+    public static final int MAX_SIZE = 521;
 
     @Nonnull public String property = "";
     public int index;
 
-    public RemoveDataContextCollectionItemServersideUIProperty() {
+    public RemoveCollectionItemServersideUICommand() {
     }
 
-    public RemoveDataContextCollectionItemServersideUIProperty(@Nonnull String property, int index) {
+    public RemoveCollectionItemServersideUICommand(@Nonnull String property, int index) {
         this.property = property;
         this.index = index;
     }
 
-    public RemoveDataContextCollectionItemServersideUIProperty(@Nonnull RemoveDataContextCollectionItemServersideUIProperty other) {
+    public RemoveCollectionItemServersideUICommand(@Nonnull RemoveCollectionItemServersideUICommand other) {
         this.property = other.property;
         this.index = other.index;
     }
@@ -39,9 +39,9 @@ public class RemoveDataContextCollectionItemServersideUIProperty extends Servers
      * check, so call this once before reading fields out of an untrusted segment.
      */
     public static void requireBounds(MemorySegment mem, int offset) {
-        if (offset < 0) throw ProtocolException.invalidOffset("RemoveDataContextCollectionItemServersideUIProperty", offset, (int) mem.byteSize());
+        if (offset < 0) throw ProtocolException.invalidOffset("RemoveCollectionItemServersideUICommand", offset, (int) mem.byteSize());
         long needed = (long) offset + 4;
-        if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("RemoveDataContextCollectionItemServersideUIProperty", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
+        if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("RemoveCollectionItemServersideUICommand", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
     public static String getProperty(MemorySegment mem) {
@@ -49,7 +49,7 @@ public class RemoveDataContextCollectionItemServersideUIProperty extends Servers
     }
     
     public static String getProperty(MemorySegment mem, int offset) {
-        return PacketIO.readVarString("Property", mem, offset + 4, 4096000);
+        return PacketIO.readVarString("Property", mem, offset + 4, 128);
     }
     
     public static int getIndex(MemorySegment mem) {
@@ -57,27 +57,29 @@ public class RemoveDataContextCollectionItemServersideUIProperty extends Servers
     }
     
     public static int getIndex(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_INT, offset + 0);
+        var value = mem.get(PacketIO.PROTO_INT, offset + 0);
+        if (value < 0) throw ProtocolException.valueBelowMinimum("Index", value, 0);
+        return value;
     }
     
     
     
     
     
-    public static RemoveDataContextCollectionItemServersideUIProperty toObject(MemorySegment mem) {
+    public static RemoveCollectionItemServersideUICommand toObject(MemorySegment mem) {
         return toObject(mem, 0, null);
     }
     
-    public static RemoveDataContextCollectionItemServersideUIProperty toObject(MemorySegment mem, int offset) {
+    public static RemoveCollectionItemServersideUICommand toObject(MemorySegment mem, int offset) {
         return toObject(mem, offset, null);
     }
     
     /**
-     * Decodes one RemoveDataContextCollectionItemServersideUIProperty and reports the end of its encoding through the cursor.
+     * Decodes one RemoveCollectionItemServersideUICommand and reports the end of its encoding through the cursor.
      * The variable block is decoded in field order against a running position, and each
      * offset slot must name that position, so the fields decoded are the bytes walked.
      */
-    public static RemoveDataContextCollectionItemServersideUIProperty toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
+    public static RemoveCollectionItemServersideUICommand toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
         var varBase = offset + 4;
@@ -86,12 +88,15 @@ public class RemoveDataContextCollectionItemServersideUIProperty extends Servers
         {
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
-            v0 = PacketIO.readVarString("Property", mem, off, 0, 4096000, sp);
+            v0 = PacketIO.readVarString("Property", mem, off, 0, 128, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         }
-        var result = new RemoveDataContextCollectionItemServersideUIProperty(
+        
+        int v1 = mem.get(PacketIO.PROTO_INT, offset + 0);
+        if (v1 < 0) throw ProtocolException.valueBelowMinimum("Index", v1, 0);
+        var result = new RemoveCollectionItemServersideUICommand(
             v0,
-            mem.get(PacketIO.PROTO_INT, offset + 0)
+            v1
         );
         if (cursor != null) cursor.position = varBase + varPos;
         return result;
@@ -99,9 +104,9 @@ public class RemoveDataContextCollectionItemServersideUIProperty extends Servers
     @Override
     public int serialize(@Nonnull MemorySegment mem, int offset) {
         
-        mem.set(PacketIO.PROTO_INT, offset + 0, this.index);
+        if (this.index < 0) throw ProtocolException.valueBelowMinimum("Index", this.index, 0); mem.set(PacketIO.PROTO_INT, offset + 0, this.index);
         var varOffset = offset + 4;
-        varOffset += PacketIO.writeVarString(mem, varOffset, this.property, 4096000);
+        varOffset += PacketIO.writeVarString(mem, varOffset, this.property, 128);
     
        return varOffset - offset;
     }
@@ -113,8 +118,8 @@ public class RemoveDataContextCollectionItemServersideUIProperty extends Servers
         return size;
     }
 
-    public RemoveDataContextCollectionItemServersideUIProperty clone() {
-        RemoveDataContextCollectionItemServersideUIProperty copy = new RemoveDataContextCollectionItemServersideUIProperty();
+    public RemoveCollectionItemServersideUICommand clone() {
+        RemoveCollectionItemServersideUICommand copy = new RemoveCollectionItemServersideUICommand();
         copy.property = this.property;
         copy.index = this.index;
         return copy;
@@ -124,7 +129,7 @@ public class RemoveDataContextCollectionItemServersideUIProperty extends Servers
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof RemoveDataContextCollectionItemServersideUIProperty other)) return false;
+        if (!(obj instanceof RemoveCollectionItemServersideUICommand other)) return false;
         return java.util.Objects.equals(this.property, other.property) && this.index == other.index;
     }
 

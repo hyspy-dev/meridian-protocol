@@ -36,20 +36,23 @@ public class UpdateBossBar implements Packet, ToClientPacket {
     public int entityNetworkId;
     @Nullable public FormattedMessage name;
     public boolean hide;
+    public boolean hardMode;
 
     public UpdateBossBar() {
     }
 
-    public UpdateBossBar(int entityNetworkId, @Nullable FormattedMessage name, boolean hide) {
+    public UpdateBossBar(int entityNetworkId, @Nullable FormattedMessage name, boolean hide, boolean hardMode) {
         this.entityNetworkId = entityNetworkId;
         this.name = name;
         this.hide = hide;
+        this.hardMode = hardMode;
     }
 
     public UpdateBossBar(@Nonnull UpdateBossBar other) {
         this.entityNetworkId = other.entityNetworkId;
         this.name = other.name;
         this.hide = other.hide;
+        this.hardMode = other.hardMode;
     }
 
     /**
@@ -85,7 +88,15 @@ public class UpdateBossBar implements Packet, ToClientPacket {
     }
     
     public static boolean getHide(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_BOOL, offset + 5);
+        return (mem.get(PacketIO.PROTO_BYTE, offset + 5) & 0x01) != 0;
+    }
+    
+    public static boolean getHardMode(MemorySegment mem) {
+        return getHardMode(mem, 0);
+    }
+    
+    public static boolean getHardMode(MemorySegment mem, int offset) {
+        return (mem.get(PacketIO.PROTO_BYTE, offset + 5) & 0x02) != 0;
     }
     
     public static boolean hasName(MemorySegment mem, int offset) {
@@ -122,7 +133,8 @@ public class UpdateBossBar implements Packet, ToClientPacket {
         var result = new UpdateBossBar(
             mem.get(PacketIO.PROTO_INT, offset + 1),
             v1,
-            mem.get(PacketIO.PROTO_BOOL, offset + 5)
+            (mem.get(PacketIO.PROTO_BYTE, offset + 5) & 0x01) != 0,
+            (mem.get(PacketIO.PROTO_BYTE, offset + 5) & 0x02) != 0
         );
         if (cursor != null) cursor.position = varBase + varPos;
         return result;
@@ -135,7 +147,10 @@ public class UpdateBossBar implements Packet, ToClientPacket {
         mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         
         mem.set(PacketIO.PROTO_INT, offset + 1, this.entityNetworkId);
-        mem.set(PacketIO.PROTO_BOOL, offset + 5, this.hide);
+        byte boolBits0_0 = 0;
+        if (this.hide) boolBits0_0 |= 0x01;
+        if (this.hardMode) boolBits0_0 |= 0x02;
+        mem.set(PacketIO.PROTO_BYTE, offset + 5 + 0, boolBits0_0);
         var varOffset = offset + 6;
         if (this.name != null) {
             
@@ -156,6 +171,7 @@ public class UpdateBossBar implements Packet, ToClientPacket {
         copy.entityNetworkId = this.entityNetworkId;
         copy.name = this.name != null ? this.name.clone() : null;
         copy.hide = this.hide;
+        copy.hardMode = this.hardMode;
         return copy;
     }
 
@@ -164,12 +180,12 @@ public class UpdateBossBar implements Packet, ToClientPacket {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof UpdateBossBar other)) return false;
-        return this.entityNetworkId == other.entityNetworkId && java.util.Objects.equals(this.name, other.name) && this.hide == other.hide;
+        return this.entityNetworkId == other.entityNetworkId && java.util.Objects.equals(this.name, other.name) && this.hide == other.hide && this.hardMode == other.hardMode;
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(entityNetworkId, name, hide);
+        return java.util.Objects.hash(entityNetworkId, name, hide, hardMode);
     }
 
 }

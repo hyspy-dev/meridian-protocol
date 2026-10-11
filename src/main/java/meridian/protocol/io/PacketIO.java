@@ -797,7 +797,7 @@ public final class PacketIO {
 
         int written = serializeInto(packet, out, serializedSize);
         out.setIntLE(lengthIndex, written);
-        statsRecorder.recordSend(id, written, 0);
+        statsRecorder.recordSend(id, written, written);
     }
 
     /**
@@ -866,7 +866,6 @@ public final class PacketIO {
     public static Packet readFramedPacketWithInfo(@Nonnull ByteBuf in, int payloadLength, @Nonnull ByteBufAllocator allocator, @Nonnull PacketRegistry.PacketInfo info, @Nonnull PacketStatsRecorder statsRecorder) {
         ByteBuf payload;
         int uncompressedSize;
-        int compressedSize = 0;
 
         if (info.compressed() && payloadLength > 0) {
             try {
@@ -877,7 +876,6 @@ public final class PacketIO {
             }
             in.skipBytes(payloadLength);
             uncompressedSize = payload.readableBytes();
-            compressedSize = payloadLength;
         } else if (payloadLength > 0) {
             payload = in.readRetainedSlice(payloadLength);
             uncompressedSize = payloadLength;
@@ -888,7 +886,7 @@ public final class PacketIO {
 
         try {
             var packet = info.toObject().deserialize(asSegment(payload, uncompressedSize), 0);
-            statsRecorder.recordReceive(info.id(), uncompressedSize, compressedSize);
+            statsRecorder.recordReceive(info.id(), uncompressedSize, payloadLength);
             return packet;
         } finally {
             if (payloadLength > 0) {
@@ -956,7 +954,7 @@ public final class PacketIO {
             }
 
             out.set(PROTO_INT, offset, size);
-            statsRecorder.recordSend(packetInfo.id(), size, 0);
+            statsRecorder.recordSend(packetInfo.id(), size, size);
             return size + PACKET_HEADER_SIZE;
         }
     }
@@ -978,7 +976,6 @@ public final class PacketIO {
     @Nonnull
     public static Packet readFramedPacketWithInfo(@Nonnull MemorySegment decompressionContext, @Nonnull MemorySegment in, int offset, int payloadLength, @Nonnull PacketRegistry.PacketInfo info, @Nonnull PacketStatsRecorder statsRecorder) {
         int uncompressedSize;
-        int compressedSize = 0;
 
         MemorySegment payload;
         Arena arena = null;
@@ -992,7 +989,6 @@ public final class PacketIO {
                 throw e;
             }
             uncompressedSize = (int) payload.byteSize();
-            compressedSize = payloadLength;
             offset = 0;
         } else {
             // Slice to exactly [offset, offset + payloadLength) so generated readers bound against
@@ -1013,7 +1009,7 @@ public final class PacketIO {
 
         try {
             var packet = info.toObject().deserialize(payload, offset);
-            statsRecorder.recordReceive(info.id(), uncompressedSize, compressedSize);
+            statsRecorder.recordReceive(info.id(), uncompressedSize, payloadLength);
             return packet;
         } finally {
             if (arena != null) {

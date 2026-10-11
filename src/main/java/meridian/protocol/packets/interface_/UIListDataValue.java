@@ -16,7 +16,7 @@ public class UIListDataValue extends UIDataValue {
     public static final int FIXED_BLOCK_SIZE = 0;
     public static final int VARIABLE_FIELD_COUNT = 2;
     public static final int VARIABLE_BLOCK_START = 8;
-    public static final int MAX_SIZE = 1677721600;
+    public static final int MAX_SIZE = 1049614;
 
     @Nonnull public String itemTypeName = "";
     @Nonnull public UIDataValue[] items = new UIDataValue[0];
@@ -49,7 +49,7 @@ public class UIListDataValue extends UIDataValue {
     }
     
     public static String getItemTypeName(MemorySegment mem, int offset) {
-        return PacketIO.readVarString("ItemTypeName", mem, offset + getValidatedOffset(mem, offset, 0, 8, "ItemTypeName"), 4096000);
+        return PacketIO.readVarString("ItemTypeName", mem, offset + getValidatedOffset(mem, offset, 0, 8, "ItemTypeName"), 255);
     }
     
     public static UIDataValue[] getItems(MemorySegment mem) {
@@ -62,7 +62,7 @@ public class UIListDataValue extends UIDataValue {
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("Items");
         var len = (int) packed;
-        if (len > 4096000) throw ProtocolException.arrayTooLong("Items", len, 4096000);
+        if (len > 1024) throw ProtocolException.arrayTooLong("Items", len, 1024);
         var lenOffset = (int) (packed >>> 32);
         if (off + lenOffset + len > mem.byteSize()) throw ProtocolException.bufferTooSmall("Items", (int) java.lang.Math.min(off + lenOffset + len, Integer.MAX_VALUE), (int) mem.byteSize());
         off += lenOffset;
@@ -117,7 +117,7 @@ public class UIListDataValue extends UIDataValue {
         {
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
-            v0 = PacketIO.readVarString("ItemTypeName", mem, off, 0, 4096000, sp);
+            v0 = PacketIO.readVarString("ItemTypeName", mem, off, 0, 255, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         }
         
@@ -128,7 +128,7 @@ public class UIListDataValue extends UIDataValue {
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("Items");
             var len = (int) packed;
-            if (len > 4096000) throw ProtocolException.arrayTooLong("Items", len, 4096000);
+            if (len > 1024) throw ProtocolException.arrayTooLong("Items", len, 1024);
             var lenOffset = (int) (packed >>> 32);
             if (off + lenOffset + len > mem.byteSize()) throw ProtocolException.bufferTooSmall("Items", (int) java.lang.Math.min(off + lenOffset + len, Integer.MAX_VALUE), (int) mem.byteSize());
             off += lenOffset;
@@ -152,9 +152,9 @@ public class UIListDataValue extends UIDataValue {
         
         var varOffset = offset + 8;
         mem.set(PacketIO.PROTO_INT, offset + 0, varOffset - offset - 8);
-        varOffset += PacketIO.writeVarString(mem, varOffset, this.itemTypeName, 4096000);
+        varOffset += PacketIO.writeVarString(mem, varOffset, this.itemTypeName, 255);
         mem.set(PacketIO.PROTO_INT, offset + 4, varOffset - offset - 8);
-        if (items.length > 4096000) throw ProtocolException.arrayTooLong("Items", items.length, 4096000);
+        if (items.length > 1024) throw ProtocolException.arrayTooLong("Items", items.length, 1024);
         varOffset += VarInt.set(mem, varOffset, this.items.length);
         
         var itemsValueOffset = 0;

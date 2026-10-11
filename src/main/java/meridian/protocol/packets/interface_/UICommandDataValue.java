@@ -16,7 +16,7 @@ public class UICommandDataValue extends UIDataValue {
     public static final int FIXED_BLOCK_SIZE = 0;
     public static final int VARIABLE_FIELD_COUNT = 1;
     public static final int VARIABLE_BLOCK_START = 0;
-    public static final int MAX_SIZE = 16384005;
+    public static final int MAX_SIZE = 517;
 
     @Nonnull public String commandId = "";
 
@@ -46,7 +46,7 @@ public class UICommandDataValue extends UIDataValue {
     }
     
     public static String getCommandId(MemorySegment mem, int offset) {
-        return PacketIO.readVarString("CommandId", mem, offset + 0, 4096000);
+        return PacketIO.readVarString("CommandId", mem, offset + 0, 128);
     }
     
     
@@ -75,7 +75,7 @@ public class UICommandDataValue extends UIDataValue {
         {
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
-            v0 = PacketIO.readVarString("CommandId", mem, off, 0, 4096000, sp);
+            v0 = PacketIO.readVarString("CommandId", mem, off, 0, 128, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         }
         var result = new UICommandDataValue(
@@ -89,7 +89,7 @@ public class UICommandDataValue extends UIDataValue {
         
         
         var varOffset = offset + 0;
-        varOffset += PacketIO.writeVarString(mem, varOffset, this.commandId, 4096000);
+        varOffset += PacketIO.writeVarString(mem, varOffset, this.commandId, 128);
     
        return varOffset - offset;
     }

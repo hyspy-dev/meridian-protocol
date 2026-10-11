@@ -18,10 +18,10 @@ public class WorldGameplayConfig implements Packet, ToClientPacket {
     public static final int PACKET_ID = 185;
     public static final boolean IS_COMPRESSED = false;
     public static final int NULLABLE_BIT_FIELD_SIZE = 0;
-    public static final int FIXED_BLOCK_SIZE = 8;
-    public static final int VARIABLE_FIELD_COUNT = 0;
-    public static final int VARIABLE_BLOCK_START = 8;
-    public static final int MAX_SIZE = 8;
+    public static final int FIXED_BLOCK_SIZE = 2;
+    public static final int VARIABLE_FIELD_COUNT = 1;
+    public static final int VARIABLE_BLOCK_START = 2;
+    public static final int MAX_SIZE = 16384014;
 
     @Override
     public int getId() {
@@ -58,7 +58,7 @@ public class WorldGameplayConfig implements Packet, ToClientPacket {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("WorldGameplayConfig", offset, (int) mem.byteSize());
-        long needed = (long) offset + 8;
+        long needed = (long) offset + 2;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("WorldGameplayConfig", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -67,7 +67,7 @@ public class WorldGameplayConfig implements Packet, ToClientPacket {
     }
     
     public static WorldConfig getWorldConfig(MemorySegment mem, int offset) {
-        return WorldConfig.toObject(mem, offset + 0);
+        return WorldConfig.toObject(mem, offset + 2);
     }
     
     public static CombatConfig getCombatConfig(MemorySegment mem) {
@@ -75,7 +75,7 @@ public class WorldGameplayConfig implements Packet, ToClientPacket {
     }
     
     public static CombatConfig getCombatConfig(MemorySegment mem, int offset) {
-        return CombatConfig.toObject(mem, offset + 6);
+        return CombatConfig.toObject(mem, offset + 0);
     }
     
     public static PlayerConfig getPlayerConfig(MemorySegment mem) {
@@ -83,7 +83,7 @@ public class WorldGameplayConfig implements Packet, ToClientPacket {
     }
     
     public static PlayerConfig getPlayerConfig(MemorySegment mem, int offset) {
-        return PlayerConfig.toObject(mem, offset + 7);
+        return PlayerConfig.toObject(mem, offset + 1);
     }
     
     
@@ -106,27 +106,37 @@ public class WorldGameplayConfig implements Packet, ToClientPacket {
     public static WorldGameplayConfig toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
+        var varBase = offset + 2;
+        var varPos = 0;
+        var walkCursor = cursor != null ? cursor : new ReadCursor();
+        WorldConfig v0;
+        {
+            v0 = WorldConfig.toObject(mem, varBase + varPos, walkCursor);
+            varPos = walkCursor.position - varBase;
+        }
         var result = new WorldGameplayConfig(
-            WorldConfig.toObject(mem, offset + 0),
-            CombatConfig.toObject(mem, offset + 6),
-            PlayerConfig.toObject(mem, offset + 7)
+            v0,
+            CombatConfig.toObject(mem, offset + 0),
+            PlayerConfig.toObject(mem, offset + 1)
         );
-        if (cursor != null) cursor.position = offset + 8;
+        if (cursor != null) cursor.position = varBase + varPos;
         return result;
     }
     @Override
     public int serialize(@Nonnull MemorySegment mem, int offset) {
         
-        this.worldConfig.serialize(mem, offset + 0);
-        this.combatConfig.serialize(mem, offset + 6);
-        this.playerConfig.serialize(mem, offset + 7);
-        
-        
+        this.combatConfig.serialize(mem, offset + 0);
+        this.playerConfig.serialize(mem, offset + 1);
+        var varOffset = offset + 2;
+        varOffset += this.worldConfig.serialize(mem, varOffset);
     
-       return 8;
+       return varOffset - offset;
     }
     public int computeSize() {
-        return 8;
+        int size = 2;
+        size += worldConfig.computeSize();
+
+        return size;
     }
 
     public WorldGameplayConfig clone() {

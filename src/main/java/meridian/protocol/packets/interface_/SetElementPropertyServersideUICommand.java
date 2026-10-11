@@ -16,7 +16,7 @@ public class SetElementPropertyServersideUICommand extends ServersideUICommand {
     public static final int FIXED_BLOCK_SIZE = 0;
     public static final int VARIABLE_FIELD_COUNT = 3;
     public static final int VARIABLE_BLOCK_START = 12;
-    public static final int MAX_SIZE = 32769046;
+    public static final int MAX_SIZE = 3606;
 
     @Nonnull public String selector = "";
     @Nonnull public String propertyName = "";
@@ -52,7 +52,7 @@ public class SetElementPropertyServersideUICommand extends ServersideUICommand {
     }
     
     public static String getSelector(MemorySegment mem, int offset) {
-        return PacketIO.readVarString("Selector", mem, offset + getValidatedOffset(mem, offset, 0, 12, "Selector"), 4096000);
+        return PacketIO.readVarString("Selector", mem, offset + getValidatedOffset(mem, offset, 0, 12, "Selector"), 512);
     }
     
     public static String getPropertyName(MemorySegment mem) {
@@ -60,7 +60,7 @@ public class SetElementPropertyServersideUICommand extends ServersideUICommand {
     }
     
     public static String getPropertyName(MemorySegment mem, int offset) {
-        return PacketIO.readVarString("PropertyName", mem, offset + getValidatedOffset(mem, offset, 4, 12, "PropertyName"), 4096000);
+        return PacketIO.readVarString("PropertyName", mem, offset + getValidatedOffset(mem, offset, 4, 12, "PropertyName"), 128);
     }
     
     public static UIDataValue getValue(MemorySegment mem) {
@@ -114,7 +114,7 @@ public class SetElementPropertyServersideUICommand extends ServersideUICommand {
         {
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
-            v0 = PacketIO.readVarString("Selector", mem, off, 0, 4096000, sp);
+            v0 = PacketIO.readVarString("Selector", mem, off, 0, 512, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         }
         
@@ -123,7 +123,7 @@ public class SetElementPropertyServersideUICommand extends ServersideUICommand {
         {
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
-            v1 = PacketIO.readVarString("PropertyName", mem, off, 0, 4096000, sp);
+            v1 = PacketIO.readVarString("PropertyName", mem, off, 0, 128, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         }
         
@@ -147,9 +147,9 @@ public class SetElementPropertyServersideUICommand extends ServersideUICommand {
         
         var varOffset = offset + 12;
         mem.set(PacketIO.PROTO_INT, offset + 0, varOffset - offset - 12);
-        varOffset += PacketIO.writeVarString(mem, varOffset, this.selector, 4096000);
+        varOffset += PacketIO.writeVarString(mem, varOffset, this.selector, 512);
         mem.set(PacketIO.PROTO_INT, offset + 4, varOffset - offset - 12);
-        varOffset += PacketIO.writeVarString(mem, varOffset, this.propertyName, 4096000);
+        varOffset += PacketIO.writeVarString(mem, varOffset, this.propertyName, 128);
         mem.set(PacketIO.PROTO_INT, offset + 8, varOffset - offset - 12);
         varOffset += this.value.serializeWithTypeId(mem, varOffset);
     

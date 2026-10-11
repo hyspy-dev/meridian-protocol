@@ -49,7 +49,7 @@ public class UIObjectDataValue extends UIDataValue {
     }
     
     public static String getTypeName(MemorySegment mem, int offset) {
-        return PacketIO.readVarString("TypeName", mem, offset + getValidatedOffset(mem, offset, 0, 8, "TypeName"), 4096000);
+        return PacketIO.readVarString("TypeName", mem, offset + getValidatedOffset(mem, offset, 0, 8, "TypeName"), 255);
     }
     
     public static java.util.Map<String, UIDataValue> getProperties(MemorySegment mem) {
@@ -62,7 +62,7 @@ public class UIObjectDataValue extends UIDataValue {
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("Properties");
         var len = (int) packed;
-        if (len > 4096000) throw ProtocolException.dictionaryTooLarge("Properties", len, 4096000);
+        if (len > 256) throw ProtocolException.dictionaryTooLarge("Properties", len, 256);
         
         off += (int) (packed >>> 32);
         if (off + (long) len * 2 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Properties", (int) java.lang.Math.min(off + (long) len * 2, Integer.MAX_VALUE), (int) mem.byteSize());
@@ -123,7 +123,7 @@ public class UIObjectDataValue extends UIDataValue {
         {
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
-            v0 = PacketIO.readVarString("TypeName", mem, off, 0, 4096000, sp);
+            v0 = PacketIO.readVarString("TypeName", mem, off, 0, 255, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         }
         
@@ -134,7 +134,7 @@ public class UIObjectDataValue extends UIDataValue {
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("Properties");
             var len = (int) packed;
-            if (len > 4096000) throw ProtocolException.dictionaryTooLarge("Properties", len, 4096000);
+            if (len > 256) throw ProtocolException.dictionaryTooLarge("Properties", len, 256);
             
             off += (int) (packed >>> 32);
             if (off + (long) len * 2 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Properties", (int) java.lang.Math.min(off + (long) len * 2, Integer.MAX_VALUE), (int) mem.byteSize());
@@ -164,9 +164,9 @@ public class UIObjectDataValue extends UIDataValue {
         
         var varOffset = offset + 8;
         mem.set(PacketIO.PROTO_INT, offset + 0, varOffset - offset - 8);
-        varOffset += PacketIO.writeVarString(mem, varOffset, this.typeName, 4096000);
+        varOffset += PacketIO.writeVarString(mem, varOffset, this.typeName, 255);
         mem.set(PacketIO.PROTO_INT, offset + 4, varOffset - offset - 8);
-        if (this.properties.size() > 4096000) throw ProtocolException.dictionaryTooLarge("Properties", properties.size(), 4096000);
+        if (this.properties.size() > 256) throw ProtocolException.dictionaryTooLarge("Properties", properties.size(), 256);
         varOffset += VarInt.set(mem, varOffset, this.properties.size());
         for (var e : this.properties.entrySet()) {
             varOffset += PacketIO.writeVarString(mem, varOffset, e.getKey(), 4096000);

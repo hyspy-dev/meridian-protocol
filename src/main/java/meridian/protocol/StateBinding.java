@@ -16,7 +16,7 @@ public class StateBinding {
     public static final int FIXED_BLOCK_SIZE = 5;
     public static final int VARIABLE_FIELD_COUNT = 1;
     public static final int VARIABLE_BLOCK_START = 5;
-    public static final int MAX_SIZE = 53248010;
+    public static final int MAX_SIZE = 163840010;
 
     public int audioStateIndex;
     @Nullable public StateDelta[] deltas;
@@ -66,11 +66,11 @@ public class StateBinding {
         var len = (int) packed;
         if (len > 4096000) throw ProtocolException.arrayTooLong("Deltas", len, 4096000);
         var lenOffset = (int) (packed >>> 32);
-        if (off + lenOffset + (long) len * 13 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Deltas", (int) java.lang.Math.min(off + lenOffset + (long) len * 13, Integer.MAX_VALUE), (int) mem.byteSize());
+        if (off + lenOffset + (long) len * 40 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Deltas", (int) java.lang.Math.min(off + lenOffset + (long) len * 40, Integer.MAX_VALUE), (int) mem.byteSize());
         off += lenOffset;
         var data = new StateDelta[len];
         for (var i = 0; i < len; i++) {
-            data[i] = StateDelta.toObject(mem, off + i * 13);
+            data[i] = StateDelta.toObject(mem, off + i * 40);
         }
         return data;
     }
@@ -108,13 +108,13 @@ public class StateBinding {
             var len = (int) packed;
             if (len > 4096000) throw ProtocolException.arrayTooLong("Deltas", len, 4096000);
             var lenOffset = (int) (packed >>> 32);
-            if (off + lenOffset + (long) len * 13 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Deltas", (int) java.lang.Math.min(off + lenOffset + (long) len * 13, Integer.MAX_VALUE), (int) mem.byteSize());
+            if (off + lenOffset + (long) len * 40 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Deltas", (int) java.lang.Math.min(off + lenOffset + (long) len * 40, Integer.MAX_VALUE), (int) mem.byteSize());
             off += lenOffset;
             v1 = new StateDelta[len];
             for (var i = 0; i < len; i++) {
-                v1[i] = StateDelta.toObject(mem, off + i * 13);
+                v1[i] = StateDelta.toObject(mem, off + i * 40);
             }
-            varPos = off + len * 13 - varBase;
+            varPos = off + len * 40 - varBase;
         }
         var result = new StateBinding(
             mem.get(PacketIO.PROTO_INT, offset + 1),
@@ -147,7 +147,7 @@ public class StateBinding {
     }
     public int computeSize() {
         int size = 5;
-        if (deltas != null) size += VarInt.size(deltas.length) + deltas.length * 13;
+        if (deltas != null) size += VarInt.size(deltas.length) + deltas.length * 40;
 
         return size;
     }

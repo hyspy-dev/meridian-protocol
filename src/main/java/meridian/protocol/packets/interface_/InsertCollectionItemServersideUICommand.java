@@ -11,27 +11,27 @@ import meridian.protocol.io.ReadCursor;
 import meridian.protocol.io.VarInt;
 
 
-public class InsertDataContextCollectionItemServersideUIProperty extends ServersideUICommand {
+public class InsertCollectionItemServersideUICommand extends ServersideUICommand {
     public static final int NULLABLE_BIT_FIELD_SIZE = 0;
     public static final int FIXED_BLOCK_SIZE = 4;
     public static final int VARIABLE_FIELD_COUNT = 2;
     public static final int VARIABLE_BLOCK_START = 12;
-    public static final int MAX_SIZE = 16385041;
+    public static final int MAX_SIZE = 1553;
 
     @Nonnull public String property = "";
     public int index;
     @Nonnull public UIDataValue value;
 
-    public InsertDataContextCollectionItemServersideUIProperty() {
+    public InsertCollectionItemServersideUICommand() {
     }
 
-    public InsertDataContextCollectionItemServersideUIProperty(@Nonnull String property, int index, @Nonnull UIDataValue value) {
+    public InsertCollectionItemServersideUICommand(@Nonnull String property, int index, @Nonnull UIDataValue value) {
         this.property = property;
         this.index = index;
         this.value = value;
     }
 
-    public InsertDataContextCollectionItemServersideUIProperty(@Nonnull InsertDataContextCollectionItemServersideUIProperty other) {
+    public InsertCollectionItemServersideUICommand(@Nonnull InsertCollectionItemServersideUICommand other) {
         this.property = other.property;
         this.index = other.index;
         this.value = other.value;
@@ -42,9 +42,9 @@ public class InsertDataContextCollectionItemServersideUIProperty extends Servers
      * check, so call this once before reading fields out of an untrusted segment.
      */
     public static void requireBounds(MemorySegment mem, int offset) {
-        if (offset < 0) throw ProtocolException.invalidOffset("InsertDataContextCollectionItemServersideUIProperty", offset, (int) mem.byteSize());
+        if (offset < 0) throw ProtocolException.invalidOffset("InsertCollectionItemServersideUICommand", offset, (int) mem.byteSize());
         long needed = (long) offset + 12;
-        if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("InsertDataContextCollectionItemServersideUIProperty", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
+        if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("InsertCollectionItemServersideUICommand", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
     public static String getProperty(MemorySegment mem) {
@@ -52,7 +52,7 @@ public class InsertDataContextCollectionItemServersideUIProperty extends Servers
     }
     
     public static String getProperty(MemorySegment mem, int offset) {
-        return PacketIO.readVarString("Property", mem, offset + getValidatedOffset(mem, offset, 4, 12, "Property"), 4096000);
+        return PacketIO.readVarString("Property", mem, offset + getValidatedOffset(mem, offset, 4, 12, "Property"), 128);
     }
     
     public static int getIndex(MemorySegment mem) {
@@ -60,7 +60,9 @@ public class InsertDataContextCollectionItemServersideUIProperty extends Servers
     }
     
     public static int getIndex(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_INT, offset + 0);
+        var value = mem.get(PacketIO.PROTO_INT, offset + 0);
+        if (value < 0) throw ProtocolException.valueBelowMinimum("Index", value, 0);
+        return value;
     }
     
     public static UIDataValue getValue(MemorySegment mem) {
@@ -90,20 +92,20 @@ public class InsertDataContextCollectionItemServersideUIProperty extends Servers
         if (slot != expected) throw ProtocolException.nonCanonicalLayout(fieldName, slot, expected);
     }
     
-    public static InsertDataContextCollectionItemServersideUIProperty toObject(MemorySegment mem) {
+    public static InsertCollectionItemServersideUICommand toObject(MemorySegment mem) {
         return toObject(mem, 0, null);
     }
     
-    public static InsertDataContextCollectionItemServersideUIProperty toObject(MemorySegment mem, int offset) {
+    public static InsertCollectionItemServersideUICommand toObject(MemorySegment mem, int offset) {
         return toObject(mem, offset, null);
     }
     
     /**
-     * Decodes one InsertDataContextCollectionItemServersideUIProperty and reports the end of its encoding through the cursor.
+     * Decodes one InsertCollectionItemServersideUICommand and reports the end of its encoding through the cursor.
      * The variable block is decoded in field order against a running position, and each
      * offset slot must name that position, so the fields decoded are the bytes walked.
      */
-    public static InsertDataContextCollectionItemServersideUIProperty toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
+    public static InsertCollectionItemServersideUICommand toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
         var varBase = offset + 12;
@@ -114,9 +116,12 @@ public class InsertDataContextCollectionItemServersideUIProperty extends Servers
         {
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
-            v0 = PacketIO.readVarString("Property", mem, off, 0, 4096000, sp);
+            v0 = PacketIO.readVarString("Property", mem, off, 0, 128, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         }
+        
+        int v1 = mem.get(PacketIO.PROTO_INT, offset + 0);
+        if (v1 < 0) throw ProtocolException.valueBelowMinimum("Index", v1, 0);
         
         UIDataValue v2;
         requireSlot(mem, offset + 8, varPos, "Value");
@@ -124,9 +129,9 @@ public class InsertDataContextCollectionItemServersideUIProperty extends Servers
             v2 = UIDataValue.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
         }
-        var result = new InsertDataContextCollectionItemServersideUIProperty(
+        var result = new InsertCollectionItemServersideUICommand(
             v0,
-            mem.get(PacketIO.PROTO_INT, offset + 0),
+            v1,
             v2
         );
         if (cursor != null) cursor.position = varBase + varPos;
@@ -135,10 +140,10 @@ public class InsertDataContextCollectionItemServersideUIProperty extends Servers
     @Override
     public int serialize(@Nonnull MemorySegment mem, int offset) {
         
-        mem.set(PacketIO.PROTO_INT, offset + 0, this.index);
+        if (this.index < 0) throw ProtocolException.valueBelowMinimum("Index", this.index, 0); mem.set(PacketIO.PROTO_INT, offset + 0, this.index);
         var varOffset = offset + 12;
         mem.set(PacketIO.PROTO_INT, offset + 4, varOffset - offset - 12);
-        varOffset += PacketIO.writeVarString(mem, varOffset, this.property, 4096000);
+        varOffset += PacketIO.writeVarString(mem, varOffset, this.property, 128);
         mem.set(PacketIO.PROTO_INT, offset + 8, varOffset - offset - 12);
         varOffset += this.value.serializeWithTypeId(mem, varOffset);
     
@@ -153,8 +158,8 @@ public class InsertDataContextCollectionItemServersideUIProperty extends Servers
         return size;
     }
 
-    public InsertDataContextCollectionItemServersideUIProperty clone() {
-        InsertDataContextCollectionItemServersideUIProperty copy = new InsertDataContextCollectionItemServersideUIProperty();
+    public InsertCollectionItemServersideUICommand clone() {
+        InsertCollectionItemServersideUICommand copy = new InsertCollectionItemServersideUICommand();
         copy.property = this.property;
         copy.index = this.index;
         copy.value = this.value;
@@ -165,7 +170,7 @@ public class InsertDataContextCollectionItemServersideUIProperty extends Servers
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof InsertDataContextCollectionItemServersideUIProperty other)) return false;
+        if (!(obj instanceof InsertCollectionItemServersideUICommand other)) return false;
         return java.util.Objects.equals(this.property, other.property) && this.index == other.index && java.util.Objects.equals(this.value, other.value);
     }
 

@@ -15,7 +15,7 @@ import meridian.protocol.io.VarInt;
 
 
 public class ExecuteServersidePageCommand implements Packet, ToServerPacket {
-    public static final int PACKET_ID = 1202;
+    public static final int PACKET_ID = 206;
     public static final boolean IS_COMPRESSED = false;
     public static final int NULLABLE_BIT_FIELD_SIZE = 1;
     public static final int FIXED_BLOCK_SIZE = 1;
@@ -33,21 +33,21 @@ public class ExecuteServersidePageCommand implements Packet, ToServerPacket {
         return NetworkChannel.Default;
     }
 
-    @Nonnull public String pageId = "";
+    @Nonnull public String id = "";
     @Nonnull public String commandId = "";
     @Nullable public UIDataValue param;
 
     public ExecuteServersidePageCommand() {
     }
 
-    public ExecuteServersidePageCommand(@Nonnull String pageId, @Nonnull String commandId, @Nullable UIDataValue param) {
-        this.pageId = pageId;
+    public ExecuteServersidePageCommand(@Nonnull String id, @Nonnull String commandId, @Nullable UIDataValue param) {
+        this.id = id;
         this.commandId = commandId;
         this.param = param;
     }
 
     public ExecuteServersidePageCommand(@Nonnull ExecuteServersidePageCommand other) {
-        this.pageId = other.pageId;
+        this.id = other.id;
         this.commandId = other.commandId;
         this.param = other.param;
     }
@@ -62,12 +62,12 @@ public class ExecuteServersidePageCommand implements Packet, ToServerPacket {
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("ExecuteServersidePageCommand", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
-    public static String getPageId(MemorySegment mem) {
-        return getPageId(mem, 0);
+    public static String getId(MemorySegment mem) {
+        return getId(mem, 0);
     }
     
-    public static String getPageId(MemorySegment mem, int offset) {
-        return PacketIO.readVarString("PageId", mem, offset + getValidatedOffset(mem, offset, 1, 13, "PageId"), 4096000);
+    public static String getId(MemorySegment mem, int offset) {
+        return PacketIO.readVarString("Id", mem, offset + getValidatedOffset(mem, offset, 1, 13, "Id"), 128);
     }
     
     public static String getCommandId(MemorySegment mem) {
@@ -75,7 +75,7 @@ public class ExecuteServersidePageCommand implements Packet, ToServerPacket {
     }
     
     public static String getCommandId(MemorySegment mem, int offset) {
-        return PacketIO.readVarString("CommandId", mem, offset + getValidatedOffset(mem, offset, 5, 13, "CommandId"), 4096000);
+        return PacketIO.readVarString("CommandId", mem, offset + getValidatedOffset(mem, offset, 5, 13, "CommandId"), 128);
     }
     
     @Nullable
@@ -130,11 +130,11 @@ public class ExecuteServersidePageCommand implements Packet, ToServerPacket {
         var varPos = 0;
         var walkCursor = cursor != null ? cursor : new ReadCursor();
         String v0;
-        requireSlot(mem, offset + 1, varPos, "PageId");
+        requireSlot(mem, offset + 1, varPos, "Id");
         {
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
-            v0 = PacketIO.readVarString("PageId", mem, off, 0, 4096000, sp);
+            v0 = PacketIO.readVarString("Id", mem, off, 0, 128, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         }
         
@@ -143,7 +143,7 @@ public class ExecuteServersidePageCommand implements Packet, ToServerPacket {
         {
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
-            v1 = PacketIO.readVarString("CommandId", mem, off, 0, 4096000, sp);
+            v1 = PacketIO.readVarString("CommandId", mem, off, 0, 128, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         }
         
@@ -173,9 +173,9 @@ public class ExecuteServersidePageCommand implements Packet, ToServerPacket {
         
         var varOffset = offset + 13;
         mem.set(PacketIO.PROTO_INT, offset + 1, varOffset - offset - 13);
-        varOffset += PacketIO.writeVarString(mem, varOffset, this.pageId, 4096000);
+        varOffset += PacketIO.writeVarString(mem, varOffset, this.id, 128);
         mem.set(PacketIO.PROTO_INT, offset + 5, varOffset - offset - 13);
-        varOffset += PacketIO.writeVarString(mem, varOffset, this.commandId, 4096000);
+        varOffset += PacketIO.writeVarString(mem, varOffset, this.commandId, 128);
         if (this.param != null) {
             mem.set(PacketIO.PROTO_INT, offset + 9, varOffset - offset - 13);
             varOffset += this.param.serializeWithTypeId(mem, varOffset);
@@ -187,7 +187,7 @@ public class ExecuteServersidePageCommand implements Packet, ToServerPacket {
     }
     public int computeSize() {
         int size = 13;
-        size += PacketIO.stringSize(pageId);
+        size += PacketIO.stringSize(id);
     size += PacketIO.stringSize(commandId);
     if (param != null) size += param.computeSizeWithTypeId();
 
@@ -196,7 +196,7 @@ public class ExecuteServersidePageCommand implements Packet, ToServerPacket {
 
     public ExecuteServersidePageCommand clone() {
         ExecuteServersidePageCommand copy = new ExecuteServersidePageCommand();
-        copy.pageId = this.pageId;
+        copy.id = this.id;
         copy.commandId = this.commandId;
         copy.param = this.param;
         return copy;
@@ -207,12 +207,12 @@ public class ExecuteServersidePageCommand implements Packet, ToServerPacket {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof ExecuteServersidePageCommand other)) return false;
-        return java.util.Objects.equals(this.pageId, other.pageId) && java.util.Objects.equals(this.commandId, other.commandId) && java.util.Objects.equals(this.param, other.param);
+        return java.util.Objects.equals(this.id, other.id) && java.util.Objects.equals(this.commandId, other.commandId) && java.util.Objects.equals(this.param, other.param);
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(pageId, commandId, param);
+        return java.util.Objects.hash(id, commandId, param);
     }
 
 }

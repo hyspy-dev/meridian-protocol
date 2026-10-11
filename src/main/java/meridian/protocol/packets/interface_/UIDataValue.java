@@ -52,6 +52,8 @@ public abstract class UIDataValue {
                 case 13 -> UILongDataValue.toObject(mem, offset + typeIdLen, walkCursor);
                 case 14 -> UIULongDataValue.toObject(mem, offset + typeIdLen, walkCursor);
                 case 15 -> UIDoubleDataValue.toObject(mem, offset + typeIdLen, walkCursor);
+                case 16 -> UIFormattedMessageDataValue.toObject(mem, offset + typeIdLen, walkCursor);
+                case 17 -> UIColorDataValue.toObject(mem, offset + typeIdLen, walkCursor);
                 default -> throw ProtocolException.unknownPolymorphicType("UIDataValue", typeId);
             };
         } finally {
@@ -77,6 +79,8 @@ public abstract class UIDataValue {
             if (this instanceof UILongDataValue sub) { return 13; }
             if (this instanceof UIULongDataValue sub) { return 14; }
             if (this instanceof UIDoubleDataValue sub) { return 15; }
+            if (this instanceof UIFormattedMessageDataValue sub) { return 16; }
+            if (this instanceof UIColorDataValue sub) { return 17; }
         throw new IllegalStateException("Unknown subtype: " + getClass().getName());
     }
 

@@ -11,25 +11,25 @@ import meridian.protocol.io.ReadCursor;
 import meridian.protocol.io.VarInt;
 
 
-public class SetDataContextPropertyServersideUIProperty extends ServersideUICommand {
+public class SetPropertyServersideUICommand extends ServersideUICommand {
     public static final int NULLABLE_BIT_FIELD_SIZE = 0;
     public static final int FIXED_BLOCK_SIZE = 0;
     public static final int VARIABLE_FIELD_COUNT = 2;
     public static final int VARIABLE_BLOCK_START = 8;
-    public static final int MAX_SIZE = 16385037;
+    public static final int MAX_SIZE = 1549;
 
     @Nonnull public String property = "";
     @Nonnull public UIDataValue value;
 
-    public SetDataContextPropertyServersideUIProperty() {
+    public SetPropertyServersideUICommand() {
     }
 
-    public SetDataContextPropertyServersideUIProperty(@Nonnull String property, @Nonnull UIDataValue value) {
+    public SetPropertyServersideUICommand(@Nonnull String property, @Nonnull UIDataValue value) {
         this.property = property;
         this.value = value;
     }
 
-    public SetDataContextPropertyServersideUIProperty(@Nonnull SetDataContextPropertyServersideUIProperty other) {
+    public SetPropertyServersideUICommand(@Nonnull SetPropertyServersideUICommand other) {
         this.property = other.property;
         this.value = other.value;
     }
@@ -39,9 +39,9 @@ public class SetDataContextPropertyServersideUIProperty extends ServersideUIComm
      * check, so call this once before reading fields out of an untrusted segment.
      */
     public static void requireBounds(MemorySegment mem, int offset) {
-        if (offset < 0) throw ProtocolException.invalidOffset("SetDataContextPropertyServersideUIProperty", offset, (int) mem.byteSize());
+        if (offset < 0) throw ProtocolException.invalidOffset("SetPropertyServersideUICommand", offset, (int) mem.byteSize());
         long needed = (long) offset + 8;
-        if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("SetDataContextPropertyServersideUIProperty", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
+        if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("SetPropertyServersideUICommand", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
     public static String getProperty(MemorySegment mem) {
@@ -49,7 +49,7 @@ public class SetDataContextPropertyServersideUIProperty extends ServersideUIComm
     }
     
     public static String getProperty(MemorySegment mem, int offset) {
-        return PacketIO.readVarString("Property", mem, offset + getValidatedOffset(mem, offset, 0, 8, "Property"), 4096000);
+        return PacketIO.readVarString("Property", mem, offset + getValidatedOffset(mem, offset, 0, 8, "Property"), 128);
     }
     
     public static UIDataValue getValue(MemorySegment mem) {
@@ -79,20 +79,20 @@ public class SetDataContextPropertyServersideUIProperty extends ServersideUIComm
         if (slot != expected) throw ProtocolException.nonCanonicalLayout(fieldName, slot, expected);
     }
     
-    public static SetDataContextPropertyServersideUIProperty toObject(MemorySegment mem) {
+    public static SetPropertyServersideUICommand toObject(MemorySegment mem) {
         return toObject(mem, 0, null);
     }
     
-    public static SetDataContextPropertyServersideUIProperty toObject(MemorySegment mem, int offset) {
+    public static SetPropertyServersideUICommand toObject(MemorySegment mem, int offset) {
         return toObject(mem, offset, null);
     }
     
     /**
-     * Decodes one SetDataContextPropertyServersideUIProperty and reports the end of its encoding through the cursor.
+     * Decodes one SetPropertyServersideUICommand and reports the end of its encoding through the cursor.
      * The variable block is decoded in field order against a running position, and each
      * offset slot must name that position, so the fields decoded are the bytes walked.
      */
-    public static SetDataContextPropertyServersideUIProperty toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
+    public static SetPropertyServersideUICommand toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
         var varBase = offset + 8;
@@ -103,7 +103,7 @@ public class SetDataContextPropertyServersideUIProperty extends ServersideUIComm
         {
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
-            v0 = PacketIO.readVarString("Property", mem, off, 0, 4096000, sp);
+            v0 = PacketIO.readVarString("Property", mem, off, 0, 128, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         }
         
@@ -113,7 +113,7 @@ public class SetDataContextPropertyServersideUIProperty extends ServersideUIComm
             v1 = UIDataValue.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
         }
-        var result = new SetDataContextPropertyServersideUIProperty(
+        var result = new SetPropertyServersideUICommand(
             v0,
             v1
         );
@@ -126,7 +126,7 @@ public class SetDataContextPropertyServersideUIProperty extends ServersideUIComm
         
         var varOffset = offset + 8;
         mem.set(PacketIO.PROTO_INT, offset + 0, varOffset - offset - 8);
-        varOffset += PacketIO.writeVarString(mem, varOffset, this.property, 4096000);
+        varOffset += PacketIO.writeVarString(mem, varOffset, this.property, 128);
         mem.set(PacketIO.PROTO_INT, offset + 4, varOffset - offset - 8);
         varOffset += this.value.serializeWithTypeId(mem, varOffset);
     
@@ -141,8 +141,8 @@ public class SetDataContextPropertyServersideUIProperty extends ServersideUIComm
         return size;
     }
 
-    public SetDataContextPropertyServersideUIProperty clone() {
-        SetDataContextPropertyServersideUIProperty copy = new SetDataContextPropertyServersideUIProperty();
+    public SetPropertyServersideUICommand clone() {
+        SetPropertyServersideUICommand copy = new SetPropertyServersideUICommand();
         copy.property = this.property;
         copy.value = this.value;
         return copy;
@@ -152,7 +152,7 @@ public class SetDataContextPropertyServersideUIProperty extends ServersideUIComm
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof SetDataContextPropertyServersideUIProperty other)) return false;
+        if (!(obj instanceof SetPropertyServersideUICommand other)) return false;
         return java.util.Objects.equals(this.property, other.property) && java.util.Objects.equals(this.value, other.value);
     }
 

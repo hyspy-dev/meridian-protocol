@@ -4,7 +4,7 @@ package meridian.protocol;
 import meridian.protocol.io.ProtocolException;
 
 public enum AbilitySlot {
-    Primary(0),
+    Core(0),
     Support(1);
 
     public static final AbilitySlot[] VALUES = values();

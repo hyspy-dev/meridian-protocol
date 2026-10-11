@@ -38,9 +38,11 @@ public abstract class ServersideUICommand {
             return switch (typeId) {
                 case 0 -> InitServersideUICommand.toObject(mem, offset + typeIdLen, walkCursor);
                 case 1 -> SetElementPropertyServersideUICommand.toObject(mem, offset + typeIdLen, walkCursor);
-                case 2 -> SetDataContextPropertyServersideUIProperty.toObject(mem, offset + typeIdLen, walkCursor);
-                case 3 -> InsertDataContextCollectionItemServersideUIProperty.toObject(mem, offset + typeIdLen, walkCursor);
-                case 4 -> RemoveDataContextCollectionItemServersideUIProperty.toObject(mem, offset + typeIdLen, walkCursor);
+                case 2 -> SetPropertyServersideUICommand.toObject(mem, offset + typeIdLen, walkCursor);
+                case 3 -> InsertCollectionItemServersideUICommand.toObject(mem, offset + typeIdLen, walkCursor);
+                case 4 -> RemoveCollectionItemServersideUICommand.toObject(mem, offset + typeIdLen, walkCursor);
+                case 5 -> RemoveServersideUICommand.toObject(mem, offset + typeIdLen, walkCursor);
+                case 6 -> SetVisibilityServersideUICommand.toObject(mem, offset + typeIdLen, walkCursor);
                 default -> throw ProtocolException.unknownPolymorphicType("ServersideUICommand", typeId);
             };
         } finally {
@@ -52,9 +54,11 @@ public abstract class ServersideUICommand {
     public int getTypeId() {
         if (this instanceof InitServersideUICommand sub) { return 0; }
             if (this instanceof SetElementPropertyServersideUICommand sub) { return 1; }
-            if (this instanceof SetDataContextPropertyServersideUIProperty sub) { return 2; }
-            if (this instanceof InsertDataContextCollectionItemServersideUIProperty sub) { return 3; }
-            if (this instanceof RemoveDataContextCollectionItemServersideUIProperty sub) { return 4; }
+            if (this instanceof SetPropertyServersideUICommand sub) { return 2; }
+            if (this instanceof InsertCollectionItemServersideUICommand sub) { return 3; }
+            if (this instanceof RemoveCollectionItemServersideUICommand sub) { return 4; }
+            if (this instanceof RemoveServersideUICommand sub) { return 5; }
+            if (this instanceof SetVisibilityServersideUICommand sub) { return 6; }
         throw new IllegalStateException("Unknown subtype: " + getClass().getName());
     }
 

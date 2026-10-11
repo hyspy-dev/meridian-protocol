@@ -433,6 +433,11 @@ public final class PacketRegistry {
             meridian.protocol.packets.assets.UpdateBeamConfigs::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
+            94, "UpdateAbilityKeywords", meridian.protocol.packets.assets.UpdateAbilityKeywords.class,
+            6, 1677721600, true,
+            meridian.protocol.packets.assets.UpdateAbilityKeywords::toObject);
+        register(
+            PacketDirection.ToClient, NetworkChannel.Default,
             100, "SetClientId", meridian.protocol.packets.player.SetClientId.class,
             4, 4, false,
             meridian.protocol.packets.player.SetClientId::toObject);
@@ -824,7 +829,7 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             185, "WorldGameplayConfig", meridian.protocol.packets.world.WorldGameplayConfig.class,
-            8, 8, false,
+            2, 16384014, false,
             meridian.protocol.packets.world.WorldGameplayConfig::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
@@ -851,6 +856,31 @@ public final class PacketRegistry {
             204, "ClientOpenWindow", meridian.protocol.packets.window.ClientOpenWindow.class,
             1, 1, false,
             meridian.protocol.packets.window.ClientOpenWindow::toObject);
+        register(
+            PacketDirection.ToClient, NetworkChannel.Default,
+            205, "UpdateServersideUIPage", meridian.protocol.packets.interface_.UpdateServersideUIPage.class,
+            0, 1677721600, false,
+            meridian.protocol.packets.interface_.UpdateServersideUIPage::toObject);
+        register(
+            PacketDirection.ToServer, NetworkChannel.Default,
+            206, "ExecuteServersidePageCommand", meridian.protocol.packets.interface_.ExecuteServersidePageCommand.class,
+            1, 1677721600, false,
+            meridian.protocol.packets.interface_.ExecuteServersidePageCommand::toObject);
+        register(
+            PacketDirection.ToServer, NetworkChannel.Default,
+            207, "ExecuteServersideHudCommand", meridian.protocol.packets.interface_.ExecuteServersideHudCommand.class,
+            1, 1677721600, false,
+            meridian.protocol.packets.interface_.ExecuteServersideHudCommand::toObject);
+        register(
+            PacketDirection.ToClient, NetworkChannel.Default,
+            208, "InitViewModelTypes", meridian.protocol.packets.interface_.InitViewModelTypes.class,
+            0, 1677721600, false,
+            meridian.protocol.packets.interface_.InitViewModelTypes::toObject);
+        register(
+            PacketDirection.ToClient, NetworkChannel.Default,
+            209, "UpdateServersideHud", meridian.protocol.packets.interface_.UpdateServersideHud.class,
+            0, 1677721600, false,
+            meridian.protocol.packets.interface_.UpdateServersideHud::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             210, "ServerMessage", meridian.protocol.packets.interface_.ServerMessage.class,
@@ -901,6 +931,16 @@ public final class PacketRegistry {
             219, "CustomPageEvent", meridian.protocol.packets.interface_.CustomPageEvent.class,
             2, 16384007, false,
             meridian.protocol.packets.interface_.CustomPageEvent::toObject);
+        register(
+            PacketDirection.ToClient, NetworkChannel.Default,
+            220, "OpenChapterRewardsPage", meridian.protocol.packets.interface_.OpenChapterRewardsPage.class,
+            2, 81920047, false,
+            meridian.protocol.packets.interface_.OpenChapterRewardsPage::toObject);
+        register(
+            PacketDirection.ToServer, NetworkChannel.Default,
+            221, "ChapterRewardsPageResult", meridian.protocol.packets.interface_.ChapterRewardsPageResult.class,
+            1, 1, false,
+            meridian.protocol.packets.interface_.ChapterRewardsPageResult::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             222, "EditorBlocksChange", meridian.protocol.packets.interface_.EditorBlocksChange.class,
@@ -1892,15 +1932,10 @@ public final class PacketRegistry {
             1, 32768019, false,
             meridian.protocol.packets.player.TriggerVolumeToolSetName::toObject);
         register(
-            PacketDirection.ToClient, NetworkChannel.Default,
-            1200, "UpdateServersideUIPage", meridian.protocol.packets.interface_.UpdateServersideUIPage.class,
-            0, 1677721600, false,
-            meridian.protocol.packets.interface_.UpdateServersideUIPage::toObject);
-        register(
             PacketDirection.ToServer, NetworkChannel.Default,
-            1202, "ExecuteServersidePageCommand", meridian.protocol.packets.interface_.ExecuteServersidePageCommand.class,
-            1, 1677721600, false,
-            meridian.protocol.packets.interface_.ExecuteServersidePageCommand::toObject);
+            527, "DismissServersidePage", meridian.protocol.packets.interface_.DismissServersidePage.class,
+            0, 517, false,
+            meridian.protocol.packets.interface_.DismissServersidePage::toObject);
     }
 
     private PacketRegistry() {}

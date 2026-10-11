@@ -13,7 +13,8 @@ public enum Page {
     ContentCreation(6),
     Custom(7),
     Serverside(8),
-    Chapters(9);
+    Chapters(9),
+    ChapterRewards(10);
 
     public static final Page[] VALUES = values();
 
