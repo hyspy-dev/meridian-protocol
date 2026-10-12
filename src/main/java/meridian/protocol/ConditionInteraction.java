@@ -13,9 +13,9 @@ import java.util.HashMap;
 
 public class ConditionInteraction extends SimpleInteraction {
     public static final int NULLABLE_BIT_FIELD_SIZE = 2;
-    public static final int FIXED_BLOCK_SIZE = 29;
+    public static final int FIXED_BLOCK_SIZE = 30;
     public static final int VARIABLE_FIELD_COUNT = 5;
-    public static final int VARIABLE_BLOCK_START = 49;
+    public static final int VARIABLE_BLOCK_START = 50;
     public static final int MAX_SIZE = 1677721600;
 
     @Nullable public GameMode requiredGameMode;
@@ -24,11 +24,12 @@ public class ConditionInteraction extends SimpleInteraction {
     @Nullable public Boolean crouching;
     @Nullable public Boolean running;
     @Nullable public Boolean flying;
+    @Nullable public Boolean gliding;
 
     public ConditionInteraction() {
     }
 
-    public ConditionInteraction(@Nonnull WaitForDataFrom waitForDataFrom, @Nullable InteractionEffects effects, float horizontalSpeedMultiplier, float runTime, @Nonnull InteractionItemChangeBehavior onItemChangeBehavior, @Nullable java.util.Map<GameMode, InteractionSettings> settings, @Nonnull InteractionRules rules, @Nullable int[] tags, @Nullable InteractionCameraSettings camera, int next, int failed, @Nullable GameMode requiredGameMode, @Nullable Boolean jumping, @Nullable Boolean swimming, @Nullable Boolean crouching, @Nullable Boolean running, @Nullable Boolean flying) {
+    public ConditionInteraction(@Nonnull WaitForDataFrom waitForDataFrom, @Nullable InteractionEffects effects, float horizontalSpeedMultiplier, float runTime, @Nonnull InteractionItemChangeBehavior onItemChangeBehavior, @Nullable java.util.Map<GameMode, InteractionSettings> settings, @Nonnull InteractionRules rules, @Nullable int[] tags, @Nullable InteractionCameraSettings camera, int next, int failed, @Nullable GameMode requiredGameMode, @Nullable Boolean jumping, @Nullable Boolean swimming, @Nullable Boolean crouching, @Nullable Boolean running, @Nullable Boolean flying, @Nullable Boolean gliding) {
         this.waitForDataFrom = waitForDataFrom;
         this.effects = effects;
         this.horizontalSpeedMultiplier = horizontalSpeedMultiplier;
@@ -46,6 +47,7 @@ public class ConditionInteraction extends SimpleInteraction {
         this.crouching = crouching;
         this.running = running;
         this.flying = flying;
+        this.gliding = gliding;
     }
 
     public ConditionInteraction(@Nonnull ConditionInteraction other) {
@@ -66,6 +68,7 @@ public class ConditionInteraction extends SimpleInteraction {
         this.crouching = other.crouching;
         this.running = other.running;
         this.flying = other.flying;
+        this.gliding = other.gliding;
     }
 
     /**
@@ -74,7 +77,7 @@ public class ConditionInteraction extends SimpleInteraction {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("ConditionInteraction", offset, (int) mem.byteSize());
-        long needed = (long) offset + 49;
+        long needed = (long) offset + 50;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("ConditionInteraction", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -93,7 +96,7 @@ public class ConditionInteraction extends SimpleInteraction {
     
     @Nullable
     public static InteractionEffects getEffects(MemorySegment mem, int offset) {
-        return hasEffects(mem, offset) ? InteractionEffects.toObject(mem, offset + getValidatedOffset(mem, offset, 29, 49, "Effects")): null;
+        return hasEffects(mem, offset) ? InteractionEffects.toObject(mem, offset + getValidatedOffset(mem, offset, 30, 50, "Effects")): null;
     }
     
     public static float getHorizontalSpeedMultiplier(MemorySegment mem) {
@@ -128,7 +131,7 @@ public class ConditionInteraction extends SimpleInteraction {
     @Nullable
     public static java.util.Map<GameMode, InteractionSettings> getSettings(MemorySegment mem, int offset) {
         if (!hasSettings(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 33, 49, "Settings");
+        var off = offset + getValidatedOffset(mem, offset, 34, 50, "Settings");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("Settings");
         var len = (int) packed;
@@ -154,7 +157,7 @@ public class ConditionInteraction extends SimpleInteraction {
     }
     
     public static InteractionRules getRules(MemorySegment mem, int offset) {
-        return InteractionRules.toObject(mem, offset + getValidatedOffset(mem, offset, 37, 49, "Rules"));
+        return InteractionRules.toObject(mem, offset + getValidatedOffset(mem, offset, 38, 50, "Rules"));
     }
     
     @Nullable
@@ -165,7 +168,7 @@ public class ConditionInteraction extends SimpleInteraction {
     @Nullable
     public static int[] getTags(MemorySegment mem, int offset) {
         if (!hasTags(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 41, 49, "Tags");
+        var off = offset + getValidatedOffset(mem, offset, 42, 50, "Tags");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("Tags");
         var len = (int) packed;
@@ -185,7 +188,7 @@ public class ConditionInteraction extends SimpleInteraction {
     
     @Nullable
     public static InteractionCameraSettings getCamera(MemorySegment mem, int offset) {
-        return hasCamera(mem, offset) ? InteractionCameraSettings.toObject(mem, offset + getValidatedOffset(mem, offset, 45, 49, "Camera")): null;
+        return hasCamera(mem, offset) ? InteractionCameraSettings.toObject(mem, offset + getValidatedOffset(mem, offset, 46, 50, "Camera")): null;
     }
     
     public static int getNext(MemorySegment mem) {
@@ -264,6 +267,16 @@ public class ConditionInteraction extends SimpleInteraction {
         return hasFlying(mem, offset) ? mem.get(PacketIO.PROTO_BOOL, offset + 28): null;
     }
     
+    @Nullable
+    public static Boolean getGliding(MemorySegment mem) {
+        return getGliding(mem, 0);
+    }
+    
+    @Nullable
+    public static Boolean getGliding(MemorySegment mem, int offset) {
+        return hasGliding(mem, offset) ? mem.get(PacketIO.PROTO_BOOL, offset + 29): null;
+    }
+    
     public static boolean hasRequiredGameMode(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
         return (b & 0x01) != 0;
@@ -294,24 +307,29 @@ public class ConditionInteraction extends SimpleInteraction {
         return (b & 0x20) != 0;
     }
     
-    public static boolean hasEffects(MemorySegment mem, int offset) {
+    public static boolean hasGliding(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
         return (b & 0x40) != 0;
     }
     
-    public static boolean hasSettings(MemorySegment mem, int offset) {
+    public static boolean hasEffects(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
         return (b & 0x80) != 0;
     }
     
-    public static boolean hasTags(MemorySegment mem, int offset) {
+    public static boolean hasSettings(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 1);
         return (b & 0x01) != 0;
     }
     
-    public static boolean hasCamera(MemorySegment mem, int offset) {
+    public static boolean hasTags(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 1);
         return (b & 0x02) != 0;
+    }
+    
+    public static boolean hasCamera(MemorySegment mem, int offset) {
+        var b = mem.get(PacketIO.PROTO_BYTE, offset + 1);
+        return (b & 0x04) != 0;
     }
     
     private static int getValidatedOffset(MemorySegment buffer, int base, int slotPosition, int varBlockStart, String fieldName) {
@@ -347,21 +365,21 @@ public class ConditionInteraction extends SimpleInteraction {
     public static ConditionInteraction toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
-        var varBase = offset + 49;
+        var varBase = offset + 50;
         var varPos = 0;
         var walkCursor = cursor != null ? cursor : new ReadCursor();
         InteractionEffects v1 = null;
         if (hasEffects(mem, offset)) {
-            requireSlot(mem, offset + 29, varPos, "Effects");
+            requireSlot(mem, offset + 30, varPos, "Effects");
             v1 = InteractionEffects.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
         } else {
-            requireSlot(mem, offset + 29, -1, "Effects");
+            requireSlot(mem, offset + 30, -1, "Effects");
         }
         
         java.util.Map<GameMode, InteractionSettings> v5 = null;
         if (hasSettings(mem, offset)) {
-            requireSlot(mem, offset + 33, varPos, "Settings");
+            requireSlot(mem, offset + 34, varPos, "Settings");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("Settings");
@@ -382,11 +400,11 @@ public class ConditionInteraction extends SimpleInteraction {
             }
             varPos = off - varBase;
         } else {
-            requireSlot(mem, offset + 33, -1, "Settings");
+            requireSlot(mem, offset + 34, -1, "Settings");
         }
         
         InteractionRules v6;
-        requireSlot(mem, offset + 37, varPos, "Rules");
+        requireSlot(mem, offset + 38, varPos, "Rules");
         {
             v6 = InteractionRules.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
@@ -394,7 +412,7 @@ public class ConditionInteraction extends SimpleInteraction {
         
         int[] v7 = null;
         if (hasTags(mem, offset)) {
-            requireSlot(mem, offset + 41, varPos, "Tags");
+            requireSlot(mem, offset + 42, varPos, "Tags");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("Tags");
@@ -407,16 +425,16 @@ public class ConditionInteraction extends SimpleInteraction {
             MemorySegment.copy(mem, PacketIO.PROTO_INT, off, v7, 0, len);
             varPos = off + len * 4 - varBase;
         } else {
-            requireSlot(mem, offset + 41, -1, "Tags");
+            requireSlot(mem, offset + 42, -1, "Tags");
         }
         
         InteractionCameraSettings v8 = null;
         if (hasCamera(mem, offset)) {
-            requireSlot(mem, offset + 45, varPos, "Camera");
+            requireSlot(mem, offset + 46, varPos, "Camera");
             v8 = InteractionCameraSettings.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
         } else {
-            requireSlot(mem, offset + 45, -1, "Camera");
+            requireSlot(mem, offset + 46, -1, "Camera");
         }
         var result = new ConditionInteraction(
             WaitForDataFrom.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 2)),
@@ -435,7 +453,8 @@ public class ConditionInteraction extends SimpleInteraction {
             hasSwimming(mem, offset) ? mem.get(PacketIO.PROTO_BOOL, offset + 25) : null,
             hasCrouching(mem, offset) ? mem.get(PacketIO.PROTO_BOOL, offset + 26) : null,
             hasRunning(mem, offset) ? mem.get(PacketIO.PROTO_BOOL, offset + 27) : null,
-            hasFlying(mem, offset) ? mem.get(PacketIO.PROTO_BOOL, offset + 28) : null
+            hasFlying(mem, offset) ? mem.get(PacketIO.PROTO_BOOL, offset + 28) : null,
+            hasGliding(mem, offset) ? mem.get(PacketIO.PROTO_BOOL, offset + 29) : null
         );
         if (cursor != null) cursor.position = varBase + varPos;
         return result;
@@ -450,12 +469,13 @@ public class ConditionInteraction extends SimpleInteraction {
         if (this.crouching != null) nullBits |= 0x08;
         if (this.running != null) nullBits |= 0x10;
         if (this.flying != null) nullBits |= 0x20;
-        if (this.effects != null) nullBits |= 0x40;
-        if (this.settings != null) nullBits |= 0x80;
+        if (this.gliding != null) nullBits |= 0x40;
+        if (this.effects != null) nullBits |= 0x80;
         mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         nullBits = 0;
-        if (this.tags != null) nullBits |= 0x01;
-        if (this.camera != null) nullBits |= 0x02;
+        if (this.settings != null) nullBits |= 0x01;
+        if (this.tags != null) nullBits |= 0x02;
+        if (this.camera != null) nullBits |= 0x04;
         mem.set(PacketIO.PROTO_BYTE, offset + 1, nullBits);
         
         mem.set(PacketIO.PROTO_BYTE, offset + 2, (byte) this.waitForDataFrom.getValue());
@@ -494,15 +514,20 @@ public class ConditionInteraction extends SimpleInteraction {
         } else {
             mem.asSlice(offset + 28, 1).fill((byte) 0); 
         }
-        var varOffset = offset + 49;
+        if (this.gliding != null) {
+            mem.set(PacketIO.PROTO_BOOL, offset + 29, this.gliding);
+        } else {
+            mem.asSlice(offset + 29, 1).fill((byte) 0); 
+        }
+        var varOffset = offset + 50;
         if (this.effects != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 29, varOffset - offset - 49);
+            mem.set(PacketIO.PROTO_INT, offset + 30, varOffset - offset - 50);
             varOffset += this.effects.serialize(mem, varOffset);
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 29, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 30, -1);
         }
         if (this.settings != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 33, varOffset - offset - 49);
+            mem.set(PacketIO.PROTO_INT, offset + 34, varOffset - offset - 50);
             if (this.settings.size() > 4096000) throw ProtocolException.dictionaryTooLarge("Settings", settings.size(), 4096000);
             varOffset += VarInt.set(mem, varOffset, this.settings.size());
             for (var e : this.settings.entrySet()) {
@@ -511,32 +536,32 @@ public class ConditionInteraction extends SimpleInteraction {
                 varOffset += e.getValue().serialize(mem, varOffset);
             }
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 33, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 34, -1);
         }
-        mem.set(PacketIO.PROTO_INT, offset + 37, varOffset - offset - 49);
+        mem.set(PacketIO.PROTO_INT, offset + 38, varOffset - offset - 50);
         varOffset += this.rules.serialize(mem, varOffset);
         if (this.tags != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 41, varOffset - offset - 49);
+            mem.set(PacketIO.PROTO_INT, offset + 42, varOffset - offset - 50);
             if (tags.length > 4096000) throw ProtocolException.arrayTooLong("Tags", tags.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.tags.length);
             
             MemorySegment.copy(this.tags, 0, mem, PacketIO.PROTO_INT, varOffset, this.tags.length);
             varOffset += this.tags.length * 4;
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 41, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 42, -1);
         }
         if (this.camera != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 45, varOffset - offset - 49);
+            mem.set(PacketIO.PROTO_INT, offset + 46, varOffset - offset - 50);
             varOffset += this.camera.serialize(mem, varOffset);
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 45, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 46, -1);
         }
     
        return varOffset - offset;
     }
     @Override
     public int computeSize() {
-        int size = 49;
+        int size = 50;
         if (effects != null) size += effects.computeSize();
     if (settings != null) size += VarInt.size(settings.size()) + settings.size() * (1 + 1);
     size += rules.computeSize();
@@ -569,6 +594,7 @@ public class ConditionInteraction extends SimpleInteraction {
         copy.crouching = this.crouching;
         copy.running = this.running;
         copy.flying = this.flying;
+        copy.gliding = this.gliding;
         return copy;
     }
 
@@ -577,7 +603,7 @@ public class ConditionInteraction extends SimpleInteraction {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof ConditionInteraction other)) return false;
-        return java.util.Objects.equals(this.waitForDataFrom, other.waitForDataFrom) && java.util.Objects.equals(this.effects, other.effects) && this.horizontalSpeedMultiplier == other.horizontalSpeedMultiplier && this.runTime == other.runTime && java.util.Objects.equals(this.onItemChangeBehavior, other.onItemChangeBehavior) && java.util.Objects.equals(this.settings, other.settings) && java.util.Objects.equals(this.rules, other.rules) && java.util.Arrays.equals(this.tags, other.tags) && java.util.Objects.equals(this.camera, other.camera) && this.next == other.next && this.failed == other.failed && java.util.Objects.equals(this.requiredGameMode, other.requiredGameMode) && java.util.Objects.equals(this.jumping, other.jumping) && java.util.Objects.equals(this.swimming, other.swimming) && java.util.Objects.equals(this.crouching, other.crouching) && java.util.Objects.equals(this.running, other.running) && java.util.Objects.equals(this.flying, other.flying);
+        return java.util.Objects.equals(this.waitForDataFrom, other.waitForDataFrom) && java.util.Objects.equals(this.effects, other.effects) && this.horizontalSpeedMultiplier == other.horizontalSpeedMultiplier && this.runTime == other.runTime && java.util.Objects.equals(this.onItemChangeBehavior, other.onItemChangeBehavior) && java.util.Objects.equals(this.settings, other.settings) && java.util.Objects.equals(this.rules, other.rules) && java.util.Arrays.equals(this.tags, other.tags) && java.util.Objects.equals(this.camera, other.camera) && this.next == other.next && this.failed == other.failed && java.util.Objects.equals(this.requiredGameMode, other.requiredGameMode) && java.util.Objects.equals(this.jumping, other.jumping) && java.util.Objects.equals(this.swimming, other.swimming) && java.util.Objects.equals(this.crouching, other.crouching) && java.util.Objects.equals(this.running, other.running) && java.util.Objects.equals(this.flying, other.flying) && java.util.Objects.equals(this.gliding, other.gliding);
     }
 
     @Override
@@ -600,6 +626,7 @@ public class ConditionInteraction extends SimpleInteraction {
         result = 31 * result + java.util.Objects.hashCode(crouching);
         result = 31 * result + java.util.Objects.hashCode(running);
         result = 31 * result + java.util.Objects.hashCode(flying);
+        result = 31 * result + java.util.Objects.hashCode(gliding);
         return result;
     }
 

@@ -14,7 +14,10 @@ public enum Page {
     Custom(7),
     Serverside(8),
     Chapters(9),
-    ChapterRewards(10);
+    ChapterRewards(10),
+    PortalSummon(11),
+    PortalActive(12),
+    PortalError(13);
 
     public static final Page[] VALUES = values();
 

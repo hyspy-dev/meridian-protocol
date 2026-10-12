@@ -14,25 +14,27 @@ import org.joml.*;
 public class RaycastSelector extends Selector {
     public static final int NULLABLE_BIT_FIELD_SIZE = 1;
     public static final int FIXED_BLOCK_SIZE = 22;
-    public static final int VARIABLE_FIELD_COUNT = 0;
+    public static final int VARIABLE_FIELD_COUNT = 1;
     public static final int VARIABLE_BLOCK_START = 22;
-    public static final int MAX_SIZE = 22;
+    public static final int MAX_SIZE = 16384027;
 
     @Nullable public Vector3fc offset;
     public int distance;
     public int blockTagIndex = Integer.MIN_VALUE;
     public boolean ignoreFluids;
     public boolean ignoreEmptyCollisionMaterial;
+    @Nullable public String distanceAttribute;
 
     public RaycastSelector() {
     }
 
-    public RaycastSelector(@Nullable Vector3fc offset, int distance, int blockTagIndex, boolean ignoreFluids, boolean ignoreEmptyCollisionMaterial) {
+    public RaycastSelector(@Nullable Vector3fc offset, int distance, int blockTagIndex, boolean ignoreFluids, boolean ignoreEmptyCollisionMaterial, @Nullable String distanceAttribute) {
         this.offset = offset;
         this.distance = distance;
         this.blockTagIndex = blockTagIndex;
         this.ignoreFluids = ignoreFluids;
         this.ignoreEmptyCollisionMaterial = ignoreEmptyCollisionMaterial;
+        this.distanceAttribute = distanceAttribute;
     }
 
     public RaycastSelector(@Nonnull RaycastSelector other) {
@@ -41,6 +43,7 @@ public class RaycastSelector extends Selector {
         this.blockTagIndex = other.blockTagIndex;
         this.ignoreFluids = other.ignoreFluids;
         this.ignoreEmptyCollisionMaterial = other.ignoreEmptyCollisionMaterial;
+        this.distanceAttribute = other.distanceAttribute;
     }
 
     /**
@@ -95,9 +98,24 @@ public class RaycastSelector extends Selector {
         return (mem.get(PacketIO.PROTO_BYTE, offset + 21) & 0x02) != 0;
     }
     
+    @Nullable
+    public static String getDistanceAttribute(MemorySegment mem) {
+        return getDistanceAttribute(mem, 0);
+    }
+    
+    @Nullable
+    public static String getDistanceAttribute(MemorySegment mem, int offset) {
+        return hasDistanceAttribute(mem, offset) ? PacketIO.readVarString("DistanceAttribute", mem, offset + 22, 4096000): null;
+    }
+    
     public static boolean hasOffset(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
         return (b & 0x01) != 0;
+    }
+    
+    public static boolean hasDistanceAttribute(MemorySegment mem, int offset) {
+        var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
+        return (b & 0x02) != 0;
     }
     
     
@@ -118,14 +136,24 @@ public class RaycastSelector extends Selector {
     public static RaycastSelector toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
+        var varBase = offset + 22;
+        var varPos = 0;
+        String v5 = null;
+        if (hasDistanceAttribute(mem, offset)) {
+            var off = varBase + varPos;
+            var sp = VarInt.getWithLength(mem, off);
+            v5 = PacketIO.readVarString("DistanceAttribute", mem, off, 0, 4096000, sp);
+            varPos += (int) sp + (int) (sp >>> 32);
+        }
         var result = new RaycastSelector(
             hasOffset(mem, offset) ? PacketIO.requireFinite(PacketIO.readVector3f(mem, offset + 1), "Offset") : null,
             mem.get(PacketIO.PROTO_INT, offset + 13),
             mem.get(PacketIO.PROTO_INT, offset + 17),
             (mem.get(PacketIO.PROTO_BYTE, offset + 21) & 0x01) != 0,
-            (mem.get(PacketIO.PROTO_BYTE, offset + 21) & 0x02) != 0
+            (mem.get(PacketIO.PROTO_BYTE, offset + 21) & 0x02) != 0,
+            v5
         );
-        if (cursor != null) cursor.position = offset + 22;
+        if (cursor != null) cursor.position = varBase + varPos;
         return result;
     }
     @Override
@@ -133,6 +161,7 @@ public class RaycastSelector extends Selector {
         byte nullBits;
         nullBits = 0;
         if (this.offset != null) nullBits |= 0x01;
+        if (this.distanceAttribute != null) nullBits |= 0x02;
         mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         
         if (this.offset != null) {
@@ -146,14 +175,20 @@ public class RaycastSelector extends Selector {
         if (this.ignoreFluids) boolBits0_0 |= 0x01;
         if (this.ignoreEmptyCollisionMaterial) boolBits0_0 |= 0x02;
         mem.set(PacketIO.PROTO_BYTE, offset + 21 + 0, boolBits0_0);
-        
-        
+        var varOffset = offset + 22;
+        if (this.distanceAttribute != null) {
+            
+            varOffset += PacketIO.writeVarString(mem, varOffset, this.distanceAttribute, 4096000);
+        }
     
-       return 22;
+       return varOffset - offset;
     }
     @Override
     public int computeSize() {
-        return 22;
+        int size = 22;
+        if (distanceAttribute != null) size += PacketIO.stringSize(distanceAttribute);
+
+        return size;
     }
 
     public RaycastSelector clone() {
@@ -163,6 +198,7 @@ public class RaycastSelector extends Selector {
         copy.blockTagIndex = this.blockTagIndex;
         copy.ignoreFluids = this.ignoreFluids;
         copy.ignoreEmptyCollisionMaterial = this.ignoreEmptyCollisionMaterial;
+        copy.distanceAttribute = this.distanceAttribute;
         return copy;
     }
 
@@ -171,12 +207,12 @@ public class RaycastSelector extends Selector {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof RaycastSelector other)) return false;
-        return java.util.Objects.equals(this.offset, other.offset) && this.distance == other.distance && this.blockTagIndex == other.blockTagIndex && this.ignoreFluids == other.ignoreFluids && this.ignoreEmptyCollisionMaterial == other.ignoreEmptyCollisionMaterial;
+        return java.util.Objects.equals(this.offset, other.offset) && this.distance == other.distance && this.blockTagIndex == other.blockTagIndex && this.ignoreFluids == other.ignoreFluids && this.ignoreEmptyCollisionMaterial == other.ignoreEmptyCollisionMaterial && java.util.Objects.equals(this.distanceAttribute, other.distanceAttribute);
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(offset, distance, blockTagIndex, ignoreFluids, ignoreEmptyCollisionMaterial);
+        return java.util.Objects.hash(offset, distance, blockTagIndex, ignoreFluids, ignoreEmptyCollisionMaterial, distanceAttribute);
     }
 
 }

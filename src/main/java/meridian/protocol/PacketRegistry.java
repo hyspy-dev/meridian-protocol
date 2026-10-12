@@ -1112,6 +1112,21 @@ public final class PacketRegistry {
             0, 65536005, false,
             meridian.protocol.packets.interface_.RemoveRecurringWorldEvents::toObject);
         register(
+            PacketDirection.ToClient, NetworkChannel.Default,
+            257, "OpenPortalSummonPage", meridian.protocol.packets.interface_.OpenPortalSummonPage.class,
+            25, 49152052, false,
+            meridian.protocol.packets.interface_.OpenPortalSummonPage::toObject);
+        register(
+            PacketDirection.ToServer, NetworkChannel.Default,
+            258, "PortalSummonPageResult", meridian.protocol.packets.interface_.PortalSummonPageResult.class,
+            5, 5, false,
+            meridian.protocol.packets.interface_.PortalSummonPageResult::toObject);
+        register(
+            PacketDirection.ToClient, NetworkChannel.Default,
+            259, "OpenPortalActivePage", meridian.protocol.packets.interface_.OpenPortalActivePage.class,
+            28, 81920066, false,
+            meridian.protocol.packets.interface_.OpenPortalActivePage::toObject);
+        register(
             PacketDirection.ToServer, NetworkChannel.Default,
             260, "RequestMachinimaActorModel", meridian.protocol.packets.machinima.RequestMachinimaActorModel.class,
             1, 49152028, false,
@@ -1126,6 +1141,16 @@ public final class PacketRegistry {
             262, "UpdateMachinimaScene", meridian.protocol.packets.machinima.UpdateMachinimaScene.class,
             6, 36864033, true,
             meridian.protocol.packets.machinima.UpdateMachinimaScene::toObject);
+        register(
+            PacketDirection.ToServer, NetworkChannel.Default,
+            263, "PortalActivePageResult", meridian.protocol.packets.interface_.PortalActivePageResult.class,
+            5, 5, false,
+            meridian.protocol.packets.interface_.PortalActivePageResult::toObject);
+        register(
+            PacketDirection.ToClient, NetworkChannel.Default,
+            264, "OpenPortalErrorPage", meridian.protocol.packets.interface_.OpenPortalErrorPage.class,
+            1, 1677721600, false,
+            meridian.protocol.packets.interface_.OpenPortalErrorPage::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             280, "SetServerCamera", meridian.protocol.packets.camera.SetServerCamera.class,

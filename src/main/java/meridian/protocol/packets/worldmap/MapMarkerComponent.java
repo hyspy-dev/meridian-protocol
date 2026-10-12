@@ -40,6 +40,7 @@ public abstract class MapMarkerComponent {
                 case 1 -> PlacedByMarkerComponent.toObject(mem, offset + typeIdLen, walkCursor);
                 case 2 -> HeightDeltaIconComponent.toObject(mem, offset + typeIdLen, walkCursor);
                 case 3 -> TintComponent.toObject(mem, offset + typeIdLen, walkCursor);
+                case 4 -> CompassAlertComponent.toObject(mem, offset + typeIdLen, walkCursor);
                 default -> throw ProtocolException.unknownPolymorphicType("MapMarkerComponent", typeId);
             };
         } finally {
@@ -53,6 +54,7 @@ public abstract class MapMarkerComponent {
             if (this instanceof PlacedByMarkerComponent sub) { return 1; }
             if (this instanceof HeightDeltaIconComponent sub) { return 2; }
             if (this instanceof TintComponent sub) { return 3; }
+            if (this instanceof CompassAlertComponent sub) { return 4; }
         throw new IllegalStateException("Unknown subtype: " + getClass().getName());
     }
 
