@@ -14,9 +14,9 @@ import org.joml.*;
 
 public class ProjectileConfig {
     public static final int NULLABLE_BIT_FIELD_SIZE = 1;
-    public static final int FIXED_BLOCK_SIZE = 174;
+    public static final int FIXED_BLOCK_SIZE = 190;
     public static final int VARIABLE_FIELD_COUNT = 2;
-    public static final int VARIABLE_BLOCK_START = 182;
+    public static final int VARIABLE_BLOCK_START = 198;
     public static final int MAX_SIZE = 1677721600;
 
     @Nullable public PhysicsConfig physicsConfig;
@@ -32,11 +32,14 @@ public class ProjectileConfig {
     public int projectileSoundEventIndex;
     public float minScale;
     public float maxScale;
+    @Nullable public HitSphere hitSphere;
+    public float hitBoxScale;
+    public float minimumHitBoxDimension;
 
     public ProjectileConfig() {
     }
 
-    public ProjectileConfig(@Nullable PhysicsConfig physicsConfig, @Nullable Model model, double launchForce, @Nullable Vector3fc spawnOffset, @Nullable Direction rotationOffset, boolean rotateSpawnOffsetByPitch, boolean rotateSpawnOffsetByYaw, @Nullable java.util.Map<InteractionType, Integer> interactions, int launchLocalSoundEventIndex, int launchWorldSoundEventIndex, int projectileSoundEventIndex, float minScale, float maxScale) {
+    public ProjectileConfig(@Nullable PhysicsConfig physicsConfig, @Nullable Model model, double launchForce, @Nullable Vector3fc spawnOffset, @Nullable Direction rotationOffset, boolean rotateSpawnOffsetByPitch, boolean rotateSpawnOffsetByYaw, @Nullable java.util.Map<InteractionType, Integer> interactions, int launchLocalSoundEventIndex, int launchWorldSoundEventIndex, int projectileSoundEventIndex, float minScale, float maxScale, @Nullable HitSphere hitSphere, float hitBoxScale, float minimumHitBoxDimension) {
         this.physicsConfig = physicsConfig;
         this.model = model;
         this.launchForce = launchForce;
@@ -50,6 +53,9 @@ public class ProjectileConfig {
         this.projectileSoundEventIndex = projectileSoundEventIndex;
         this.minScale = minScale;
         this.maxScale = maxScale;
+        this.hitSphere = hitSphere;
+        this.hitBoxScale = hitBoxScale;
+        this.minimumHitBoxDimension = minimumHitBoxDimension;
     }
 
     public ProjectileConfig(@Nonnull ProjectileConfig other) {
@@ -66,6 +72,9 @@ public class ProjectileConfig {
         this.projectileSoundEventIndex = other.projectileSoundEventIndex;
         this.minScale = other.minScale;
         this.maxScale = other.maxScale;
+        this.hitSphere = other.hitSphere;
+        this.hitBoxScale = other.hitBoxScale;
+        this.minimumHitBoxDimension = other.minimumHitBoxDimension;
     }
 
     /**
@@ -74,7 +83,7 @@ public class ProjectileConfig {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("ProjectileConfig", offset, (int) mem.byteSize());
-        long needed = (long) offset + 182;
+        long needed = (long) offset + 198;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("ProjectileConfig", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -95,7 +104,7 @@ public class ProjectileConfig {
     
     @Nullable
     public static Model getModel(MemorySegment mem, int offset) {
-        return hasModel(mem, offset) ? Model.toObject(mem, offset + getValidatedOffset(mem, offset, 174, 182, "Model")): null;
+        return hasModel(mem, offset) ? Model.toObject(mem, offset + getValidatedOffset(mem, offset, 190, 198, "Model")): null;
     }
     
     public static double getLaunchForce(MemorySegment mem) {
@@ -150,7 +159,7 @@ public class ProjectileConfig {
     @Nullable
     public static java.util.Map<InteractionType, Integer> getInteractions(MemorySegment mem, int offset) {
         if (!hasInteractions(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 178, 182, "Interactions");
+        var off = offset + getValidatedOffset(mem, offset, 194, 198, "Interactions");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("Interactions");
         var len = (int) packed;
@@ -211,6 +220,32 @@ public class ProjectileConfig {
         return PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 170), "MaxScale");
     }
     
+    @Nullable
+    public static HitSphere getHitSphere(MemorySegment mem) {
+        return getHitSphere(mem, 0);
+    }
+    
+    @Nullable
+    public static HitSphere getHitSphere(MemorySegment mem, int offset) {
+        return hasHitSphere(mem, offset) ? HitSphere.toObject(mem, offset + 174): null;
+    }
+    
+    public static float getHitBoxScale(MemorySegment mem) {
+        return getHitBoxScale(mem, 0);
+    }
+    
+    public static float getHitBoxScale(MemorySegment mem, int offset) {
+        return PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 182), "HitBoxScale");
+    }
+    
+    public static float getMinimumHitBoxDimension(MemorySegment mem) {
+        return getMinimumHitBoxDimension(mem, 0);
+    }
+    
+    public static float getMinimumHitBoxDimension(MemorySegment mem, int offset) {
+        return PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 186), "MinimumHitBoxDimension");
+    }
+    
     public static boolean hasPhysicsConfig(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
         return (b & 0x01) != 0;
@@ -226,14 +261,19 @@ public class ProjectileConfig {
         return (b & 0x04) != 0;
     }
     
-    public static boolean hasModel(MemorySegment mem, int offset) {
+    public static boolean hasHitSphere(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
         return (b & 0x08) != 0;
     }
     
-    public static boolean hasInteractions(MemorySegment mem, int offset) {
+    public static boolean hasModel(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
         return (b & 0x10) != 0;
+    }
+    
+    public static boolean hasInteractions(MemorySegment mem, int offset) {
+        var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
+        return (b & 0x20) != 0;
     }
     
     private static int getValidatedOffset(MemorySegment buffer, int base, int slotPosition, int varBlockStart, String fieldName) {
@@ -269,21 +309,21 @@ public class ProjectileConfig {
     public static ProjectileConfig toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
-        var varBase = offset + 182;
+        var varBase = offset + 198;
         var varPos = 0;
         var walkCursor = cursor != null ? cursor : new ReadCursor();
         Model v1 = null;
         if (hasModel(mem, offset)) {
-            requireSlot(mem, offset + 174, varPos, "Model");
+            requireSlot(mem, offset + 190, varPos, "Model");
             v1 = Model.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
         } else {
-            requireSlot(mem, offset + 174, -1, "Model");
+            requireSlot(mem, offset + 190, -1, "Model");
         }
         
         java.util.Map<InteractionType, Integer> v7 = null;
         if (hasInteractions(mem, offset)) {
-            requireSlot(mem, offset + 178, varPos, "Interactions");
+            requireSlot(mem, offset + 194, varPos, "Interactions");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("Interactions");
@@ -304,7 +344,7 @@ public class ProjectileConfig {
             }
             varPos = off - varBase;
         } else {
-            requireSlot(mem, offset + 178, -1, "Interactions");
+            requireSlot(mem, offset + 194, -1, "Interactions");
         }
         var result = new ProjectileConfig(
             hasPhysicsConfig(mem, offset) ? PhysicsConfig.toObject(mem, offset + 1) : null,
@@ -319,7 +359,10 @@ public class ProjectileConfig {
             mem.get(PacketIO.PROTO_INT, offset + 158),
             mem.get(PacketIO.PROTO_INT, offset + 162),
             PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 166), "MinScale"),
-            PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 170), "MaxScale")
+            PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 170), "MaxScale"),
+            hasHitSphere(mem, offset) ? HitSphere.toObject(mem, offset + 174) : null,
+            PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 182), "HitBoxScale"),
+            PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 186), "MinimumHitBoxDimension")
         );
         if (cursor != null) cursor.position = varBase + varPos;
         return result;
@@ -330,8 +373,9 @@ public class ProjectileConfig {
         if (this.physicsConfig != null) nullBits |= 0x01;
         if (this.spawnOffset != null) nullBits |= 0x02;
         if (this.rotationOffset != null) nullBits |= 0x04;
-        if (this.model != null) nullBits |= 0x08;
-        if (this.interactions != null) nullBits |= 0x10;
+        if (this.hitSphere != null) nullBits |= 0x08;
+        if (this.model != null) nullBits |= 0x10;
+        if (this.interactions != null) nullBits |= 0x20;
         mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         
         if (this.physicsConfig != null) {
@@ -359,15 +403,22 @@ public class ProjectileConfig {
         mem.set(PacketIO.PROTO_INT, offset + 162, this.projectileSoundEventIndex);
         PacketIO.requireFinite(this.minScale, "MinScale"); mem.set(PacketIO.PROTO_FLOAT, offset + 166, this.minScale);
         PacketIO.requireFinite(this.maxScale, "MaxScale"); mem.set(PacketIO.PROTO_FLOAT, offset + 170, this.maxScale);
-        var varOffset = offset + 182;
+        if (this.hitSphere != null) {
+            this.hitSphere.serialize(mem, offset + 174);
+        } else {
+            mem.asSlice(offset + 174, 8).fill((byte) 0); 
+        }
+        PacketIO.requireFinite(this.hitBoxScale, "HitBoxScale"); mem.set(PacketIO.PROTO_FLOAT, offset + 182, this.hitBoxScale);
+        PacketIO.requireFinite(this.minimumHitBoxDimension, "MinimumHitBoxDimension"); mem.set(PacketIO.PROTO_FLOAT, offset + 186, this.minimumHitBoxDimension);
+        var varOffset = offset + 198;
         if (this.model != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 174, varOffset - offset - 182);
+            mem.set(PacketIO.PROTO_INT, offset + 190, varOffset - offset - 198);
             varOffset += this.model.serialize(mem, varOffset);
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 174, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 190, -1);
         }
         if (this.interactions != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 178, varOffset - offset - 182);
+            mem.set(PacketIO.PROTO_INT, offset + 194, varOffset - offset - 198);
             if (this.interactions.size() > 4096000) throw ProtocolException.dictionaryTooLarge("Interactions", interactions.size(), 4096000);
             varOffset += VarInt.set(mem, varOffset, this.interactions.size());
             for (var e : this.interactions.entrySet()) {
@@ -377,13 +428,13 @@ public class ProjectileConfig {
                 varOffset += 4;
             }
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 178, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 194, -1);
         }
     
        return varOffset - offset;
     }
     public int computeSize() {
-        int size = 182;
+        int size = 198;
         if (model != null) size += model.computeSize();
     if (interactions != null) size += VarInt.size(interactions.size()) + interactions.size() * (1 + 4);
 
@@ -405,6 +456,9 @@ public class ProjectileConfig {
         copy.projectileSoundEventIndex = this.projectileSoundEventIndex;
         copy.minScale = this.minScale;
         copy.maxScale = this.maxScale;
+        copy.hitSphere = this.hitSphere != null ? this.hitSphere.clone() : null;
+        copy.hitBoxScale = this.hitBoxScale;
+        copy.minimumHitBoxDimension = this.minimumHitBoxDimension;
         return copy;
     }
 
@@ -413,12 +467,12 @@ public class ProjectileConfig {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof ProjectileConfig other)) return false;
-        return java.util.Objects.equals(this.physicsConfig, other.physicsConfig) && java.util.Objects.equals(this.model, other.model) && this.launchForce == other.launchForce && java.util.Objects.equals(this.spawnOffset, other.spawnOffset) && java.util.Objects.equals(this.rotationOffset, other.rotationOffset) && this.rotateSpawnOffsetByPitch == other.rotateSpawnOffsetByPitch && this.rotateSpawnOffsetByYaw == other.rotateSpawnOffsetByYaw && java.util.Objects.equals(this.interactions, other.interactions) && this.launchLocalSoundEventIndex == other.launchLocalSoundEventIndex && this.launchWorldSoundEventIndex == other.launchWorldSoundEventIndex && this.projectileSoundEventIndex == other.projectileSoundEventIndex && this.minScale == other.minScale && this.maxScale == other.maxScale;
+        return java.util.Objects.equals(this.physicsConfig, other.physicsConfig) && java.util.Objects.equals(this.model, other.model) && this.launchForce == other.launchForce && java.util.Objects.equals(this.spawnOffset, other.spawnOffset) && java.util.Objects.equals(this.rotationOffset, other.rotationOffset) && this.rotateSpawnOffsetByPitch == other.rotateSpawnOffsetByPitch && this.rotateSpawnOffsetByYaw == other.rotateSpawnOffsetByYaw && java.util.Objects.equals(this.interactions, other.interactions) && this.launchLocalSoundEventIndex == other.launchLocalSoundEventIndex && this.launchWorldSoundEventIndex == other.launchWorldSoundEventIndex && this.projectileSoundEventIndex == other.projectileSoundEventIndex && this.minScale == other.minScale && this.maxScale == other.maxScale && java.util.Objects.equals(this.hitSphere, other.hitSphere) && this.hitBoxScale == other.hitBoxScale && this.minimumHitBoxDimension == other.minimumHitBoxDimension;
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(physicsConfig, model, launchForce, spawnOffset, rotationOffset, rotateSpawnOffsetByPitch, rotateSpawnOffsetByYaw, interactions, launchLocalSoundEventIndex, launchWorldSoundEventIndex, projectileSoundEventIndex, minScale, maxScale);
+        return java.util.Objects.hash(physicsConfig, model, launchForce, spawnOffset, rotationOffset, rotateSpawnOffsetByPitch, rotateSpawnOffsetByYaw, interactions, launchLocalSoundEventIndex, launchWorldSoundEventIndex, projectileSoundEventIndex, minScale, maxScale, hitSphere, hitBoxScale, minimumHitBoxDimension);
     }
 
 }

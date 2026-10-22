@@ -1379,7 +1379,7 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToServer, NetworkChannel.Default,
             333, "AssetEditorRequestDataset", meridian.protocol.packets.asseteditor.AssetEditorRequestDataset.class,
-            1, 16384006, false,
+            0, 16384005, false,
             meridian.protocol.packets.asseteditor.AssetEditorRequestDataset::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,

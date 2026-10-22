@@ -14,8 +14,8 @@ import java.util.HashMap;
 public class ItemAbility {
     public static final int NULLABLE_BIT_FIELD_SIZE = 2;
     public static final int FIXED_BLOCK_SIZE = 16;
-    public static final int VARIABLE_FIELD_COUNT = 9;
-    public static final int VARIABLE_BLOCK_START = 52;
+    public static final int VARIABLE_FIELD_COUNT = 10;
+    public static final int VARIABLE_BLOCK_START = 56;
     public static final int MAX_SIZE = 1677721600;
 
     @Nonnull public AbilitySlot slot = AbilitySlot.Core;
@@ -30,13 +30,14 @@ public class ItemAbility {
     @Nullable public int[] excludesAnyAbilityKeywordIndexes;
     @Nullable public String[] onHitEffects;
     @Nullable public java.util.Map<String, Float> attributes;
+    @Nullable public java.util.Map<String, AbilityDescriptionValue> descriptionValues;
     @Nullable public java.util.Map<String, Modifier[]> attributeModifiers;
     public int cast = Integer.MIN_VALUE;
 
     public ItemAbility() {
     }
 
-    public ItemAbility(@Nonnull AbilitySlot slot, float cooldown, float cost, @Nonnull AbilityCostType costType, @Nullable String[] weapons, @Nullable int[] weaponTagIndexes, @Nullable int[] abilityKeywordIndexes, @Nullable int[] requiresAnyAbilityKeywordIndexes, @Nullable int[] requiresAllAbilityKeywordIndexes, @Nullable int[] excludesAnyAbilityKeywordIndexes, @Nullable String[] onHitEffects, @Nullable java.util.Map<String, Float> attributes, @Nullable java.util.Map<String, Modifier[]> attributeModifiers, int cast) {
+    public ItemAbility(@Nonnull AbilitySlot slot, float cooldown, float cost, @Nonnull AbilityCostType costType, @Nullable String[] weapons, @Nullable int[] weaponTagIndexes, @Nullable int[] abilityKeywordIndexes, @Nullable int[] requiresAnyAbilityKeywordIndexes, @Nullable int[] requiresAllAbilityKeywordIndexes, @Nullable int[] excludesAnyAbilityKeywordIndexes, @Nullable String[] onHitEffects, @Nullable java.util.Map<String, Float> attributes, @Nullable java.util.Map<String, AbilityDescriptionValue> descriptionValues, @Nullable java.util.Map<String, Modifier[]> attributeModifiers, int cast) {
         this.slot = slot;
         this.cooldown = cooldown;
         this.cost = cost;
@@ -49,6 +50,7 @@ public class ItemAbility {
         this.excludesAnyAbilityKeywordIndexes = excludesAnyAbilityKeywordIndexes;
         this.onHitEffects = onHitEffects;
         this.attributes = attributes;
+        this.descriptionValues = descriptionValues;
         this.attributeModifiers = attributeModifiers;
         this.cast = cast;
     }
@@ -66,6 +68,7 @@ public class ItemAbility {
         this.excludesAnyAbilityKeywordIndexes = other.excludesAnyAbilityKeywordIndexes;
         this.onHitEffects = other.onHitEffects;
         this.attributes = other.attributes;
+        this.descriptionValues = other.descriptionValues;
         this.attributeModifiers = other.attributeModifiers;
         this.cast = other.cast;
     }
@@ -76,7 +79,7 @@ public class ItemAbility {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("ItemAbility", offset, (int) mem.byteSize());
-        long needed = (long) offset + 52;
+        long needed = (long) offset + 56;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("ItemAbility", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -120,7 +123,7 @@ public class ItemAbility {
     @Nullable
     public static String[] getWeapons(MemorySegment mem, int offset) {
         if (!hasWeapons(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 16, 52, "Weapons");
+        var off = offset + getValidatedOffset(mem, offset, 16, 56, "Weapons");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("Weapons");
         var len = (int) packed;
@@ -145,7 +148,7 @@ public class ItemAbility {
     @Nullable
     public static int[] getWeaponTagIndexes(MemorySegment mem, int offset) {
         if (!hasWeaponTagIndexes(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 20, 52, "WeaponTagIndexes");
+        var off = offset + getValidatedOffset(mem, offset, 20, 56, "WeaponTagIndexes");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("WeaponTagIndexes");
         var len = (int) packed;
@@ -166,7 +169,7 @@ public class ItemAbility {
     @Nullable
     public static int[] getAbilityKeywordIndexes(MemorySegment mem, int offset) {
         if (!hasAbilityKeywordIndexes(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 24, 52, "AbilityKeywordIndexes");
+        var off = offset + getValidatedOffset(mem, offset, 24, 56, "AbilityKeywordIndexes");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("AbilityKeywordIndexes");
         var len = (int) packed;
@@ -187,7 +190,7 @@ public class ItemAbility {
     @Nullable
     public static int[] getRequiresAnyAbilityKeywordIndexes(MemorySegment mem, int offset) {
         if (!hasRequiresAnyAbilityKeywordIndexes(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 28, 52, "RequiresAnyAbilityKeywordIndexes");
+        var off = offset + getValidatedOffset(mem, offset, 28, 56, "RequiresAnyAbilityKeywordIndexes");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("RequiresAnyAbilityKeywordIndexes");
         var len = (int) packed;
@@ -208,7 +211,7 @@ public class ItemAbility {
     @Nullable
     public static int[] getRequiresAllAbilityKeywordIndexes(MemorySegment mem, int offset) {
         if (!hasRequiresAllAbilityKeywordIndexes(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 32, 52, "RequiresAllAbilityKeywordIndexes");
+        var off = offset + getValidatedOffset(mem, offset, 32, 56, "RequiresAllAbilityKeywordIndexes");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("RequiresAllAbilityKeywordIndexes");
         var len = (int) packed;
@@ -229,7 +232,7 @@ public class ItemAbility {
     @Nullable
     public static int[] getExcludesAnyAbilityKeywordIndexes(MemorySegment mem, int offset) {
         if (!hasExcludesAnyAbilityKeywordIndexes(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 36, 52, "ExcludesAnyAbilityKeywordIndexes");
+        var off = offset + getValidatedOffset(mem, offset, 36, 56, "ExcludesAnyAbilityKeywordIndexes");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("ExcludesAnyAbilityKeywordIndexes");
         var len = (int) packed;
@@ -250,7 +253,7 @@ public class ItemAbility {
     @Nullable
     public static String[] getOnHitEffects(MemorySegment mem, int offset) {
         if (!hasOnHitEffects(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 40, 52, "OnHitEffects");
+        var off = offset + getValidatedOffset(mem, offset, 40, 56, "OnHitEffects");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("OnHitEffects");
         var len = (int) packed;
@@ -275,7 +278,7 @@ public class ItemAbility {
     @Nullable
     public static java.util.Map<String, Float> getAttributes(MemorySegment mem, int offset) {
         if (!hasAttributes(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 44, 52, "Attributes");
+        var off = offset + getValidatedOffset(mem, offset, 44, 56, "Attributes");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("Attributes");
         var len = (int) packed;
@@ -298,6 +301,37 @@ public class ItemAbility {
     }
     
     @Nullable
+    public static java.util.Map<String, AbilityDescriptionValue> getDescriptionValues(MemorySegment mem) {
+        return getDescriptionValues(mem, 0);
+    }
+    
+    @Nullable
+    public static java.util.Map<String, AbilityDescriptionValue> getDescriptionValues(MemorySegment mem, int offset) {
+        if (!hasDescriptionValues(mem, offset)) return null;
+        var walkCursor = new ReadCursor();
+        var off = offset + getValidatedOffset(mem, offset, 48, 56, "DescriptionValues");
+        var packed = VarInt.getWithLength(mem, off);
+        if (packed == -1L) throw ProtocolException.invalidVarInt("DescriptionValues");
+        var len = (int) packed;
+        if (len > 4096000) throw ProtocolException.dictionaryTooLarge("DescriptionValues", len, 4096000);
+        
+        off += (int) (packed >>> 32);
+        if (off + (long) len * 7 > mem.byteSize()) throw ProtocolException.bufferTooSmall("DescriptionValues", (int) java.lang.Math.min(off + (long) len * 7, Integer.MAX_VALUE), (int) mem.byteSize());
+        java.util.Map<String, AbilityDescriptionValue> data = new HashMap<>(len);
+        for (var i = 0; i < len; i++) {
+            var keyPacked = VarInt.getWithLength(mem, off);
+                var key = PacketIO.readVarString("key", mem, off, 0, 4096000, keyPacked);
+                off += (int) keyPacked + (int) (keyPacked >>> 32);
+            var value = AbilityDescriptionValue.toObject(mem, off, walkCursor);
+                off = walkCursor.position;
+            if (data.put(key, value) != null) {
+                throw ProtocolException.duplicateKey("DescriptionValues", key);
+            }
+        }
+        return data;
+    }
+    
+    @Nullable
     public static java.util.Map<String, Modifier[]> getAttributeModifiers(MemorySegment mem) {
         return getAttributeModifiers(mem, 0);
     }
@@ -305,7 +339,7 @@ public class ItemAbility {
     @Nullable
     public static java.util.Map<String, Modifier[]> getAttributeModifiers(MemorySegment mem, int offset) {
         if (!hasAttributeModifiers(mem, offset)) return null;
-        var off = offset + getValidatedOffset(mem, offset, 48, 52, "AttributeModifiers");
+        var off = offset + getValidatedOffset(mem, offset, 52, 56, "AttributeModifiers");
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("AttributeModifiers");
         var len = (int) packed;
@@ -386,9 +420,14 @@ public class ItemAbility {
         return (b & 0x80) != 0;
     }
     
-    public static boolean hasAttributeModifiers(MemorySegment mem, int offset) {
+    public static boolean hasDescriptionValues(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 1);
         return (b & 0x01) != 0;
+    }
+    
+    public static boolean hasAttributeModifiers(MemorySegment mem, int offset) {
+        var b = mem.get(PacketIO.PROTO_BYTE, offset + 1);
+        return (b & 0x02) != 0;
     }
     
     private static int getValidatedOffset(MemorySegment buffer, int base, int slotPosition, int varBlockStart, String fieldName) {
@@ -424,8 +463,9 @@ public class ItemAbility {
     public static ItemAbility toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
-        var varBase = offset + 52;
+        var varBase = offset + 56;
         var varPos = 0;
+        var walkCursor = cursor != null ? cursor : new ReadCursor();
         String[] v4 = null;
         if (hasWeapons(mem, offset)) {
             requireSlot(mem, offset + 16, varPos, "Weapons");
@@ -587,9 +627,36 @@ public class ItemAbility {
             requireSlot(mem, offset + 44, -1, "Attributes");
         }
         
-        java.util.Map<String, Modifier[]> v12 = null;
+        java.util.Map<String, AbilityDescriptionValue> v12 = null;
+        if (hasDescriptionValues(mem, offset)) {
+            requireSlot(mem, offset + 48, varPos, "DescriptionValues");
+            var off = varBase + varPos;
+            var packed = VarInt.getWithLength(mem, off);
+            if (packed == -1L) throw ProtocolException.invalidVarInt("DescriptionValues");
+            var len = (int) packed;
+            if (len > 4096000) throw ProtocolException.dictionaryTooLarge("DescriptionValues", len, 4096000);
+            
+            off += (int) (packed >>> 32);
+            if (off + (long) len * 7 > mem.byteSize()) throw ProtocolException.bufferTooSmall("DescriptionValues", (int) java.lang.Math.min(off + (long) len * 7, Integer.MAX_VALUE), (int) mem.byteSize());
+            v12 = new HashMap<>(len);
+            for (var i = 0; i < len; i++) {
+                var keyPacked = VarInt.getWithLength(mem, off);
+                    var key = PacketIO.readVarString("key", mem, off, 0, 4096000, keyPacked);
+                    off += (int) keyPacked + (int) (keyPacked >>> 32);
+                var value = AbilityDescriptionValue.toObject(mem, off, walkCursor);
+                    off = walkCursor.position;
+                if (v12.put(key, value) != null) {
+                    throw ProtocolException.duplicateKey("DescriptionValues", key);
+                }
+            }
+            varPos = off - varBase;
+        } else {
+            requireSlot(mem, offset + 48, -1, "DescriptionValues");
+        }
+        
+        java.util.Map<String, Modifier[]> v13 = null;
         if (hasAttributeModifiers(mem, offset)) {
-            requireSlot(mem, offset + 48, varPos, "AttributeModifiers");
+            requireSlot(mem, offset + 52, varPos, "AttributeModifiers");
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
             if (packed == -1L) throw ProtocolException.invalidVarInt("AttributeModifiers");
@@ -598,7 +665,7 @@ public class ItemAbility {
             
             off += (int) (packed >>> 32);
             if (off + (long) len * 2 > mem.byteSize()) throw ProtocolException.bufferTooSmall("AttributeModifiers", (int) java.lang.Math.min(off + (long) len * 2, Integer.MAX_VALUE), (int) mem.byteSize());
-            v12 = new HashMap<>(len);
+            v13 = new HashMap<>(len);
             for (var i = 0; i < len; i++) {
                 var keyPacked = VarInt.getWithLength(mem, off);
                     var key = PacketIO.readVarString("key", mem, off, 0, 4096000, keyPacked);
@@ -616,13 +683,13 @@ public class ItemAbility {
                         value[valueIdx] = Modifier.toObject(mem, off);
                         off += 6;
                     }
-                if (v12.put(key, value) != null) {
+                if (v13.put(key, value) != null) {
                     throw ProtocolException.duplicateKey("AttributeModifiers", key);
                 }
             }
             varPos = off - varBase;
         } else {
-            requireSlot(mem, offset + 48, -1, "AttributeModifiers");
+            requireSlot(mem, offset + 52, -1, "AttributeModifiers");
         }
         var result = new ItemAbility(
             AbilitySlot.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 2)),
@@ -638,6 +705,7 @@ public class ItemAbility {
             v10,
             v11,
             v12,
+            v13,
             mem.get(PacketIO.PROTO_INT, offset + 12)
         );
         if (cursor != null) cursor.position = varBase + varPos;
@@ -656,7 +724,8 @@ public class ItemAbility {
         if (this.attributes != null) nullBits |= 0x80;
         mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         nullBits = 0;
-        if (this.attributeModifiers != null) nullBits |= 0x01;
+        if (this.descriptionValues != null) nullBits |= 0x01;
+        if (this.attributeModifiers != null) nullBits |= 0x02;
         mem.set(PacketIO.PROTO_BYTE, offset + 1, nullBits);
         
         mem.set(PacketIO.PROTO_BYTE, offset + 2, (byte) this.slot.getValue());
@@ -664,9 +733,9 @@ public class ItemAbility {
         PacketIO.requireFinite(this.cost, "Cost"); mem.set(PacketIO.PROTO_FLOAT, offset + 7, this.cost);
         mem.set(PacketIO.PROTO_BYTE, offset + 11, (byte) this.costType.getValue());
         mem.set(PacketIO.PROTO_INT, offset + 12, this.cast);
-        var varOffset = offset + 52;
+        var varOffset = offset + 56;
         if (this.weapons != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 16, varOffset - offset - 52);
+            mem.set(PacketIO.PROTO_INT, offset + 16, varOffset - offset - 56);
             if (weapons.length > 4096000) throw ProtocolException.arrayTooLong("Weapons", weapons.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.weapons.length);
             
@@ -679,7 +748,7 @@ public class ItemAbility {
             mem.set(PacketIO.PROTO_INT, offset + 16, -1);
         }
         if (this.weaponTagIndexes != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 20, varOffset - offset - 52);
+            mem.set(PacketIO.PROTO_INT, offset + 20, varOffset - offset - 56);
             if (weaponTagIndexes.length > 4096000) throw ProtocolException.arrayTooLong("WeaponTagIndexes", weaponTagIndexes.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.weaponTagIndexes.length);
             
@@ -689,7 +758,7 @@ public class ItemAbility {
             mem.set(PacketIO.PROTO_INT, offset + 20, -1);
         }
         if (this.abilityKeywordIndexes != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 24, varOffset - offset - 52);
+            mem.set(PacketIO.PROTO_INT, offset + 24, varOffset - offset - 56);
             if (abilityKeywordIndexes.length > 4096000) throw ProtocolException.arrayTooLong("AbilityKeywordIndexes", abilityKeywordIndexes.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.abilityKeywordIndexes.length);
             
@@ -699,7 +768,7 @@ public class ItemAbility {
             mem.set(PacketIO.PROTO_INT, offset + 24, -1);
         }
         if (this.requiresAnyAbilityKeywordIndexes != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 28, varOffset - offset - 52);
+            mem.set(PacketIO.PROTO_INT, offset + 28, varOffset - offset - 56);
             if (requiresAnyAbilityKeywordIndexes.length > 4096000) throw ProtocolException.arrayTooLong("RequiresAnyAbilityKeywordIndexes", requiresAnyAbilityKeywordIndexes.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.requiresAnyAbilityKeywordIndexes.length);
             
@@ -709,7 +778,7 @@ public class ItemAbility {
             mem.set(PacketIO.PROTO_INT, offset + 28, -1);
         }
         if (this.requiresAllAbilityKeywordIndexes != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 32, varOffset - offset - 52);
+            mem.set(PacketIO.PROTO_INT, offset + 32, varOffset - offset - 56);
             if (requiresAllAbilityKeywordIndexes.length > 4096000) throw ProtocolException.arrayTooLong("RequiresAllAbilityKeywordIndexes", requiresAllAbilityKeywordIndexes.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.requiresAllAbilityKeywordIndexes.length);
             
@@ -719,7 +788,7 @@ public class ItemAbility {
             mem.set(PacketIO.PROTO_INT, offset + 32, -1);
         }
         if (this.excludesAnyAbilityKeywordIndexes != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 36, varOffset - offset - 52);
+            mem.set(PacketIO.PROTO_INT, offset + 36, varOffset - offset - 56);
             if (excludesAnyAbilityKeywordIndexes.length > 4096000) throw ProtocolException.arrayTooLong("ExcludesAnyAbilityKeywordIndexes", excludesAnyAbilityKeywordIndexes.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.excludesAnyAbilityKeywordIndexes.length);
             
@@ -729,7 +798,7 @@ public class ItemAbility {
             mem.set(PacketIO.PROTO_INT, offset + 36, -1);
         }
         if (this.onHitEffects != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 40, varOffset - offset - 52);
+            mem.set(PacketIO.PROTO_INT, offset + 40, varOffset - offset - 56);
             if (onHitEffects.length > 4096000) throw ProtocolException.arrayTooLong("OnHitEffects", onHitEffects.length, 4096000);
             varOffset += VarInt.set(mem, varOffset, this.onHitEffects.length);
             
@@ -742,7 +811,7 @@ public class ItemAbility {
             mem.set(PacketIO.PROTO_INT, offset + 40, -1);
         }
         if (this.attributes != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 44, varOffset - offset - 52);
+            mem.set(PacketIO.PROTO_INT, offset + 44, varOffset - offset - 56);
             if (this.attributes.size() > 4096000) throw ProtocolException.dictionaryTooLarge("Attributes", attributes.size(), 4096000);
             varOffset += VarInt.set(mem, varOffset, this.attributes.size());
             for (var e : this.attributes.entrySet()) {
@@ -753,8 +822,19 @@ public class ItemAbility {
         } else {
             mem.set(PacketIO.PROTO_INT, offset + 44, -1);
         }
+        if (this.descriptionValues != null) {
+            mem.set(PacketIO.PROTO_INT, offset + 48, varOffset - offset - 56);
+            if (this.descriptionValues.size() > 4096000) throw ProtocolException.dictionaryTooLarge("DescriptionValues", descriptionValues.size(), 4096000);
+            varOffset += VarInt.set(mem, varOffset, this.descriptionValues.size());
+            for (var e : this.descriptionValues.entrySet()) {
+                varOffset += PacketIO.writeVarString(mem, varOffset, e.getKey(), 4096000);
+                varOffset += e.getValue().serialize(mem, varOffset);
+            }
+        } else {
+            mem.set(PacketIO.PROTO_INT, offset + 48, -1);
+        }
         if (this.attributeModifiers != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 48, varOffset - offset - 52);
+            mem.set(PacketIO.PROTO_INT, offset + 52, varOffset - offset - 56);
             if (this.attributeModifiers.size() > 4096000) throw ProtocolException.dictionaryTooLarge("AttributeModifiers", attributeModifiers.size(), 4096000);
             varOffset += VarInt.set(mem, varOffset, this.attributeModifiers.size());
             for (var e : this.attributeModifiers.entrySet()) {
@@ -765,13 +845,13 @@ public class ItemAbility {
                 }
             }
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 48, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 52, -1);
         }
     
        return varOffset - offset;
     }
     public int computeSize() {
-        int size = 52;
+        int size = 56;
         if (weapons != null) {
         int weaponsSize = 0;
 for (var elem : weapons) weaponsSize += PacketIO.stringSize(elem);
@@ -791,6 +871,11 @@ size += VarInt.size(onHitEffects.length) + onHitEffectsSize;
         int attributesSize = 0;
 for (var kvp : attributes.entrySet()) attributesSize += PacketIO.stringSize(kvp.getKey()) + 4;
 size += VarInt.size(attributes.size()) + attributesSize;
+    }
+    if (descriptionValues != null) {
+        int descriptionValuesSize = 0;
+for (var kvp : descriptionValues.entrySet()) descriptionValuesSize += PacketIO.stringSize(kvp.getKey()) + kvp.getValue().computeSize();
+size += VarInt.size(descriptionValues.size()) + descriptionValuesSize;
     }
     if (attributeModifiers != null) {
         int attributeModifiersSize = 0;
@@ -815,6 +900,11 @@ size += VarInt.size(attributeModifiers.size()) + attributeModifiersSize;
         copy.excludesAnyAbilityKeywordIndexes = this.excludesAnyAbilityKeywordIndexes != null ? java.util.Arrays.copyOf(this.excludesAnyAbilityKeywordIndexes, this.excludesAnyAbilityKeywordIndexes.length) : null;
         copy.onHitEffects = this.onHitEffects != null ? java.util.Arrays.copyOf(this.onHitEffects, this.onHitEffects.length) : null;
         copy.attributes = this.attributes != null ? new java.util.HashMap<>(this.attributes) : null;
+        if (this.descriptionValues != null) {
+            java.util.Map<String, AbilityDescriptionValue> m = new java.util.HashMap<>();
+            for (var e : this.descriptionValues.entrySet()) { m.put(e.getKey(), e.getValue().clone()); }
+            copy.descriptionValues = m;
+        }
         if (this.attributeModifiers != null) {
             java.util.Map<String, Modifier[]> m = new java.util.HashMap<>();
             for (var e : this.attributeModifiers.entrySet()) { m.put(e.getKey(), java.util.Arrays.stream(e.getValue()).map(x -> x.clone()).toArray(Modifier[]::new)); }
@@ -829,7 +919,7 @@ size += VarInt.size(attributeModifiers.size()) + attributeModifiersSize;
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof ItemAbility other)) return false;
-        return java.util.Objects.equals(this.slot, other.slot) && this.cooldown == other.cooldown && this.cost == other.cost && java.util.Objects.equals(this.costType, other.costType) && java.util.Arrays.equals(this.weapons, other.weapons) && java.util.Arrays.equals(this.weaponTagIndexes, other.weaponTagIndexes) && java.util.Arrays.equals(this.abilityKeywordIndexes, other.abilityKeywordIndexes) && java.util.Arrays.equals(this.requiresAnyAbilityKeywordIndexes, other.requiresAnyAbilityKeywordIndexes) && java.util.Arrays.equals(this.requiresAllAbilityKeywordIndexes, other.requiresAllAbilityKeywordIndexes) && java.util.Arrays.equals(this.excludesAnyAbilityKeywordIndexes, other.excludesAnyAbilityKeywordIndexes) && java.util.Arrays.equals(this.onHitEffects, other.onHitEffects) && java.util.Objects.equals(this.attributes, other.attributes) && java.util.Objects.equals(this.attributeModifiers, other.attributeModifiers) && this.cast == other.cast;
+        return java.util.Objects.equals(this.slot, other.slot) && this.cooldown == other.cooldown && this.cost == other.cost && java.util.Objects.equals(this.costType, other.costType) && java.util.Arrays.equals(this.weapons, other.weapons) && java.util.Arrays.equals(this.weaponTagIndexes, other.weaponTagIndexes) && java.util.Arrays.equals(this.abilityKeywordIndexes, other.abilityKeywordIndexes) && java.util.Arrays.equals(this.requiresAnyAbilityKeywordIndexes, other.requiresAnyAbilityKeywordIndexes) && java.util.Arrays.equals(this.requiresAllAbilityKeywordIndexes, other.requiresAllAbilityKeywordIndexes) && java.util.Arrays.equals(this.excludesAnyAbilityKeywordIndexes, other.excludesAnyAbilityKeywordIndexes) && java.util.Arrays.equals(this.onHitEffects, other.onHitEffects) && java.util.Objects.equals(this.attributes, other.attributes) && java.util.Objects.equals(this.descriptionValues, other.descriptionValues) && java.util.Objects.equals(this.attributeModifiers, other.attributeModifiers) && this.cast == other.cast;
     }
 
     @Override
@@ -847,6 +937,7 @@ size += VarInt.size(attributeModifiers.size()) + attributeModifiersSize;
         result = 31 * result + java.util.Arrays.hashCode(excludesAnyAbilityKeywordIndexes);
         result = 31 * result + java.util.Arrays.hashCode(onHitEffects);
         result = 31 * result + java.util.Objects.hashCode(attributes);
+        result = 31 * result + java.util.Objects.hashCode(descriptionValues);
         result = 31 * result + java.util.Objects.hashCode(attributeModifiers);
         result = 31 * result + Integer.hashCode(cast);
         return result;

@@ -88,7 +88,7 @@ public class UpdateProjectileConfigs implements Packet, ToClientPacket {
         if (len > 4096000) throw ProtocolException.dictionaryTooLarge("Configs", len, 4096000);
         
         off += (int) (packed >>> 32);
-        if (off + (long) len * 183 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Configs", (int) java.lang.Math.min(off + (long) len * 183, Integer.MAX_VALUE), (int) mem.byteSize());
+        if (off + (long) len * 199 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Configs", (int) java.lang.Math.min(off + (long) len * 199, Integer.MAX_VALUE), (int) mem.byteSize());
         java.util.Map<String, ProjectileConfig> data = new HashMap<>(len);
         for (var i = 0; i < len; i++) {
             var keyPacked = VarInt.getWithLength(mem, off);
@@ -184,7 +184,7 @@ public class UpdateProjectileConfigs implements Packet, ToClientPacket {
             if (len > 4096000) throw ProtocolException.dictionaryTooLarge("Configs", len, 4096000);
             
             off += (int) (packed >>> 32);
-            if (off + (long) len * 183 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Configs", (int) java.lang.Math.min(off + (long) len * 183, Integer.MAX_VALUE), (int) mem.byteSize());
+            if (off + (long) len * 199 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Configs", (int) java.lang.Math.min(off + (long) len * 199, Integer.MAX_VALUE), (int) mem.byteSize());
             v1 = new HashMap<>(len);
             for (var i = 0; i < len; i++) {
                 var keyPacked = VarInt.getWithLength(mem, off);

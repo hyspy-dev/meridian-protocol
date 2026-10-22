@@ -17,11 +17,11 @@ import meridian.protocol.io.VarInt;
 public class AssetEditorRequestDataset implements Packet, ToServerPacket {
     public static final int PACKET_ID = 333;
     public static final boolean IS_COMPRESSED = false;
-    public static final int NULLABLE_BIT_FIELD_SIZE = 1;
-    public static final int FIXED_BLOCK_SIZE = 1;
+    public static final int NULLABLE_BIT_FIELD_SIZE = 0;
+    public static final int FIXED_BLOCK_SIZE = 0;
     public static final int VARIABLE_FIELD_COUNT = 1;
-    public static final int VARIABLE_BLOCK_START = 1;
-    public static final int MAX_SIZE = 16384006;
+    public static final int VARIABLE_BLOCK_START = 0;
+    public static final int MAX_SIZE = 16384005;
 
     @Override
     public int getId() {
@@ -33,12 +33,12 @@ public class AssetEditorRequestDataset implements Packet, ToServerPacket {
         return NetworkChannel.Default;
     }
 
-    @Nullable public String name;
+    @Nonnull public String name = "";
 
     public AssetEditorRequestDataset() {
     }
 
-    public AssetEditorRequestDataset(@Nullable String name) {
+    public AssetEditorRequestDataset(@Nonnull String name) {
         this.name = name;
     }
 
@@ -52,24 +52,19 @@ public class AssetEditorRequestDataset implements Packet, ToServerPacket {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("AssetEditorRequestDataset", offset, (int) mem.byteSize());
-        long needed = (long) offset + 1;
+        long needed = (long) offset + 0;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("AssetEditorRequestDataset", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
-    @Nullable
     public static String getName(MemorySegment mem) {
         return getName(mem, 0);
     }
     
-    @Nullable
     public static String getName(MemorySegment mem, int offset) {
-        return hasName(mem, offset) ? PacketIO.readVarString("Name", mem, offset + 1, 4096000): null;
+        return PacketIO.readVarString("Name", mem, offset + 0, 4096000);
     }
     
-    public static boolean hasName(MemorySegment mem, int offset) {
-        var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
-        return (b & 0x01) != 0;
-    }
+    
     
     
     
@@ -89,10 +84,10 @@ public class AssetEditorRequestDataset implements Packet, ToServerPacket {
     public static AssetEditorRequestDataset toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
-        var varBase = offset + 1;
+        var varBase = offset + 0;
         var varPos = 0;
-        String v0 = null;
-        if (hasName(mem, offset)) {
+        String v0;
+        {
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
             v0 = PacketIO.readVarString("Name", mem, off, 0, 4096000, sp);
@@ -106,23 +101,16 @@ public class AssetEditorRequestDataset implements Packet, ToServerPacket {
     }
     @Override
     public int serialize(@Nonnull MemorySegment mem, int offset) {
-        byte nullBits;
-        nullBits = 0;
-        if (this.name != null) nullBits |= 0x01;
-        mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         
         
-        var varOffset = offset + 1;
-        if (this.name != null) {
-            
-            varOffset += PacketIO.writeVarString(mem, varOffset, this.name, 4096000);
-        }
+        var varOffset = offset + 0;
+        varOffset += PacketIO.writeVarString(mem, varOffset, this.name, 4096000);
     
        return varOffset - offset;
     }
     public int computeSize() {
-        int size = 1;
-        if (name != null) size += PacketIO.stringSize(name);
+        int size = 0;
+        size += PacketIO.stringSize(name);
 
         return size;
     }

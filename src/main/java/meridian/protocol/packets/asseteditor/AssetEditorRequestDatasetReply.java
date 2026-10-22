@@ -33,13 +33,13 @@ public class AssetEditorRequestDatasetReply implements Packet, ToClientPacket {
         return NetworkChannel.Default;
     }
 
-    @Nullable public String name;
+    @Nonnull public String name = "";
     @Nullable public String[] ids;
 
     public AssetEditorRequestDatasetReply() {
     }
 
-    public AssetEditorRequestDatasetReply(@Nullable String name, @Nullable String[] ids) {
+    public AssetEditorRequestDatasetReply(@Nonnull String name, @Nullable String[] ids) {
         this.name = name;
         this.ids = ids;
     }
@@ -59,14 +59,12 @@ public class AssetEditorRequestDatasetReply implements Packet, ToClientPacket {
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("AssetEditorRequestDatasetReply", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
-    @Nullable
     public static String getName(MemorySegment mem) {
         return getName(mem, 0);
     }
     
-    @Nullable
     public static String getName(MemorySegment mem, int offset) {
-        return hasName(mem, offset) ? PacketIO.readVarString("Name", mem, offset + getValidatedOffset(mem, offset, 1, 9, "Name"), 4096000): null;
+        return PacketIO.readVarString("Name", mem, offset + getValidatedOffset(mem, offset, 1, 9, "Name"), 4096000);
     }
     
     @Nullable
@@ -94,14 +92,9 @@ public class AssetEditorRequestDatasetReply implements Packet, ToClientPacket {
         return data;
     }
     
-    public static boolean hasName(MemorySegment mem, int offset) {
-        var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
-        return (b & 0x01) != 0;
-    }
-    
     public static boolean hasIds(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
-        return (b & 0x02) != 0;
+        return (b & 0x01) != 0;
     }
     
     private static int getValidatedOffset(MemorySegment buffer, int base, int slotPosition, int varBlockStart, String fieldName) {
@@ -139,15 +132,13 @@ public class AssetEditorRequestDatasetReply implements Packet, ToClientPacket {
         requireBounds(mem, offset);
         var varBase = offset + 9;
         var varPos = 0;
-        String v0 = null;
-        if (hasName(mem, offset)) {
-            requireSlot(mem, offset + 1, varPos, "Name");
+        String v0;
+        requireSlot(mem, offset + 1, varPos, "Name");
+        {
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
             v0 = PacketIO.readVarString("Name", mem, off, 0, 4096000, sp);
             varPos += (int) sp + (int) (sp >>> 32);
-        } else {
-            requireSlot(mem, offset + 1, -1, "Name");
         }
         
         String[] v1 = null;
@@ -182,18 +173,13 @@ public class AssetEditorRequestDatasetReply implements Packet, ToClientPacket {
     public int serialize(@Nonnull MemorySegment mem, int offset) {
         byte nullBits;
         nullBits = 0;
-        if (this.name != null) nullBits |= 0x01;
-        if (this.ids != null) nullBits |= 0x02;
+        if (this.ids != null) nullBits |= 0x01;
         mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         
         
         var varOffset = offset + 9;
-        if (this.name != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 1, varOffset - offset - 9);
-            varOffset += PacketIO.writeVarString(mem, varOffset, this.name, 4096000);
-        } else {
-            mem.set(PacketIO.PROTO_INT, offset + 1, -1);
-        }
+        mem.set(PacketIO.PROTO_INT, offset + 1, varOffset - offset - 9);
+        varOffset += PacketIO.writeVarString(mem, varOffset, this.name, 4096000);
         if (this.ids != null) {
             mem.set(PacketIO.PROTO_INT, offset + 5, varOffset - offset - 9);
             if (ids.length > 4096000) throw ProtocolException.arrayTooLong("Ids", ids.length, 4096000);
@@ -212,7 +198,7 @@ public class AssetEditorRequestDatasetReply implements Packet, ToClientPacket {
     }
     public int computeSize() {
         int size = 9;
-        if (name != null) size += PacketIO.stringSize(name);
+        size += PacketIO.stringSize(name);
     if (ids != null) {
         int idsSize = 0;
 for (var elem : ids) idsSize += PacketIO.stringSize(elem);
