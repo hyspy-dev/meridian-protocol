@@ -35,12 +35,12 @@ public class TriggerVolumeToolSetCooldown implements Packet, ToServerPacket {
 
     @Nonnull public String volumeId = "";
     public float cooldown;
-    public byte cooldownMode;
+    @Nonnull public TriggerVolumeCooldownMode cooldownMode = TriggerVolumeCooldownMode.PerEntity;
 
     public TriggerVolumeToolSetCooldown() {
     }
 
-    public TriggerVolumeToolSetCooldown(@Nonnull String volumeId, float cooldown, byte cooldownMode) {
+    public TriggerVolumeToolSetCooldown(@Nonnull String volumeId, float cooldown, @Nonnull TriggerVolumeCooldownMode cooldownMode) {
         this.volumeId = volumeId;
         this.cooldown = cooldown;
         this.cooldownMode = cooldownMode;
@@ -78,12 +78,12 @@ public class TriggerVolumeToolSetCooldown implements Packet, ToServerPacket {
         return PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 0), "Cooldown");
     }
     
-    public static byte getCooldownMode(MemorySegment mem) {
+    public static TriggerVolumeCooldownMode getCooldownMode(MemorySegment mem) {
         return getCooldownMode(mem, 0);
     }
     
-    public static byte getCooldownMode(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_BYTE, offset + 4);
+    public static TriggerVolumeCooldownMode getCooldownMode(MemorySegment mem, int offset) {
+        return TriggerVolumeCooldownMode.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 4));
     }
     
     
@@ -118,7 +118,7 @@ public class TriggerVolumeToolSetCooldown implements Packet, ToServerPacket {
         var result = new TriggerVolumeToolSetCooldown(
             v0,
             PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 0), "Cooldown"),
-            mem.get(PacketIO.PROTO_BYTE, offset + 4)
+            TriggerVolumeCooldownMode.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 4))
         );
         if (cursor != null) cursor.position = varBase + varPos;
         return result;
@@ -127,7 +127,7 @@ public class TriggerVolumeToolSetCooldown implements Packet, ToServerPacket {
     public int serialize(@Nonnull MemorySegment mem, int offset) {
         
         PacketIO.requireFinite(this.cooldown, "Cooldown"); mem.set(PacketIO.PROTO_FLOAT, offset + 0, this.cooldown);
-        mem.set(PacketIO.PROTO_BYTE, offset + 4, this.cooldownMode);
+        mem.set(PacketIO.PROTO_BYTE, offset + 4, (byte) this.cooldownMode.getValue());
         var varOffset = offset + 5;
         varOffset += PacketIO.writeVarString(mem, varOffset, this.volumeId, 4096000);
     
@@ -153,7 +153,7 @@ public class TriggerVolumeToolSetCooldown implements Packet, ToServerPacket {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof TriggerVolumeToolSetCooldown other)) return false;
-        return java.util.Objects.equals(this.volumeId, other.volumeId) && this.cooldown == other.cooldown && this.cooldownMode == other.cooldownMode;
+        return java.util.Objects.equals(this.volumeId, other.volumeId) && this.cooldown == other.cooldown && java.util.Objects.equals(this.cooldownMode, other.cooldownMode);
     }
 
     @Override

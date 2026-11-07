@@ -20,6 +20,17 @@ public interface ConnectionHandler {
     void handle(@Nonnull ToServerPacket packet);
 
     /**
+     * Tests if this handler accepts packets with the given ID in its current state. Transports call
+     * this when the frame header arrives, before they buffer or decompress the payload, and close
+     * the connection if it returns {@code false}.
+     *
+     * @param packetId The ID of the received packet
+     */
+    default boolean handlesPacket(int packetId) {
+        return true;
+    }
+
+    /**
      * Called when the affiliated network channel has been closed.
      *
      * @param networkChannel The network channel that was closed, or null if unknown

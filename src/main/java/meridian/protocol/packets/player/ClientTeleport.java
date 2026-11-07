@@ -38,16 +38,18 @@ public class ClientTeleport implements Packet, ToClientPacket {
     @Nonnull public short relativeTransformFields;
     @Nonnull public ModelTransform modelTransform = new ModelTransform();
     public boolean resetVelocity;
+    public boolean isMountedTeleport;
 
     public ClientTeleport() {
     }
 
-    public ClientTeleport(byte teleportId, @Nonnull short ignoredTransformFields, @Nonnull short relativeTransformFields, @Nonnull ModelTransform modelTransform, boolean resetVelocity) {
+    public ClientTeleport(byte teleportId, @Nonnull short ignoredTransformFields, @Nonnull short relativeTransformFields, @Nonnull ModelTransform modelTransform, boolean resetVelocity, boolean isMountedTeleport) {
         this.teleportId = teleportId;
         this.ignoredTransformFields = ignoredTransformFields;
         this.relativeTransformFields = relativeTransformFields;
         this.modelTransform = modelTransform;
         this.resetVelocity = resetVelocity;
+        this.isMountedTeleport = isMountedTeleport;
     }
 
     public ClientTeleport(@Nonnull ClientTeleport other) {
@@ -56,6 +58,7 @@ public class ClientTeleport implements Packet, ToClientPacket {
         this.relativeTransformFields = other.relativeTransformFields;
         this.modelTransform = other.modelTransform;
         this.resetVelocity = other.resetVelocity;
+        this.isMountedTeleport = other.isMountedTeleport;
     }
 
     /**
@@ -105,7 +108,15 @@ public class ClientTeleport implements Packet, ToClientPacket {
     }
     
     public static boolean getResetVelocity(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_BOOL, offset + 54);
+        return (mem.get(PacketIO.PROTO_BYTE, offset + 54) & 0x01) != 0;
+    }
+    
+    public static boolean getIsMountedTeleport(MemorySegment mem) {
+        return getIsMountedTeleport(mem, 0);
+    }
+    
+    public static boolean getIsMountedTeleport(MemorySegment mem, int offset) {
+        return (mem.get(PacketIO.PROTO_BYTE, offset + 54) & 0x02) != 0;
     }
     
     
@@ -133,7 +144,8 @@ public class ClientTeleport implements Packet, ToClientPacket {
             mem.get(PacketIO.PROTO_SHORT, offset + 1),
             mem.get(PacketIO.PROTO_SHORT, offset + 3),
             ModelTransform.toObject(mem, offset + 5),
-            mem.get(PacketIO.PROTO_BOOL, offset + 54)
+            (mem.get(PacketIO.PROTO_BYTE, offset + 54) & 0x01) != 0,
+            (mem.get(PacketIO.PROTO_BYTE, offset + 54) & 0x02) != 0
         );
         if (cursor != null) cursor.position = offset + 55;
         return result;
@@ -145,7 +157,10 @@ public class ClientTeleport implements Packet, ToClientPacket {
         mem.set(PacketIO.PROTO_SHORT, offset + 1, this.ignoredTransformFields);
         mem.set(PacketIO.PROTO_SHORT, offset + 3, this.relativeTransformFields);
         this.modelTransform.serialize(mem, offset + 5);
-        mem.set(PacketIO.PROTO_BOOL, offset + 54, this.resetVelocity);
+        byte boolBits0_0 = 0;
+        if (this.resetVelocity) boolBits0_0 |= 0x01;
+        if (this.isMountedTeleport) boolBits0_0 |= 0x02;
+        mem.set(PacketIO.PROTO_BYTE, offset + 54 + 0, boolBits0_0);
         
         
     
@@ -162,6 +177,7 @@ public class ClientTeleport implements Packet, ToClientPacket {
         copy.relativeTransformFields = this.relativeTransformFields;
         copy.modelTransform = this.modelTransform.clone();
         copy.resetVelocity = this.resetVelocity;
+        copy.isMountedTeleport = this.isMountedTeleport;
         return copy;
     }
 
@@ -170,12 +186,12 @@ public class ClientTeleport implements Packet, ToClientPacket {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof ClientTeleport other)) return false;
-        return this.teleportId == other.teleportId && java.util.Objects.equals(this.ignoredTransformFields, other.ignoredTransformFields) && java.util.Objects.equals(this.relativeTransformFields, other.relativeTransformFields) && java.util.Objects.equals(this.modelTransform, other.modelTransform) && this.resetVelocity == other.resetVelocity;
+        return this.teleportId == other.teleportId && java.util.Objects.equals(this.ignoredTransformFields, other.ignoredTransformFields) && java.util.Objects.equals(this.relativeTransformFields, other.relativeTransformFields) && java.util.Objects.equals(this.modelTransform, other.modelTransform) && this.resetVelocity == other.resetVelocity && this.isMountedTeleport == other.isMountedTeleport;
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(teleportId, ignoredTransformFields, relativeTransformFields, modelTransform, resetVelocity);
+        return java.util.Objects.hash(teleportId, ignoredTransformFields, relativeTransformFields, modelTransform, resetVelocity, isMountedTeleport);
     }
 
 }

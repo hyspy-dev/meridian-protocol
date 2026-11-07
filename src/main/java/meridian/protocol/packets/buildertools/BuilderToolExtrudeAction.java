@@ -109,7 +109,9 @@ public class BuilderToolExtrudeAction implements Packet, ToServerPacket {
     }
     
     public static int getXNormal(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_INT, offset + 12);
+        var value = mem.get(PacketIO.PROTO_INT, offset + 12);
+        if (value < -1 || value > 1) throw ProtocolException.valueOutOfRange("XNormal", value, -1, 1);
+        return value;
     }
     
     public static int getYNormal(MemorySegment mem) {
@@ -117,7 +119,9 @@ public class BuilderToolExtrudeAction implements Packet, ToServerPacket {
     }
     
     public static int getYNormal(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_INT, offset + 16);
+        var value = mem.get(PacketIO.PROTO_INT, offset + 16);
+        if (value < -1 || value > 1) throw ProtocolException.valueOutOfRange("YNormal", value, -1, 1);
+        return value;
     }
     
     public static int getZNormal(MemorySegment mem) {
@@ -125,7 +129,9 @@ public class BuilderToolExtrudeAction implements Packet, ToServerPacket {
     }
     
     public static int getZNormal(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_INT, offset + 20);
+        var value = mem.get(PacketIO.PROTO_INT, offset + 20);
+        if (value < -1 || value > 1) throw ProtocolException.valueOutOfRange("ZNormal", value, -1, 1);
+        return value;
     }
     
     public static ExtrudeMode getMode(MemorySegment mem) {
@@ -172,13 +178,21 @@ public class BuilderToolExtrudeAction implements Packet, ToServerPacket {
     public static BuilderToolExtrudeAction toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
+        int v3 = mem.get(PacketIO.PROTO_INT, offset + 12);
+        if (v3 < -1 || v3 > 1) throw ProtocolException.valueOutOfRange("XNormal", v3, -1, 1);
+        
+        int v4 = mem.get(PacketIO.PROTO_INT, offset + 16);
+        if (v4 < -1 || v4 > 1) throw ProtocolException.valueOutOfRange("YNormal", v4, -1, 1);
+        
+        int v5 = mem.get(PacketIO.PROTO_INT, offset + 20);
+        if (v5 < -1 || v5 > 1) throw ProtocolException.valueOutOfRange("ZNormal", v5, -1, 1);
         var result = new BuilderToolExtrudeAction(
             mem.get(PacketIO.PROTO_INT, offset + 0),
             mem.get(PacketIO.PROTO_INT, offset + 4),
             mem.get(PacketIO.PROTO_INT, offset + 8),
-            mem.get(PacketIO.PROTO_INT, offset + 12),
-            mem.get(PacketIO.PROTO_INT, offset + 16),
-            mem.get(PacketIO.PROTO_INT, offset + 20),
+            v3,
+            v4,
+            v5,
             ExtrudeMode.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 24)),
             mem.get(PacketIO.PROTO_BOOL, offset + 25),
             mem.get(PacketIO.PROTO_INT, offset + 26)
@@ -192,9 +206,9 @@ public class BuilderToolExtrudeAction implements Packet, ToServerPacket {
         mem.set(PacketIO.PROTO_INT, offset + 0, this.x);
         mem.set(PacketIO.PROTO_INT, offset + 4, this.y);
         mem.set(PacketIO.PROTO_INT, offset + 8, this.z);
-        mem.set(PacketIO.PROTO_INT, offset + 12, this.xNormal);
-        mem.set(PacketIO.PROTO_INT, offset + 16, this.yNormal);
-        mem.set(PacketIO.PROTO_INT, offset + 20, this.zNormal);
+        if (this.xNormal < -1 || this.xNormal > 1) throw ProtocolException.valueOutOfRange("XNormal", this.xNormal, -1, 1); mem.set(PacketIO.PROTO_INT, offset + 12, this.xNormal);
+        if (this.yNormal < -1 || this.yNormal > 1) throw ProtocolException.valueOutOfRange("YNormal", this.yNormal, -1, 1); mem.set(PacketIO.PROTO_INT, offset + 16, this.yNormal);
+        if (this.zNormal < -1 || this.zNormal > 1) throw ProtocolException.valueOutOfRange("ZNormal", this.zNormal, -1, 1); mem.set(PacketIO.PROTO_INT, offset + 20, this.zNormal);
         mem.set(PacketIO.PROTO_BYTE, offset + 24, (byte) this.mode.getValue());
         mem.set(PacketIO.PROTO_BOOL, offset + 25, this.isHoldDownInteraction);
         mem.set(PacketIO.PROTO_INT, offset + 26, this.undoGroupSize);

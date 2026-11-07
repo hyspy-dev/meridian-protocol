@@ -21,7 +21,7 @@ public class TriggerVolumeToolCreate implements Packet, ToServerPacket {
     public static final int FIXED_BLOCK_SIZE = 38;
     public static final int VARIABLE_FIELD_COUNT = 1;
     public static final int VARIABLE_BLOCK_START = 38;
-    public static final int MAX_SIZE = 16384043;
+    public static final int MAX_SIZE = 1067;
 
     @Override
     public int getId() {
@@ -107,7 +107,7 @@ public class TriggerVolumeToolCreate implements Packet, ToServerPacket {
     
     @Nullable
     public static String getName(MemorySegment mem, int offset) {
-        return hasName(mem, offset) ? PacketIO.readVarString("Name", mem, offset + 38, 4096000): null;
+        return hasName(mem, offset) ? PacketIO.readVarString("Name", mem, offset + 38, 256): null;
     }
     
     public static boolean hasName(MemorySegment mem, int offset) {
@@ -139,7 +139,7 @@ public class TriggerVolumeToolCreate implements Packet, ToServerPacket {
         if (hasName(mem, offset)) {
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
-            v4 = PacketIO.readVarString("Name", mem, off, 0, 4096000, sp);
+            v4 = PacketIO.readVarString("Name", mem, off, 0, 256, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         }
         var result = new TriggerVolumeToolCreate(
@@ -166,7 +166,7 @@ public class TriggerVolumeToolCreate implements Packet, ToServerPacket {
         var varOffset = offset + 38;
         if (this.name != null) {
             
-            varOffset += PacketIO.writeVarString(mem, varOffset, this.name, 4096000);
+            varOffset += PacketIO.writeVarString(mem, varOffset, this.name, 256);
         }
     
        return varOffset - offset;

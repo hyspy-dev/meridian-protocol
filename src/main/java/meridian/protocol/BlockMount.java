@@ -13,12 +13,11 @@ import org.joml.*;
 
 public class BlockMount {
     public static final int NULLABLE_BIT_FIELD_SIZE = 0;
-    public static final int FIXED_BLOCK_SIZE = 29;
+    public static final int FIXED_BLOCK_SIZE = 28;
     public static final int VARIABLE_FIELD_COUNT = 0;
-    public static final int VARIABLE_BLOCK_START = 29;
-    public static final int MAX_SIZE = 29;
+    public static final int VARIABLE_BLOCK_START = 28;
+    public static final int MAX_SIZE = 28;
 
-    @Nonnull public BlockMountType type = BlockMountType.Seat;
     @Nonnull public Vector3fc position = PacketIO.ZERO_VECTOR3;
     @Nonnull public Vector3fc orientation = PacketIO.ZERO_VECTOR3;
     public int blockTypeId;
@@ -26,15 +25,13 @@ public class BlockMount {
     public BlockMount() {
     }
 
-    public BlockMount(@Nonnull BlockMountType type, @Nonnull Vector3fc position, @Nonnull Vector3fc orientation, int blockTypeId) {
-        this.type = type;
+    public BlockMount(@Nonnull Vector3fc position, @Nonnull Vector3fc orientation, int blockTypeId) {
         this.position = position;
         this.orientation = orientation;
         this.blockTypeId = blockTypeId;
     }
 
     public BlockMount(@Nonnull BlockMount other) {
-        this.type = other.type;
         this.position = other.position;
         this.orientation = other.orientation;
         this.blockTypeId = other.blockTypeId;
@@ -46,16 +43,8 @@ public class BlockMount {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("BlockMount", offset, (int) mem.byteSize());
-        long needed = (long) offset + 29;
+        long needed = (long) offset + 28;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("BlockMount", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
-    }
-    
-    public static BlockMountType getType(MemorySegment mem) {
-        return getType(mem, 0);
-    }
-    
-    public static BlockMountType getType(MemorySegment mem, int offset) {
-        return BlockMountType.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 0));
     }
     
     public static Vector3fc getPosition(MemorySegment mem) {
@@ -63,7 +52,7 @@ public class BlockMount {
     }
     
     public static Vector3fc getPosition(MemorySegment mem, int offset) {
-        return PacketIO.requireFinite(PacketIO.readVector3f(mem, offset + 1), "Position");
+        return PacketIO.requireFinite(PacketIO.readVector3f(mem, offset + 0), "Position");
     }
     
     public static Vector3fc getOrientation(MemorySegment mem) {
@@ -71,7 +60,7 @@ public class BlockMount {
     }
     
     public static Vector3fc getOrientation(MemorySegment mem, int offset) {
-        return PacketIO.requireFinite(PacketIO.readVector3f(mem, offset + 13), "Orientation");
+        return PacketIO.requireFinite(PacketIO.readVector3f(mem, offset + 12), "Orientation");
     }
     
     public static int getBlockTypeId(MemorySegment mem) {
@@ -79,7 +68,7 @@ public class BlockMount {
     }
     
     public static int getBlockTypeId(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_INT, offset + 25);
+        return mem.get(PacketIO.PROTO_INT, offset + 24);
     }
     
     
@@ -103,32 +92,29 @@ public class BlockMount {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
         var result = new BlockMount(
-            BlockMountType.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 0)),
-            PacketIO.requireFinite(PacketIO.readVector3f(mem, offset + 1), "Position"),
-            PacketIO.requireFinite(PacketIO.readVector3f(mem, offset + 13), "Orientation"),
-            mem.get(PacketIO.PROTO_INT, offset + 25)
+            PacketIO.requireFinite(PacketIO.readVector3f(mem, offset + 0), "Position"),
+            PacketIO.requireFinite(PacketIO.readVector3f(mem, offset + 12), "Orientation"),
+            mem.get(PacketIO.PROTO_INT, offset + 24)
         );
-        if (cursor != null) cursor.position = offset + 29;
+        if (cursor != null) cursor.position = offset + 28;
         return result;
     }
     public int serialize(@Nonnull MemorySegment mem, int offset) {
         
-        mem.set(PacketIO.PROTO_BYTE, offset + 0, (byte) this.type.getValue());
-        PacketIO.requireFinite(this.position, "Position"); PacketIO.writeVector3f(mem, offset + 1, this.position);
-        PacketIO.requireFinite(this.orientation, "Orientation"); PacketIO.writeVector3f(mem, offset + 13, this.orientation);
-        mem.set(PacketIO.PROTO_INT, offset + 25, this.blockTypeId);
+        PacketIO.requireFinite(this.position, "Position"); PacketIO.writeVector3f(mem, offset + 0, this.position);
+        PacketIO.requireFinite(this.orientation, "Orientation"); PacketIO.writeVector3f(mem, offset + 12, this.orientation);
+        mem.set(PacketIO.PROTO_INT, offset + 24, this.blockTypeId);
         
         
     
-       return 29;
+       return 28;
     }
     public int computeSize() {
-        return 29;
+        return 28;
     }
 
     public BlockMount clone() {
         BlockMount copy = new BlockMount();
-        copy.type = this.type;
         copy.position = this.position;
         copy.orientation = this.orientation;
         copy.blockTypeId = this.blockTypeId;
@@ -140,12 +126,12 @@ public class BlockMount {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof BlockMount other)) return false;
-        return java.util.Objects.equals(this.type, other.type) && java.util.Objects.equals(this.position, other.position) && java.util.Objects.equals(this.orientation, other.orientation) && this.blockTypeId == other.blockTypeId;
+        return java.util.Objects.equals(this.position, other.position) && java.util.Objects.equals(this.orientation, other.orientation) && this.blockTypeId == other.blockTypeId;
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(type, position, orientation, blockTypeId);
+        return java.util.Objects.hash(position, orientation, blockTypeId);
     }
 
 }

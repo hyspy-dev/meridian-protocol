@@ -34,10 +34,10 @@ public class BuilderToolSelectionTransform implements Packet, ToServerPacket {
         return NetworkChannel.Default;
     }
 
-    @Nullable public Quaternionfc rotation;
-    @Nullable public BlockPosition translationOffset;
-    @Nullable public BlockPosition initialSelectionMin;
-    @Nullable public BlockPosition initialSelectionMax;
+    @Nonnull public Quaternionfc rotation = PacketIO.ZERO_QUATERNION;
+    @Nonnull public BlockPosition translationOffset = new BlockPosition();
+    @Nonnull public BlockPosition initialSelectionMin = new BlockPosition();
+    @Nonnull public BlockPosition initialSelectionMax = new BlockPosition();
     @Nonnull public Vector3fc initialRotationOrigin = PacketIO.ZERO_VECTOR3;
     public boolean cutOriginal;
     public boolean applyTransformationToSelectionMinMax;
@@ -47,7 +47,7 @@ public class BuilderToolSelectionTransform implements Packet, ToServerPacket {
     public BuilderToolSelectionTransform() {
     }
 
-    public BuilderToolSelectionTransform(@Nullable Quaternionfc rotation, @Nullable BlockPosition translationOffset, @Nullable BlockPosition initialSelectionMin, @Nullable BlockPosition initialSelectionMax, @Nonnull Vector3fc initialRotationOrigin, boolean cutOriginal, boolean applyTransformationToSelectionMinMax, boolean isExitingTransformMode, @Nullable BlockPosition initialPastePointForClipboardPaste) {
+    public BuilderToolSelectionTransform(@Nonnull Quaternionfc rotation, @Nonnull BlockPosition translationOffset, @Nonnull BlockPosition initialSelectionMin, @Nonnull BlockPosition initialSelectionMax, @Nonnull Vector3fc initialRotationOrigin, boolean cutOriginal, boolean applyTransformationToSelectionMinMax, boolean isExitingTransformMode, @Nullable BlockPosition initialPastePointForClipboardPaste) {
         this.rotation = rotation;
         this.translationOffset = translationOffset;
         this.initialSelectionMin = initialSelectionMin;
@@ -81,44 +81,36 @@ public class BuilderToolSelectionTransform implements Packet, ToServerPacket {
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("BuilderToolSelectionTransform", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
-    @Nullable
     public static Quaternionfc getRotation(MemorySegment mem) {
         return getRotation(mem, 0);
     }
     
-    @Nullable
     public static Quaternionfc getRotation(MemorySegment mem, int offset) {
-        return hasRotation(mem, offset) ? PacketIO.requireFinite(PacketIO.readQuaternionf(mem, offset + 1), "Rotation"): null;
+        return PacketIO.requireFinite(PacketIO.readQuaternionf(mem, offset + 1), "Rotation");
     }
     
-    @Nullable
     public static BlockPosition getTranslationOffset(MemorySegment mem) {
         return getTranslationOffset(mem, 0);
     }
     
-    @Nullable
     public static BlockPosition getTranslationOffset(MemorySegment mem, int offset) {
-        return hasTranslationOffset(mem, offset) ? BlockPosition.toObject(mem, offset + 17): null;
+        return BlockPosition.toObject(mem, offset + 17);
     }
     
-    @Nullable
     public static BlockPosition getInitialSelectionMin(MemorySegment mem) {
         return getInitialSelectionMin(mem, 0);
     }
     
-    @Nullable
     public static BlockPosition getInitialSelectionMin(MemorySegment mem, int offset) {
-        return hasInitialSelectionMin(mem, offset) ? BlockPosition.toObject(mem, offset + 29): null;
+        return BlockPosition.toObject(mem, offset + 29);
     }
     
-    @Nullable
     public static BlockPosition getInitialSelectionMax(MemorySegment mem) {
         return getInitialSelectionMax(mem, 0);
     }
     
-    @Nullable
     public static BlockPosition getInitialSelectionMax(MemorySegment mem, int offset) {
-        return hasInitialSelectionMax(mem, offset) ? BlockPosition.toObject(mem, offset + 41): null;
+        return BlockPosition.toObject(mem, offset + 41);
     }
     
     public static Vector3fc getInitialRotationOrigin(MemorySegment mem) {
@@ -163,29 +155,9 @@ public class BuilderToolSelectionTransform implements Packet, ToServerPacket {
         return hasInitialPastePointForClipboardPaste(mem, offset) ? BlockPosition.toObject(mem, offset + 66): null;
     }
     
-    public static boolean hasRotation(MemorySegment mem, int offset) {
-        var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
-        return (b & 0x01) != 0;
-    }
-    
-    public static boolean hasTranslationOffset(MemorySegment mem, int offset) {
-        var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
-        return (b & 0x02) != 0;
-    }
-    
-    public static boolean hasInitialSelectionMin(MemorySegment mem, int offset) {
-        var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
-        return (b & 0x04) != 0;
-    }
-    
-    public static boolean hasInitialSelectionMax(MemorySegment mem, int offset) {
-        var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
-        return (b & 0x08) != 0;
-    }
-    
     public static boolean hasInitialPastePointForClipboardPaste(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
-        return (b & 0x10) != 0;
+        return (b & 0x01) != 0;
     }
     
     
@@ -207,10 +179,10 @@ public class BuilderToolSelectionTransform implements Packet, ToServerPacket {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
         var result = new BuilderToolSelectionTransform(
-            hasRotation(mem, offset) ? PacketIO.requireFinite(PacketIO.readQuaternionf(mem, offset + 1), "Rotation") : null,
-            hasTranslationOffset(mem, offset) ? BlockPosition.toObject(mem, offset + 17) : null,
-            hasInitialSelectionMin(mem, offset) ? BlockPosition.toObject(mem, offset + 29) : null,
-            hasInitialSelectionMax(mem, offset) ? BlockPosition.toObject(mem, offset + 41) : null,
+            PacketIO.requireFinite(PacketIO.readQuaternionf(mem, offset + 1), "Rotation"),
+            BlockPosition.toObject(mem, offset + 17),
+            BlockPosition.toObject(mem, offset + 29),
+            BlockPosition.toObject(mem, offset + 41),
             PacketIO.requireFinite(PacketIO.readVector3f(mem, offset + 53), "InitialRotationOrigin"),
             (mem.get(PacketIO.PROTO_BYTE, offset + 65) & 0x01) != 0,
             (mem.get(PacketIO.PROTO_BYTE, offset + 65) & 0x02) != 0,
@@ -224,33 +196,13 @@ public class BuilderToolSelectionTransform implements Packet, ToServerPacket {
     public int serialize(@Nonnull MemorySegment mem, int offset) {
         byte nullBits;
         nullBits = 0;
-        if (this.rotation != null) nullBits |= 0x01;
-        if (this.translationOffset != null) nullBits |= 0x02;
-        if (this.initialSelectionMin != null) nullBits |= 0x04;
-        if (this.initialSelectionMax != null) nullBits |= 0x08;
-        if (this.initialPastePointForClipboardPaste != null) nullBits |= 0x10;
+        if (this.initialPastePointForClipboardPaste != null) nullBits |= 0x01;
         mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         
-        if (this.rotation != null) {
-            PacketIO.requireFinite(this.rotation, "Rotation"); PacketIO.writeQuaternionf(mem, offset + 1, this.rotation);
-        } else {
-            mem.asSlice(offset + 1, 16).fill((byte) 0); 
-        }
-        if (this.translationOffset != null) {
-            this.translationOffset.serialize(mem, offset + 17);
-        } else {
-            mem.asSlice(offset + 17, 12).fill((byte) 0); 
-        }
-        if (this.initialSelectionMin != null) {
-            this.initialSelectionMin.serialize(mem, offset + 29);
-        } else {
-            mem.asSlice(offset + 29, 12).fill((byte) 0); 
-        }
-        if (this.initialSelectionMax != null) {
-            this.initialSelectionMax.serialize(mem, offset + 41);
-        } else {
-            mem.asSlice(offset + 41, 12).fill((byte) 0); 
-        }
+        PacketIO.requireFinite(this.rotation, "Rotation"); PacketIO.writeQuaternionf(mem, offset + 1, this.rotation);
+        this.translationOffset.serialize(mem, offset + 17);
+        this.initialSelectionMin.serialize(mem, offset + 29);
+        this.initialSelectionMax.serialize(mem, offset + 41);
         PacketIO.requireFinite(this.initialRotationOrigin, "InitialRotationOrigin"); PacketIO.writeVector3f(mem, offset + 53, this.initialRotationOrigin);
         byte boolBits0_0 = 0;
         if (this.cutOriginal) boolBits0_0 |= 0x01;
@@ -274,9 +226,9 @@ public class BuilderToolSelectionTransform implements Packet, ToServerPacket {
     public BuilderToolSelectionTransform clone() {
         BuilderToolSelectionTransform copy = new BuilderToolSelectionTransform();
         copy.rotation = this.rotation;
-        copy.translationOffset = this.translationOffset != null ? this.translationOffset.clone() : null;
-        copy.initialSelectionMin = this.initialSelectionMin != null ? this.initialSelectionMin.clone() : null;
-        copy.initialSelectionMax = this.initialSelectionMax != null ? this.initialSelectionMax.clone() : null;
+        copy.translationOffset = this.translationOffset.clone();
+        copy.initialSelectionMin = this.initialSelectionMin.clone();
+        copy.initialSelectionMax = this.initialSelectionMax.clone();
         copy.initialRotationOrigin = this.initialRotationOrigin;
         copy.cutOriginal = this.cutOriginal;
         copy.applyTransformationToSelectionMinMax = this.applyTransformationToSelectionMinMax;

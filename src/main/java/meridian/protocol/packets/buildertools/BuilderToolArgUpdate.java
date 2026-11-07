@@ -36,13 +36,13 @@ public class BuilderToolArgUpdate implements Packet, ToServerPacket {
     public int token;
     public int section;
     public int slot;
-    @Nullable public String id;
+    @Nonnull public String id = "";
     @Nullable public String value;
 
     public BuilderToolArgUpdate() {
     }
 
-    public BuilderToolArgUpdate(int token, int section, int slot, @Nullable String id, @Nullable String value) {
+    public BuilderToolArgUpdate(int token, int section, int slot, @Nonnull String id, @Nullable String value) {
         this.token = token;
         this.section = section;
         this.slot = slot;
@@ -92,14 +92,12 @@ public class BuilderToolArgUpdate implements Packet, ToServerPacket {
         return mem.get(PacketIO.PROTO_INT, offset + 9);
     }
     
-    @Nullable
     public static String getId(MemorySegment mem) {
         return getId(mem, 0);
     }
     
-    @Nullable
     public static String getId(MemorySegment mem, int offset) {
-        return hasId(mem, offset) ? PacketIO.readVarString("Id", mem, offset + getValidatedOffset(mem, offset, 13, 21, "Id"), 4096000): null;
+        return PacketIO.readVarString("Id", mem, offset + getValidatedOffset(mem, offset, 13, 21, "Id"), 4096000);
     }
     
     @Nullable
@@ -112,14 +110,9 @@ public class BuilderToolArgUpdate implements Packet, ToServerPacket {
         return hasValue(mem, offset) ? PacketIO.readVarString("Value", mem, offset + getValidatedOffset(mem, offset, 17, 21, "Value"), 4096000): null;
     }
     
-    public static boolean hasId(MemorySegment mem, int offset) {
-        var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
-        return (b & 0x01) != 0;
-    }
-    
     public static boolean hasValue(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
-        return (b & 0x02) != 0;
+        return (b & 0x01) != 0;
     }
     
     private static int getValidatedOffset(MemorySegment buffer, int base, int slotPosition, int varBlockStart, String fieldName) {
@@ -157,15 +150,13 @@ public class BuilderToolArgUpdate implements Packet, ToServerPacket {
         requireBounds(mem, offset);
         var varBase = offset + 21;
         var varPos = 0;
-        String v3 = null;
-        if (hasId(mem, offset)) {
-            requireSlot(mem, offset + 13, varPos, "Id");
+        String v3;
+        requireSlot(mem, offset + 13, varPos, "Id");
+        {
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
             v3 = PacketIO.readVarString("Id", mem, off, 0, 4096000, sp);
             varPos += (int) sp + (int) (sp >>> 32);
-        } else {
-            requireSlot(mem, offset + 13, -1, "Id");
         }
         
         String v4 = null;
@@ -192,20 +183,15 @@ public class BuilderToolArgUpdate implements Packet, ToServerPacket {
     public int serialize(@Nonnull MemorySegment mem, int offset) {
         byte nullBits;
         nullBits = 0;
-        if (this.id != null) nullBits |= 0x01;
-        if (this.value != null) nullBits |= 0x02;
+        if (this.value != null) nullBits |= 0x01;
         mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         
         mem.set(PacketIO.PROTO_INT, offset + 1, this.token);
         mem.set(PacketIO.PROTO_INT, offset + 5, this.section);
         mem.set(PacketIO.PROTO_INT, offset + 9, this.slot);
         var varOffset = offset + 21;
-        if (this.id != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 13, varOffset - offset - 21);
-            varOffset += PacketIO.writeVarString(mem, varOffset, this.id, 4096000);
-        } else {
-            mem.set(PacketIO.PROTO_INT, offset + 13, -1);
-        }
+        mem.set(PacketIO.PROTO_INT, offset + 13, varOffset - offset - 21);
+        varOffset += PacketIO.writeVarString(mem, varOffset, this.id, 4096000);
         if (this.value != null) {
             mem.set(PacketIO.PROTO_INT, offset + 17, varOffset - offset - 21);
             varOffset += PacketIO.writeVarString(mem, varOffset, this.value, 4096000);
@@ -217,7 +203,7 @@ public class BuilderToolArgUpdate implements Packet, ToServerPacket {
     }
     public int computeSize() {
         int size = 21;
-        if (id != null) size += PacketIO.stringSize(id);
+        size += PacketIO.stringSize(id);
     if (value != null) size += PacketIO.stringSize(value);
 
         return size;

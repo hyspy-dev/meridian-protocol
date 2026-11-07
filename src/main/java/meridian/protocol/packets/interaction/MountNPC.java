@@ -17,11 +17,11 @@ import meridian.protocol.io.VarInt;
 public class MountNPC implements Packet, ToClientPacket {
     public static final int PACKET_ID = 293;
     public static final boolean IS_COMPRESSED = false;
-    public static final int NULLABLE_BIT_FIELD_SIZE = 0;
-    public static final int FIXED_BLOCK_SIZE = 16;
-    public static final int VARIABLE_FIELD_COUNT = 0;
-    public static final int VARIABLE_BLOCK_START = 16;
-    public static final int MAX_SIZE = 16;
+    public static final int NULLABLE_BIT_FIELD_SIZE = 1;
+    public static final int FIXED_BLOCK_SIZE = 5;
+    public static final int VARIABLE_FIELD_COUNT = 1;
+    public static final int VARIABLE_BLOCK_START = 5;
+    public static final int MAX_SIZE = 16384010;
 
     @Override
     public int getId() {
@@ -33,25 +33,19 @@ public class MountNPC implements Packet, ToClientPacket {
         return NetworkChannel.Default;
     }
 
-    public float anchorX;
-    public float anchorY;
-    public float anchorZ;
+    @Nullable public String anchorNodeName;
     public int entityId;
 
     public MountNPC() {
     }
 
-    public MountNPC(float anchorX, float anchorY, float anchorZ, int entityId) {
-        this.anchorX = anchorX;
-        this.anchorY = anchorY;
-        this.anchorZ = anchorZ;
+    public MountNPC(@Nullable String anchorNodeName, int entityId) {
+        this.anchorNodeName = anchorNodeName;
         this.entityId = entityId;
     }
 
     public MountNPC(@Nonnull MountNPC other) {
-        this.anchorX = other.anchorX;
-        this.anchorY = other.anchorY;
-        this.anchorZ = other.anchorZ;
+        this.anchorNodeName = other.anchorNodeName;
         this.entityId = other.entityId;
     }
 
@@ -61,32 +55,18 @@ public class MountNPC implements Packet, ToClientPacket {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("MountNPC", offset, (int) mem.byteSize());
-        long needed = (long) offset + 16;
+        long needed = (long) offset + 5;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("MountNPC", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
-    public static float getAnchorX(MemorySegment mem) {
-        return getAnchorX(mem, 0);
+    @Nullable
+    public static String getAnchorNodeName(MemorySegment mem) {
+        return getAnchorNodeName(mem, 0);
     }
     
-    public static float getAnchorX(MemorySegment mem, int offset) {
-        return PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 0), "AnchorX");
-    }
-    
-    public static float getAnchorY(MemorySegment mem) {
-        return getAnchorY(mem, 0);
-    }
-    
-    public static float getAnchorY(MemorySegment mem, int offset) {
-        return PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 4), "AnchorY");
-    }
-    
-    public static float getAnchorZ(MemorySegment mem) {
-        return getAnchorZ(mem, 0);
-    }
-    
-    public static float getAnchorZ(MemorySegment mem, int offset) {
-        return PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 8), "AnchorZ");
+    @Nullable
+    public static String getAnchorNodeName(MemorySegment mem, int offset) {
+        return hasAnchorNodeName(mem, offset) ? PacketIO.readVarString("AnchorNodeName", mem, offset + 5, 4096000): null;
     }
     
     public static int getEntityId(MemorySegment mem) {
@@ -94,10 +74,13 @@ public class MountNPC implements Packet, ToClientPacket {
     }
     
     public static int getEntityId(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_INT, offset + 12);
+        return mem.get(PacketIO.PROTO_INT, offset + 1);
     }
     
-    
+    public static boolean hasAnchorNodeName(MemorySegment mem, int offset) {
+        var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
+        return (b & 0x01) != 0;
+    }
     
     
     
@@ -117,36 +100,48 @@ public class MountNPC implements Packet, ToClientPacket {
     public static MountNPC toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
+        var varBase = offset + 5;
+        var varPos = 0;
+        String v0 = null;
+        if (hasAnchorNodeName(mem, offset)) {
+            var off = varBase + varPos;
+            var sp = VarInt.getWithLength(mem, off);
+            v0 = PacketIO.readVarString("AnchorNodeName", mem, off, 0, 4096000, sp);
+            varPos += (int) sp + (int) (sp >>> 32);
+        }
         var result = new MountNPC(
-            PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 0), "AnchorX"),
-            PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 4), "AnchorY"),
-            PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 8), "AnchorZ"),
-            mem.get(PacketIO.PROTO_INT, offset + 12)
+            v0,
+            mem.get(PacketIO.PROTO_INT, offset + 1)
         );
-        if (cursor != null) cursor.position = offset + 16;
+        if (cursor != null) cursor.position = varBase + varPos;
         return result;
     }
     @Override
     public int serialize(@Nonnull MemorySegment mem, int offset) {
+        byte nullBits;
+        nullBits = 0;
+        if (this.anchorNodeName != null) nullBits |= 0x01;
+        mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         
-        PacketIO.requireFinite(this.anchorX, "AnchorX"); mem.set(PacketIO.PROTO_FLOAT, offset + 0, this.anchorX);
-        PacketIO.requireFinite(this.anchorY, "AnchorY"); mem.set(PacketIO.PROTO_FLOAT, offset + 4, this.anchorY);
-        PacketIO.requireFinite(this.anchorZ, "AnchorZ"); mem.set(PacketIO.PROTO_FLOAT, offset + 8, this.anchorZ);
-        mem.set(PacketIO.PROTO_INT, offset + 12, this.entityId);
-        
-        
+        mem.set(PacketIO.PROTO_INT, offset + 1, this.entityId);
+        var varOffset = offset + 5;
+        if (this.anchorNodeName != null) {
+            
+            varOffset += PacketIO.writeVarString(mem, varOffset, this.anchorNodeName, 4096000);
+        }
     
-       return 16;
+       return varOffset - offset;
     }
     public int computeSize() {
-        return 16;
+        int size = 5;
+        if (anchorNodeName != null) size += PacketIO.stringSize(anchorNodeName);
+
+        return size;
     }
 
     public MountNPC clone() {
         MountNPC copy = new MountNPC();
-        copy.anchorX = this.anchorX;
-        copy.anchorY = this.anchorY;
-        copy.anchorZ = this.anchorZ;
+        copy.anchorNodeName = this.anchorNodeName;
         copy.entityId = this.entityId;
         return copy;
     }
@@ -156,12 +151,12 @@ public class MountNPC implements Packet, ToClientPacket {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof MountNPC other)) return false;
-        return this.anchorX == other.anchorX && this.anchorY == other.anchorY && this.anchorZ == other.anchorZ && this.entityId == other.entityId;
+        return java.util.Objects.equals(this.anchorNodeName, other.anchorNodeName) && this.entityId == other.entityId;
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(anchorX, anchorY, anchorZ, entityId);
+        return java.util.Objects.hash(anchorNodeName, entityId);
     }
 
 }

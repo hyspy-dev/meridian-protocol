@@ -13,30 +13,30 @@ import org.joml.*;
 
 public class MountedUpdate extends ComponentUpdate {
     public static final int NULLABLE_BIT_FIELD_SIZE = 1;
-    public static final int FIXED_BLOCK_SIZE = 47;
+    public static final int FIXED_BLOCK_SIZE = 46;
     public static final int VARIABLE_FIELD_COUNT = 0;
-    public static final int VARIABLE_BLOCK_START = 47;
-    public static final int MAX_SIZE = 47;
+    public static final int VARIABLE_BLOCK_START = 46;
+    public static final int MAX_SIZE = 46;
 
     public int mountedToEntity;
     @Nonnull public Vector3fc attachmentOffset = PacketIO.ZERO_VECTOR3;
-    @Nonnull public MountController controller = MountController.Minecart;
+    @Nonnull public MovementControllerType movementControllerType = MovementControllerType.Default;
     @Nullable public BlockMount block;
 
     public MountedUpdate() {
     }
 
-    public MountedUpdate(int mountedToEntity, @Nonnull Vector3fc attachmentOffset, @Nonnull MountController controller, @Nullable BlockMount block) {
+    public MountedUpdate(int mountedToEntity, @Nonnull Vector3fc attachmentOffset, @Nonnull MovementControllerType movementControllerType, @Nullable BlockMount block) {
         this.mountedToEntity = mountedToEntity;
         this.attachmentOffset = attachmentOffset;
-        this.controller = controller;
+        this.movementControllerType = movementControllerType;
         this.block = block;
     }
 
     public MountedUpdate(@Nonnull MountedUpdate other) {
         this.mountedToEntity = other.mountedToEntity;
         this.attachmentOffset = other.attachmentOffset;
-        this.controller = other.controller;
+        this.movementControllerType = other.movementControllerType;
         this.block = other.block;
     }
 
@@ -46,7 +46,7 @@ public class MountedUpdate extends ComponentUpdate {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("MountedUpdate", offset, (int) mem.byteSize());
-        long needed = (long) offset + 47;
+        long needed = (long) offset + 46;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("MountedUpdate", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -66,12 +66,12 @@ public class MountedUpdate extends ComponentUpdate {
         return PacketIO.requireFinite(PacketIO.readVector3f(mem, offset + 5), "AttachmentOffset");
     }
     
-    public static MountController getController(MemorySegment mem) {
-        return getController(mem, 0);
+    public static MovementControllerType getMovementControllerType(MemorySegment mem) {
+        return getMovementControllerType(mem, 0);
     }
     
-    public static MountController getController(MemorySegment mem, int offset) {
-        return MountController.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 17));
+    public static MovementControllerType getMovementControllerType(MemorySegment mem, int offset) {
+        return MovementControllerType.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 17));
     }
     
     @Nullable
@@ -110,10 +110,10 @@ public class MountedUpdate extends ComponentUpdate {
         var result = new MountedUpdate(
             mem.get(PacketIO.PROTO_INT, offset + 1),
             PacketIO.requireFinite(PacketIO.readVector3f(mem, offset + 5), "AttachmentOffset"),
-            MountController.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 17)),
+            MovementControllerType.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 17)),
             hasBlock(mem, offset) ? BlockMount.toObject(mem, offset + 18) : null
         );
-        if (cursor != null) cursor.position = offset + 47;
+        if (cursor != null) cursor.position = offset + 46;
         return result;
     }
     @Override
@@ -125,27 +125,27 @@ public class MountedUpdate extends ComponentUpdate {
         
         mem.set(PacketIO.PROTO_INT, offset + 1, this.mountedToEntity);
         PacketIO.requireFinite(this.attachmentOffset, "AttachmentOffset"); PacketIO.writeVector3f(mem, offset + 5, this.attachmentOffset);
-        mem.set(PacketIO.PROTO_BYTE, offset + 17, (byte) this.controller.getValue());
+        mem.set(PacketIO.PROTO_BYTE, offset + 17, (byte) this.movementControllerType.getValue());
         if (this.block != null) {
             this.block.serialize(mem, offset + 18);
         } else {
-            mem.asSlice(offset + 18, 29).fill((byte) 0); 
+            mem.asSlice(offset + 18, 28).fill((byte) 0); 
         }
         
         
     
-       return 47;
+       return 46;
     }
     @Override
     public int computeSize() {
-        return 47;
+        return 46;
     }
 
     public MountedUpdate clone() {
         MountedUpdate copy = new MountedUpdate();
         copy.mountedToEntity = this.mountedToEntity;
         copy.attachmentOffset = this.attachmentOffset;
-        copy.controller = this.controller;
+        copy.movementControllerType = this.movementControllerType;
         copy.block = this.block != null ? this.block.clone() : null;
         return copy;
     }
@@ -155,12 +155,12 @@ public class MountedUpdate extends ComponentUpdate {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof MountedUpdate other)) return false;
-        return this.mountedToEntity == other.mountedToEntity && java.util.Objects.equals(this.attachmentOffset, other.attachmentOffset) && java.util.Objects.equals(this.controller, other.controller) && java.util.Objects.equals(this.block, other.block);
+        return this.mountedToEntity == other.mountedToEntity && java.util.Objects.equals(this.attachmentOffset, other.attachmentOffset) && java.util.Objects.equals(this.movementControllerType, other.movementControllerType) && java.util.Objects.equals(this.block, other.block);
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(mountedToEntity, attachmentOffset, controller, block);
+        return java.util.Objects.hash(mountedToEntity, attachmentOffset, movementControllerType, block);
     }
 
 }

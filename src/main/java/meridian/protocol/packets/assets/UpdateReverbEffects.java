@@ -20,9 +20,9 @@ public class UpdateReverbEffects implements Packet, ToClientPacket {
     public static final int PACKET_ID = 81;
     public static final boolean IS_COMPRESSED = true;
     public static final int NULLABLE_BIT_FIELD_SIZE = 1;
-    public static final int FIXED_BLOCK_SIZE = 6;
+    public static final int FIXED_BLOCK_SIZE = 2;
     public static final int VARIABLE_FIELD_COUNT = 1;
-    public static final int VARIABLE_BLOCK_START = 6;
+    public static final int VARIABLE_BLOCK_START = 2;
     public static final int MAX_SIZE = 1677721600;
 
     @Override
@@ -36,21 +36,18 @@ public class UpdateReverbEffects implements Packet, ToClientPacket {
     }
 
     @Nonnull public UpdateType type = UpdateType.Init;
-    public int maxId;
     @Nullable public java.util.Map<Integer, ReverbEffect> effects;
 
     public UpdateReverbEffects() {
     }
 
-    public UpdateReverbEffects(@Nonnull UpdateType type, int maxId, @Nullable java.util.Map<Integer, ReverbEffect> effects) {
+    public UpdateReverbEffects(@Nonnull UpdateType type, @Nullable java.util.Map<Integer, ReverbEffect> effects) {
         this.type = type;
-        this.maxId = maxId;
         this.effects = effects;
     }
 
     public UpdateReverbEffects(@Nonnull UpdateReverbEffects other) {
         this.type = other.type;
-        this.maxId = other.maxId;
         this.effects = other.effects;
     }
 
@@ -60,7 +57,7 @@ public class UpdateReverbEffects implements Packet, ToClientPacket {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("UpdateReverbEffects", offset, (int) mem.byteSize());
-        long needed = (long) offset + 6;
+        long needed = (long) offset + 2;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("UpdateReverbEffects", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -72,14 +69,6 @@ public class UpdateReverbEffects implements Packet, ToClientPacket {
         return UpdateType.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 1));
     }
     
-    public static int getMaxId(MemorySegment mem) {
-        return getMaxId(mem, 0);
-    }
-    
-    public static int getMaxId(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_INT, offset + 2);
-    }
-    
     @Nullable
     public static java.util.Map<Integer, ReverbEffect> getEffects(MemorySegment mem) {
         return getEffects(mem, 0);
@@ -89,7 +78,7 @@ public class UpdateReverbEffects implements Packet, ToClientPacket {
     public static java.util.Map<Integer, ReverbEffect> getEffects(MemorySegment mem, int offset) {
         if (!hasEffects(mem, offset)) return null;
         var walkCursor = new ReadCursor();
-        var off = offset + 6;
+        var off = offset + 2;
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("Effects");
         var len = (int) packed;
@@ -133,10 +122,10 @@ public class UpdateReverbEffects implements Packet, ToClientPacket {
     public static UpdateReverbEffects toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
-        var varBase = offset + 6;
+        var varBase = offset + 2;
         var varPos = 0;
         var walkCursor = cursor != null ? cursor : new ReadCursor();
-        java.util.Map<Integer, ReverbEffect> v2 = null;
+        java.util.Map<Integer, ReverbEffect> v1 = null;
         if (hasEffects(mem, offset)) {
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
@@ -146,13 +135,13 @@ public class UpdateReverbEffects implements Packet, ToClientPacket {
             
             off += (int) (packed >>> 32);
             if (off + (long) len * 58 > mem.byteSize()) throw ProtocolException.bufferTooSmall("Effects", (int) java.lang.Math.min(off + (long) len * 58, Integer.MAX_VALUE), (int) mem.byteSize());
-            v2 = new HashMap<>(len);
+            v1 = new HashMap<>(len);
             for (var i = 0; i < len; i++) {
                 var key = mem.get(PacketIO.PROTO_INT, off);
                     off += 4;
                 var value = ReverbEffect.toObject(mem, off, walkCursor);
                     off = walkCursor.position;
-                if (v2.put(key, value) != null) {
+                if (v1.put(key, value) != null) {
                     throw ProtocolException.duplicateKey("Effects", key);
                 }
             }
@@ -160,8 +149,7 @@ public class UpdateReverbEffects implements Packet, ToClientPacket {
         }
         var result = new UpdateReverbEffects(
             UpdateType.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 1)),
-            mem.get(PacketIO.PROTO_INT, offset + 2),
-            v2
+            v1
         );
         if (cursor != null) cursor.position = varBase + varPos;
         return result;
@@ -174,8 +162,7 @@ public class UpdateReverbEffects implements Packet, ToClientPacket {
         mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         
         mem.set(PacketIO.PROTO_BYTE, offset + 1, (byte) this.type.getValue());
-        mem.set(PacketIO.PROTO_INT, offset + 2, this.maxId);
-        var varOffset = offset + 6;
+        var varOffset = offset + 2;
         if (this.effects != null) {
             
             if (this.effects.size() > 4096000) throw ProtocolException.dictionaryTooLarge("Effects", effects.size(), 4096000);
@@ -190,7 +177,7 @@ public class UpdateReverbEffects implements Packet, ToClientPacket {
        return varOffset - offset;
     }
     public int computeSize() {
-        int size = 6;
+        int size = 2;
         if (effects != null) {
         int effectsSize = 0;
 for (var kvp : effects.entrySet()) effectsSize += 4 + kvp.getValue().computeSize();
@@ -203,7 +190,6 @@ size += VarInt.size(effects.size()) + effectsSize;
     public UpdateReverbEffects clone() {
         UpdateReverbEffects copy = new UpdateReverbEffects();
         copy.type = this.type;
-        copy.maxId = this.maxId;
         if (this.effects != null) {
             java.util.Map<Integer, ReverbEffect> m = new java.util.HashMap<>();
             for (var e : this.effects.entrySet()) { m.put(e.getKey(), e.getValue().clone()); }
@@ -217,12 +203,12 @@ size += VarInt.size(effects.size()) + effectsSize;
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof UpdateReverbEffects other)) return false;
-        return java.util.Objects.equals(this.type, other.type) && this.maxId == other.maxId && java.util.Objects.equals(this.effects, other.effects);
+        return java.util.Objects.equals(this.type, other.type) && java.util.Objects.equals(this.effects, other.effects);
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(type, maxId, effects);
+        return java.util.Objects.hash(type, effects);
     }
 
 }

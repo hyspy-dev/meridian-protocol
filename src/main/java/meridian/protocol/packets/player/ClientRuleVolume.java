@@ -18,7 +18,7 @@ public class ClientRuleVolume {
     public static final int VARIABLE_BLOCK_START = 55;
     public static final int MAX_SIZE = 1677721600;
 
-    public byte rules;
+    @Nonnull public byte rules;
     @Nonnull public TriggerVolumeShapeType shapeType = TriggerVolumeShapeType.Box;
     @Nonnull public Vector3fc position = PacketIO.ZERO_VECTOR3;
     @Nonnull public Vector3fc dimensions = PacketIO.ZERO_VECTOR3;
@@ -31,7 +31,7 @@ public class ClientRuleVolume {
     public ClientRuleVolume() {
     }
 
-    public ClientRuleVolume(byte rules, @Nonnull TriggerVolumeShapeType shapeType, @Nonnull Vector3fc position, @Nonnull Vector3fc dimensions, @Nonnull Vector3fc rotation, @Nullable int[] buildExceptBlocks, @Nullable int[] destroyExceptBlocks, @Nullable String[] destroyExceptTools, @Nullable int[] harvestExceptBlocks) {
+    public ClientRuleVolume(@Nonnull byte rules, @Nonnull TriggerVolumeShapeType shapeType, @Nonnull Vector3fc position, @Nonnull Vector3fc dimensions, @Nonnull Vector3fc rotation, @Nullable int[] buildExceptBlocks, @Nullable int[] destroyExceptBlocks, @Nullable String[] destroyExceptTools, @Nullable int[] harvestExceptBlocks) {
         this.rules = rules;
         this.shapeType = shapeType;
         this.position = position;
@@ -431,13 +431,13 @@ size += VarInt.size(destroyExceptTools.length) + destroyExceptToolsSize;
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof ClientRuleVolume other)) return false;
-        return this.rules == other.rules && java.util.Objects.equals(this.shapeType, other.shapeType) && java.util.Objects.equals(this.position, other.position) && java.util.Objects.equals(this.dimensions, other.dimensions) && java.util.Objects.equals(this.rotation, other.rotation) && java.util.Arrays.equals(this.buildExceptBlocks, other.buildExceptBlocks) && java.util.Arrays.equals(this.destroyExceptBlocks, other.destroyExceptBlocks) && java.util.Arrays.equals(this.destroyExceptTools, other.destroyExceptTools) && java.util.Arrays.equals(this.harvestExceptBlocks, other.harvestExceptBlocks);
+        return java.util.Objects.equals(this.rules, other.rules) && java.util.Objects.equals(this.shapeType, other.shapeType) && java.util.Objects.equals(this.position, other.position) && java.util.Objects.equals(this.dimensions, other.dimensions) && java.util.Objects.equals(this.rotation, other.rotation) && java.util.Arrays.equals(this.buildExceptBlocks, other.buildExceptBlocks) && java.util.Arrays.equals(this.destroyExceptBlocks, other.destroyExceptBlocks) && java.util.Arrays.equals(this.destroyExceptTools, other.destroyExceptTools) && java.util.Arrays.equals(this.harvestExceptBlocks, other.harvestExceptBlocks);
     }
 
     @Override
     public int hashCode() {
         int result = 1;
-        result = 31 * result + Byte.hashCode(rules);
+        result = 31 * result + java.util.Objects.hashCode(rules);
         result = 31 * result + java.util.Objects.hashCode(shapeType);
         result = 31 * result + java.util.Objects.hashCode(position);
         result = 31 * result + java.util.Objects.hashCode(dimensions);

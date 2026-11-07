@@ -18,16 +18,16 @@ public class InitServersideUICommand extends ServersideUICommand {
     public static final int VARIABLE_BLOCK_START = 15;
     public static final int MAX_SIZE = 1677721600;
 
-    @Nonnull public String filePath = "";
+    @Nullable public String filePath;
     @Nullable public HudWidgetSlot slot;
     @Nullable public Integer order;
     @Nullable public ServersidePageLifetime lifetime;
-    @Nullable public UIObjectDataValue dataContext;
+    @Nonnull public UIObjectDataValue dataContext = new UIObjectDataValue();
 
     public InitServersideUICommand() {
     }
 
-    public InitServersideUICommand(@Nonnull String filePath, @Nullable HudWidgetSlot slot, @Nullable Integer order, @Nullable ServersidePageLifetime lifetime, @Nullable UIObjectDataValue dataContext) {
+    public InitServersideUICommand(@Nullable String filePath, @Nullable HudWidgetSlot slot, @Nullable Integer order, @Nullable ServersidePageLifetime lifetime, @Nonnull UIObjectDataValue dataContext) {
         this.filePath = filePath;
         this.slot = slot;
         this.order = order;
@@ -53,12 +53,14 @@ public class InitServersideUICommand extends ServersideUICommand {
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("InitServersideUICommand", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
+    @Nullable
     public static String getFilePath(MemorySegment mem) {
         return getFilePath(mem, 0);
     }
     
+    @Nullable
     public static String getFilePath(MemorySegment mem, int offset) {
-        return PacketIO.readVarString("FilePath", mem, offset + getValidatedOffset(mem, offset, 7, 15, "FilePath"), 512);
+        return hasFilePath(mem, offset) ? PacketIO.readVarString("FilePath", mem, offset + getValidatedOffset(mem, offset, 7, 15, "FilePath"), 512): null;
     }
     
     @Nullable
@@ -91,14 +93,12 @@ public class InitServersideUICommand extends ServersideUICommand {
         return hasLifetime(mem, offset) ? ServersidePageLifetime.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 6)): null;
     }
     
-    @Nullable
     public static UIObjectDataValue getDataContext(MemorySegment mem) {
         return getDataContext(mem, 0);
     }
     
-    @Nullable
     public static UIObjectDataValue getDataContext(MemorySegment mem, int offset) {
-        return hasDataContext(mem, offset) ? UIObjectDataValue.toObject(mem, offset + getValidatedOffset(mem, offset, 11, 15, "DataContext")): null;
+        return UIObjectDataValue.toObject(mem, offset + getValidatedOffset(mem, offset, 11, 15, "DataContext"));
     }
     
     public static boolean hasSlot(MemorySegment mem, int offset) {
@@ -116,7 +116,7 @@ public class InitServersideUICommand extends ServersideUICommand {
         return (b & 0x04) != 0;
     }
     
-    public static boolean hasDataContext(MemorySegment mem, int offset) {
+    public static boolean hasFilePath(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
         return (b & 0x08) != 0;
     }
@@ -157,22 +157,22 @@ public class InitServersideUICommand extends ServersideUICommand {
         var varBase = offset + 15;
         var varPos = 0;
         var walkCursor = cursor != null ? cursor : new ReadCursor();
-        String v0;
-        requireSlot(mem, offset + 7, varPos, "FilePath");
-        {
+        String v0 = null;
+        if (hasFilePath(mem, offset)) {
+            requireSlot(mem, offset + 7, varPos, "FilePath");
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
             v0 = PacketIO.readVarString("FilePath", mem, off, 0, 512, sp);
             varPos += (int) sp + (int) (sp >>> 32);
+        } else {
+            requireSlot(mem, offset + 7, -1, "FilePath");
         }
         
-        UIObjectDataValue v4 = null;
-        if (hasDataContext(mem, offset)) {
-            requireSlot(mem, offset + 11, varPos, "DataContext");
+        UIObjectDataValue v4;
+        requireSlot(mem, offset + 11, varPos, "DataContext");
+        {
             v4 = UIObjectDataValue.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
-        } else {
-            requireSlot(mem, offset + 11, -1, "DataContext");
         }
         var result = new InitServersideUICommand(
             v0,
@@ -191,7 +191,7 @@ public class InitServersideUICommand extends ServersideUICommand {
         if (this.slot != null) nullBits |= 0x01;
         if (this.order != null) nullBits |= 0x02;
         if (this.lifetime != null) nullBits |= 0x04;
-        if (this.dataContext != null) nullBits |= 0x08;
+        if (this.filePath != null) nullBits |= 0x08;
         mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         
         if (this.slot != null) {
@@ -210,22 +210,22 @@ public class InitServersideUICommand extends ServersideUICommand {
             mem.asSlice(offset + 6, 1).fill((byte) 0); 
         }
         var varOffset = offset + 15;
-        mem.set(PacketIO.PROTO_INT, offset + 7, varOffset - offset - 15);
-        varOffset += PacketIO.writeVarString(mem, varOffset, this.filePath, 512);
-        if (this.dataContext != null) {
-            mem.set(PacketIO.PROTO_INT, offset + 11, varOffset - offset - 15);
-            varOffset += this.dataContext.serialize(mem, varOffset);
+        if (this.filePath != null) {
+            mem.set(PacketIO.PROTO_INT, offset + 7, varOffset - offset - 15);
+            varOffset += PacketIO.writeVarString(mem, varOffset, this.filePath, 512);
         } else {
-            mem.set(PacketIO.PROTO_INT, offset + 11, -1);
+            mem.set(PacketIO.PROTO_INT, offset + 7, -1);
         }
+        mem.set(PacketIO.PROTO_INT, offset + 11, varOffset - offset - 15);
+        varOffset += this.dataContext.serialize(mem, varOffset);
     
        return varOffset - offset;
     }
     @Override
     public int computeSize() {
         int size = 15;
-        size += PacketIO.stringSize(filePath);
-    if (dataContext != null) size += dataContext.computeSize();
+        if (filePath != null) size += PacketIO.stringSize(filePath);
+    size += dataContext.computeSize();
 
         return size;
     }
@@ -236,7 +236,7 @@ public class InitServersideUICommand extends ServersideUICommand {
         copy.slot = this.slot;
         copy.order = this.order;
         copy.lifetime = this.lifetime;
-        copy.dataContext = this.dataContext != null ? this.dataContext.clone() : null;
+        copy.dataContext = this.dataContext.clone();
         return copy;
     }
 

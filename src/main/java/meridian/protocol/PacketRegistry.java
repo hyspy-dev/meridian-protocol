@@ -164,22 +164,22 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             40, "UpdateBlockTypes", meridian.protocol.packets.assets.UpdateBlockTypes.class,
-            7, 1677721600, true,
+            3, 1677721600, true,
             meridian.protocol.packets.assets.UpdateBlockTypes::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             41, "UpdateBlockHitboxes", meridian.protocol.packets.assets.UpdateBlockHitboxes.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateBlockHitboxes::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             42, "UpdateBlockSoundSets", meridian.protocol.packets.assets.UpdateBlockSoundSets.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateBlockSoundSets::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             43, "UpdateItemSoundSets", meridian.protocol.packets.assets.UpdateItemSoundSets.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateItemSoundSets::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
@@ -199,7 +199,7 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             47, "UpdateWeathers", meridian.protocol.packets.assets.UpdateWeathers.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateWeathers::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
@@ -219,7 +219,7 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             51, "UpdateEntityEffects", meridian.protocol.packets.assets.UpdateEntityEffects.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateEntityEffects::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
@@ -229,7 +229,7 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             53, "UpdateModelvfxs", meridian.protocol.packets.assets.UpdateModelvfxs.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateModelvfxs::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
@@ -239,7 +239,7 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             55, "UpdateItemQualities", meridian.protocol.packets.assets.UpdateItemQualities.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateItemQualities::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
@@ -249,7 +249,7 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             57, "UpdateItemReticles", meridian.protocol.packets.assets.UpdateItemReticles.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateItemReticles::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
@@ -269,17 +269,17 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             61, "UpdateEnvironments", meridian.protocol.packets.assets.UpdateEnvironments.class,
-            7, 1677721600, true,
+            3, 1677721600, true,
             meridian.protocol.packets.assets.UpdateEnvironments::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             62, "UpdateAmbienceFX", meridian.protocol.packets.assets.UpdateAmbienceFX.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateAmbienceFX::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             63, "UpdateFluidFX", meridian.protocol.packets.assets.UpdateFluidFX.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateFluidFX::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
@@ -289,17 +289,17 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             65, "UpdateSoundEvents", meridian.protocol.packets.assets.UpdateSoundEvents.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateSoundEvents::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             66, "UpdateInteractions", meridian.protocol.packets.assets.UpdateInteractions.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateInteractions::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             67, "UpdateRootInteractions", meridian.protocol.packets.assets.UpdateRootInteractions.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateRootInteractions::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
@@ -324,22 +324,22 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             72, "UpdateEntityStatTypes", meridian.protocol.packets.assets.UpdateEntityStatTypes.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateEntityStatTypes::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             73, "UpdateEntityUIComponents", meridian.protocol.packets.assets.UpdateEntityUIComponents.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateEntityUIComponents::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             74, "UpdateHitboxCollisionConfig", meridian.protocol.packets.assets.UpdateHitboxCollisionConfig.class,
-            6, 40960011, true,
+            2, 40960007, true,
             meridian.protocol.packets.assets.UpdateHitboxCollisionConfig::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             75, "UpdateRepulsionConfig", meridian.protocol.packets.assets.UpdateRepulsionConfig.class,
-            6, 65536011, true,
+            2, 65536007, true,
             meridian.protocol.packets.assets.UpdateRepulsionConfig::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
@@ -359,32 +359,32 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             79, "UpdateSoundSets", meridian.protocol.packets.assets.UpdateSoundSets.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateSoundSets::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             80, "UpdateAudioCategories", meridian.protocol.packets.assets.UpdateAudioCategories.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateAudioCategories::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             81, "UpdateReverbEffects", meridian.protocol.packets.assets.UpdateReverbEffects.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateReverbEffects::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             82, "UpdateEqualizerEffects", meridian.protocol.packets.assets.UpdateEqualizerEffects.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateEqualizerEffects::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             83, "UpdateFluids", meridian.protocol.packets.assets.UpdateFluids.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateFluids::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             84, "UpdateTagPatterns", meridian.protocol.packets.assets.UpdateTagPatterns.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateTagPatterns::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
@@ -394,22 +394,22 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             86, "UpdateEmotes", meridian.protocol.packets.assets.UpdateEmotes.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateEmotes::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             87, "UpdatePhysicalMaterials", meridian.protocol.packets.assets.UpdatePhysicalMaterials.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdatePhysicalMaterials::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             88, "UpdateMusicContainers", meridian.protocol.packets.assets.UpdateMusicContainers.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateMusicContainers::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             89, "UpdateAudioStates", meridian.protocol.packets.assets.UpdateAudioStates.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateAudioStates::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
@@ -419,12 +419,12 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             91, "UpdateMusicTransitions", meridian.protocol.packets.assets.UpdateMusicTransitions.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateMusicTransitions::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             92, "UpdateStingers", meridian.protocol.packets.assets.UpdateStingers.class,
-            6, 1677721600, true,
+            2, 1677721600, true,
             meridian.protocol.packets.assets.UpdateStingers::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
@@ -459,7 +459,7 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             104, "JoinWorld", meridian.protocol.packets.player.JoinWorld.class,
-            26, 26, false,
+            17, 17, false,
             meridian.protocol.packets.player.JoinWorld::toObject);
         register(
             PacketDirection.ToServer, NetworkChannel.Default,
@@ -519,7 +519,7 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToServer, NetworkChannel.Default,
             116, "SyncPlayerPreferences", meridian.protocol.packets.player.SyncPlayerPreferences.class,
-            14, 14, false,
+            15, 15, false,
             meridian.protocol.packets.player.SyncPlayerPreferences::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Chunks,
@@ -723,11 +723,6 @@ public final class PacketRegistry {
             meridian.protocol.packets.entities.ChangeVelocity::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
-            164, "ApplyKnockback", meridian.protocol.packets.entities.ApplyKnockback.class,
-            38, 38, false,
-            meridian.protocol.packets.entities.ApplyKnockback::toObject);
-        register(
-            PacketDirection.ToClient, NetworkChannel.Default,
             165, "SpawnModelParticles", meridian.protocol.packets.entities.SpawnModelParticles.class,
             5, 1677721600, false,
             meridian.protocol.packets.entities.SpawnModelParticles::toObject);
@@ -863,14 +858,14 @@ public final class PacketRegistry {
             meridian.protocol.packets.interface_.UpdateServersideUIPage::toObject);
         register(
             PacketDirection.ToServer, NetworkChannel.Default,
-            206, "ExecuteServersidePageCommand", meridian.protocol.packets.interface_.ExecuteServersidePageCommand.class,
-            1, 1677721600, false,
-            meridian.protocol.packets.interface_.ExecuteServersidePageCommand::toObject);
+            206, "NotifyServersideUIPropertyChanged", meridian.protocol.packets.interface_.NotifyServersideUIPropertyChanged.class,
+            2, 1677721600, false,
+            meridian.protocol.packets.interface_.NotifyServersideUIPropertyChanged::toObject);
         register(
             PacketDirection.ToServer, NetworkChannel.Default,
-            207, "ExecuteServersideHudCommand", meridian.protocol.packets.interface_.ExecuteServersideHudCommand.class,
-            1, 1677721600, false,
-            meridian.protocol.packets.interface_.ExecuteServersideHudCommand::toObject);
+            207, "ExecuteServersideUICommand", meridian.protocol.packets.interface_.ExecuteServersideUICommand.class,
+            2, 1677721600, false,
+            meridian.protocol.packets.interface_.ExecuteServersideUICommand::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             208, "InitViewModelTypes", meridian.protocol.packets.interface_.InitViewModelTypes.class,
@@ -1014,8 +1009,13 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             236, "UpdateBossBar", meridian.protocol.packets.interface_.UpdateBossBar.class,
-            6, 1677721600, false,
+            10, 1677721600, false,
             meridian.protocol.packets.interface_.UpdateBossBar::toObject);
+        register(
+            PacketDirection.ToClient, NetworkChannel.Default,
+            237, "RegisterServersideGlobalResources", meridian.protocol.packets.interface_.RegisterServersideGlobalResources.class,
+            0, 1677721600, false,
+            meridian.protocol.packets.interface_.RegisterServersideGlobalResources::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             238, "CommandTreeSync", meridian.protocol.packets.interface_.CommandTreeSync.class,
@@ -1153,6 +1153,11 @@ public final class PacketRegistry {
             meridian.protocol.packets.interface_.OpenPortalErrorPage::toObject);
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
+            265, "UnregisterServersideGlobalResources", meridian.protocol.packets.interface_.UnregisterServersideGlobalResources.class,
+            0, 1677721600, false,
+            meridian.protocol.packets.interface_.UnregisterServersideGlobalResources::toObject);
+        register(
+            PacketDirection.ToClient, NetworkChannel.Default,
             280, "SetServerCamera", meridian.protocol.packets.camera.SetServerCamera.class,
             182, 182, false,
             meridian.protocol.packets.camera.SetServerCamera::toObject);
@@ -1209,7 +1214,7 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToClient, NetworkChannel.Default,
             293, "MountNPC", meridian.protocol.packets.interaction.MountNPC.class,
-            16, 16, false,
+            5, 16384010, false,
             meridian.protocol.packets.interaction.MountNPC::toObject);
         register(
             PacketDirection.Both, NetworkChannel.Default,
@@ -1554,7 +1559,7 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToServer, NetworkChannel.Default,
             404, "BuilderToolStackArea", meridian.protocol.packets.buildertools.BuilderToolStackArea.class,
-            41, 41, false,
+            40, 40, false,
             meridian.protocol.packets.buildertools.BuilderToolStackArea::toObject);
         register(
             PacketDirection.ToServer, NetworkChannel.Default,
@@ -1754,7 +1759,7 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToServer, NetworkChannel.Default,
             480, "TriggerVolumeToolCreate", meridian.protocol.packets.player.TriggerVolumeToolCreate.class,
-            38, 16384043, false,
+            38, 1067, false,
             meridian.protocol.packets.player.TriggerVolumeToolCreate::toObject);
         register(
             PacketDirection.ToServer, NetworkChannel.Default,
@@ -1954,7 +1959,7 @@ public final class PacketRegistry {
         register(
             PacketDirection.ToServer, NetworkChannel.Default,
             526, "TriggerVolumeToolSetName", meridian.protocol.packets.player.TriggerVolumeToolSetName.class,
-            1, 32768019, false,
+            1, 16385043, false,
             meridian.protocol.packets.player.TriggerVolumeToolSetName::toObject);
         register(
             PacketDirection.ToServer, NetworkChannel.Default,

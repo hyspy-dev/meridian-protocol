@@ -28,11 +28,11 @@ public class TriggerVolumeDisplayEntry {
     @Nullable public String groupId;
     public int groupColor;
     @Nullable public String effectAssetRef;
-    public byte targetTypes;
+    @Nonnull public byte targetTypes;
     public boolean keepLoaded;
     public boolean cancelDelayedOnExit;
     public float cooldown;
-    public byte cooldownMode;
+    @Nonnull public TriggerVolumeCooldownMode cooldownMode = TriggerVolumeCooldownMode.PerEntity;
     public float activationDelay;
     @Nonnull public TriggerVolumeConditionTiming conditionTiming = TriggerVolumeConditionTiming.BeforeVolumeDelay;
     @Nonnull public Vector3fc rotation = PacketIO.ZERO_VECTOR3;
@@ -40,7 +40,7 @@ public class TriggerVolumeDisplayEntry {
     public TriggerVolumeDisplayEntry() {
     }
 
-    public TriggerVolumeDisplayEntry(@Nonnull String volumeId, @Nonnull TriggerVolumeShapeType shapeType, @Nonnull Vector3fc position, @Nonnull Vector3fc dimensions, @Nonnull Vector3fc color, float opacity, @Nullable String name, @Nullable String groupId, int groupColor, @Nullable String effectAssetRef, byte targetTypes, boolean keepLoaded, boolean cancelDelayedOnExit, float cooldown, byte cooldownMode, float activationDelay, @Nonnull TriggerVolumeConditionTiming conditionTiming, @Nonnull Vector3fc rotation) {
+    public TriggerVolumeDisplayEntry(@Nonnull String volumeId, @Nonnull TriggerVolumeShapeType shapeType, @Nonnull Vector3fc position, @Nonnull Vector3fc dimensions, @Nonnull Vector3fc color, float opacity, @Nullable String name, @Nullable String groupId, int groupColor, @Nullable String effectAssetRef, @Nonnull byte targetTypes, boolean keepLoaded, boolean cancelDelayedOnExit, float cooldown, @Nonnull TriggerVolumeCooldownMode cooldownMode, float activationDelay, @Nonnull TriggerVolumeConditionTiming conditionTiming, @Nonnull Vector3fc rotation) {
         this.volumeId = volumeId;
         this.shapeType = shapeType;
         this.position = position;
@@ -210,12 +210,12 @@ public class TriggerVolumeDisplayEntry {
         return PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 48), "Cooldown");
     }
     
-    public static byte getCooldownMode(MemorySegment mem) {
+    public static TriggerVolumeCooldownMode getCooldownMode(MemorySegment mem) {
         return getCooldownMode(mem, 0);
     }
     
-    public static byte getCooldownMode(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_BYTE, offset + 52);
+    public static TriggerVolumeCooldownMode getCooldownMode(MemorySegment mem, int offset) {
+        return TriggerVolumeCooldownMode.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 52));
     }
     
     public static float getActivationDelay(MemorySegment mem) {
@@ -348,7 +348,7 @@ public class TriggerVolumeDisplayEntry {
             (mem.get(PacketIO.PROTO_BYTE, offset + 47) & 0x01) != 0,
             (mem.get(PacketIO.PROTO_BYTE, offset + 47) & 0x02) != 0,
             PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 48), "Cooldown"),
-            mem.get(PacketIO.PROTO_BYTE, offset + 52),
+            TriggerVolumeCooldownMode.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 52)),
             PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 53), "ActivationDelay"),
             TriggerVolumeConditionTiming.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 57)),
             PacketIO.requireFinite(PacketIO.readVector3f(mem, offset + 58), "Rotation")
@@ -376,7 +376,7 @@ public class TriggerVolumeDisplayEntry {
         if (this.cancelDelayedOnExit) boolBits0_0 |= 0x02;
         mem.set(PacketIO.PROTO_BYTE, offset + 47 + 0, boolBits0_0);
         PacketIO.requireFinite(this.cooldown, "Cooldown"); mem.set(PacketIO.PROTO_FLOAT, offset + 48, this.cooldown);
-        mem.set(PacketIO.PROTO_BYTE, offset + 52, this.cooldownMode);
+        mem.set(PacketIO.PROTO_BYTE, offset + 52, (byte) this.cooldownMode.getValue());
         PacketIO.requireFinite(this.activationDelay, "ActivationDelay"); mem.set(PacketIO.PROTO_FLOAT, offset + 53, this.activationDelay);
         mem.set(PacketIO.PROTO_BYTE, offset + 57, (byte) this.conditionTiming.getValue());
         PacketIO.requireFinite(this.rotation, "Rotation"); PacketIO.writeVector3f(mem, offset + 58, this.rotation);
@@ -442,7 +442,7 @@ public class TriggerVolumeDisplayEntry {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof TriggerVolumeDisplayEntry other)) return false;
-        return java.util.Objects.equals(this.volumeId, other.volumeId) && java.util.Objects.equals(this.shapeType, other.shapeType) && java.util.Objects.equals(this.position, other.position) && java.util.Objects.equals(this.dimensions, other.dimensions) && java.util.Objects.equals(this.color, other.color) && this.opacity == other.opacity && java.util.Objects.equals(this.name, other.name) && java.util.Objects.equals(this.groupId, other.groupId) && this.groupColor == other.groupColor && java.util.Objects.equals(this.effectAssetRef, other.effectAssetRef) && this.targetTypes == other.targetTypes && this.keepLoaded == other.keepLoaded && this.cancelDelayedOnExit == other.cancelDelayedOnExit && this.cooldown == other.cooldown && this.cooldownMode == other.cooldownMode && this.activationDelay == other.activationDelay && java.util.Objects.equals(this.conditionTiming, other.conditionTiming) && java.util.Objects.equals(this.rotation, other.rotation);
+        return java.util.Objects.equals(this.volumeId, other.volumeId) && java.util.Objects.equals(this.shapeType, other.shapeType) && java.util.Objects.equals(this.position, other.position) && java.util.Objects.equals(this.dimensions, other.dimensions) && java.util.Objects.equals(this.color, other.color) && this.opacity == other.opacity && java.util.Objects.equals(this.name, other.name) && java.util.Objects.equals(this.groupId, other.groupId) && this.groupColor == other.groupColor && java.util.Objects.equals(this.effectAssetRef, other.effectAssetRef) && java.util.Objects.equals(this.targetTypes, other.targetTypes) && this.keepLoaded == other.keepLoaded && this.cancelDelayedOnExit == other.cancelDelayedOnExit && this.cooldown == other.cooldown && java.util.Objects.equals(this.cooldownMode, other.cooldownMode) && this.activationDelay == other.activationDelay && java.util.Objects.equals(this.conditionTiming, other.conditionTiming) && java.util.Objects.equals(this.rotation, other.rotation);
     }
 
     @Override

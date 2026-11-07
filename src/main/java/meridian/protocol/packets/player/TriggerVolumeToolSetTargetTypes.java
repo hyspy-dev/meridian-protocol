@@ -34,12 +34,12 @@ public class TriggerVolumeToolSetTargetTypes implements Packet, ToServerPacket {
     }
 
     @Nonnull public String volumeId = "";
-    public byte targetTypes;
+    @Nonnull public byte targetTypes;
 
     public TriggerVolumeToolSetTargetTypes() {
     }
 
-    public TriggerVolumeToolSetTargetTypes(@Nonnull String volumeId, byte targetTypes) {
+    public TriggerVolumeToolSetTargetTypes(@Nonnull String volumeId, @Nonnull byte targetTypes) {
         this.volumeId = volumeId;
         this.targetTypes = targetTypes;
     }
@@ -139,7 +139,7 @@ public class TriggerVolumeToolSetTargetTypes implements Packet, ToServerPacket {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof TriggerVolumeToolSetTargetTypes other)) return false;
-        return java.util.Objects.equals(this.volumeId, other.volumeId) && this.targetTypes == other.targetTypes;
+        return java.util.Objects.equals(this.volumeId, other.volumeId) && java.util.Objects.equals(this.targetTypes, other.targetTypes);
     }
 
     @Override

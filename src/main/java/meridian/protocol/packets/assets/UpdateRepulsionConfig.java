@@ -20,10 +20,10 @@ public class UpdateRepulsionConfig implements Packet, ToClientPacket {
     public static final int PACKET_ID = 75;
     public static final boolean IS_COMPRESSED = true;
     public static final int NULLABLE_BIT_FIELD_SIZE = 1;
-    public static final int FIXED_BLOCK_SIZE = 6;
+    public static final int FIXED_BLOCK_SIZE = 2;
     public static final int VARIABLE_FIELD_COUNT = 1;
-    public static final int VARIABLE_BLOCK_START = 6;
-    public static final int MAX_SIZE = 65536011;
+    public static final int VARIABLE_BLOCK_START = 2;
+    public static final int MAX_SIZE = 65536007;
 
     @Override
     public int getId() {
@@ -36,21 +36,18 @@ public class UpdateRepulsionConfig implements Packet, ToClientPacket {
     }
 
     @Nonnull public UpdateType type = UpdateType.Init;
-    public int maxId;
     @Nullable public java.util.Map<Integer, RepulsionConfig> repulsionConfigs;
 
     public UpdateRepulsionConfig() {
     }
 
-    public UpdateRepulsionConfig(@Nonnull UpdateType type, int maxId, @Nullable java.util.Map<Integer, RepulsionConfig> repulsionConfigs) {
+    public UpdateRepulsionConfig(@Nonnull UpdateType type, @Nullable java.util.Map<Integer, RepulsionConfig> repulsionConfigs) {
         this.type = type;
-        this.maxId = maxId;
         this.repulsionConfigs = repulsionConfigs;
     }
 
     public UpdateRepulsionConfig(@Nonnull UpdateRepulsionConfig other) {
         this.type = other.type;
-        this.maxId = other.maxId;
         this.repulsionConfigs = other.repulsionConfigs;
     }
 
@@ -60,7 +57,7 @@ public class UpdateRepulsionConfig implements Packet, ToClientPacket {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("UpdateRepulsionConfig", offset, (int) mem.byteSize());
-        long needed = (long) offset + 6;
+        long needed = (long) offset + 2;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("UpdateRepulsionConfig", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -72,14 +69,6 @@ public class UpdateRepulsionConfig implements Packet, ToClientPacket {
         return UpdateType.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 1));
     }
     
-    public static int getMaxId(MemorySegment mem) {
-        return getMaxId(mem, 0);
-    }
-    
-    public static int getMaxId(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_INT, offset + 2);
-    }
-    
     @Nullable
     public static java.util.Map<Integer, RepulsionConfig> getRepulsionConfigs(MemorySegment mem) {
         return getRepulsionConfigs(mem, 0);
@@ -88,7 +77,7 @@ public class UpdateRepulsionConfig implements Packet, ToClientPacket {
     @Nullable
     public static java.util.Map<Integer, RepulsionConfig> getRepulsionConfigs(MemorySegment mem, int offset) {
         if (!hasRepulsionConfigs(mem, offset)) return null;
-        var off = offset + 6;
+        var off = offset + 2;
         var packed = VarInt.getWithLength(mem, off);
         if (packed == -1L) throw ProtocolException.invalidVarInt("RepulsionConfigs");
         var len = (int) packed;
@@ -132,9 +121,9 @@ public class UpdateRepulsionConfig implements Packet, ToClientPacket {
     public static UpdateRepulsionConfig toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
-        var varBase = offset + 6;
+        var varBase = offset + 2;
         var varPos = 0;
-        java.util.Map<Integer, RepulsionConfig> v2 = null;
+        java.util.Map<Integer, RepulsionConfig> v1 = null;
         if (hasRepulsionConfigs(mem, offset)) {
             var off = varBase + varPos;
             var packed = VarInt.getWithLength(mem, off);
@@ -144,13 +133,13 @@ public class UpdateRepulsionConfig implements Packet, ToClientPacket {
             
             off += (int) (packed >>> 32);
             if (off + (long) len * 16 > mem.byteSize()) throw ProtocolException.bufferTooSmall("RepulsionConfigs", (int) java.lang.Math.min(off + (long) len * 16, Integer.MAX_VALUE), (int) mem.byteSize());
-            v2 = new HashMap<>(len);
+            v1 = new HashMap<>(len);
             for (var i = 0; i < len; i++) {
                 var key = mem.get(PacketIO.PROTO_INT, off);
                     off += 4;
                 var value = RepulsionConfig.toObject(mem, off);
                     off += 12;
-                if (v2.put(key, value) != null) {
+                if (v1.put(key, value) != null) {
                     throw ProtocolException.duplicateKey("RepulsionConfigs", key);
                 }
             }
@@ -158,8 +147,7 @@ public class UpdateRepulsionConfig implements Packet, ToClientPacket {
         }
         var result = new UpdateRepulsionConfig(
             UpdateType.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 1)),
-            mem.get(PacketIO.PROTO_INT, offset + 2),
-            v2
+            v1
         );
         if (cursor != null) cursor.position = varBase + varPos;
         return result;
@@ -172,8 +160,7 @@ public class UpdateRepulsionConfig implements Packet, ToClientPacket {
         mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         
         mem.set(PacketIO.PROTO_BYTE, offset + 1, (byte) this.type.getValue());
-        mem.set(PacketIO.PROTO_INT, offset + 2, this.maxId);
-        var varOffset = offset + 6;
+        var varOffset = offset + 2;
         if (this.repulsionConfigs != null) {
             
             if (this.repulsionConfigs.size() > 4096000) throw ProtocolException.dictionaryTooLarge("RepulsionConfigs", repulsionConfigs.size(), 4096000);
@@ -188,7 +175,7 @@ public class UpdateRepulsionConfig implements Packet, ToClientPacket {
        return varOffset - offset;
     }
     public int computeSize() {
-        int size = 6;
+        int size = 2;
         if (repulsionConfigs != null) size += VarInt.size(repulsionConfigs.size()) + repulsionConfigs.size() * (4 + 12);
 
         return size;
@@ -197,7 +184,6 @@ public class UpdateRepulsionConfig implements Packet, ToClientPacket {
     public UpdateRepulsionConfig clone() {
         UpdateRepulsionConfig copy = new UpdateRepulsionConfig();
         copy.type = this.type;
-        copy.maxId = this.maxId;
         if (this.repulsionConfigs != null) {
             java.util.Map<Integer, RepulsionConfig> m = new java.util.HashMap<>();
             for (var e : this.repulsionConfigs.entrySet()) { m.put(e.getKey(), e.getValue().clone()); }
@@ -211,12 +197,12 @@ public class UpdateRepulsionConfig implements Packet, ToClientPacket {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof UpdateRepulsionConfig other)) return false;
-        return java.util.Objects.equals(this.type, other.type) && this.maxId == other.maxId && java.util.Objects.equals(this.repulsionConfigs, other.repulsionConfigs);
+        return java.util.Objects.equals(this.type, other.type) && java.util.Objects.equals(this.repulsionConfigs, other.repulsionConfigs);
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(type, maxId, repulsionConfigs);
+        return java.util.Objects.hash(type, repulsionConfigs);
     }
 
 }

@@ -64,7 +64,9 @@ public class BuilderToolRotateClipboard implements Packet, ToServerPacket {
     }
     
     public static int getAngle(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_INT, offset + 0);
+        var value = mem.get(PacketIO.PROTO_INT, offset + 0);
+        if (value < -360 || value > 360) throw ProtocolException.valueOutOfRange("Angle", value, -360, 360);
+        return value;
     }
     
     public static Axis getAxis(MemorySegment mem) {
@@ -95,8 +97,10 @@ public class BuilderToolRotateClipboard implements Packet, ToServerPacket {
     public static BuilderToolRotateClipboard toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
+        int v0 = mem.get(PacketIO.PROTO_INT, offset + 0);
+        if (v0 < -360 || v0 > 360) throw ProtocolException.valueOutOfRange("Angle", v0, -360, 360);
         var result = new BuilderToolRotateClipboard(
-            mem.get(PacketIO.PROTO_INT, offset + 0),
+            v0,
             Axis.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 4))
         );
         if (cursor != null) cursor.position = offset + 5;
@@ -105,7 +109,7 @@ public class BuilderToolRotateClipboard implements Packet, ToServerPacket {
     @Override
     public int serialize(@Nonnull MemorySegment mem, int offset) {
         
-        mem.set(PacketIO.PROTO_INT, offset + 0, this.angle);
+        if (this.angle < -360 || this.angle > 360) throw ProtocolException.valueOutOfRange("Angle", this.angle, -360, 360); mem.set(PacketIO.PROTO_INT, offset + 0, this.angle);
         mem.set(PacketIO.PROTO_BYTE, offset + 4, (byte) this.axis.getValue());
         
         

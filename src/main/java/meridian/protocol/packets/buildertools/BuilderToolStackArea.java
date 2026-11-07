@@ -17,11 +17,11 @@ import meridian.protocol.BlockPosition;
 public class BuilderToolStackArea implements Packet, ToServerPacket {
     public static final int PACKET_ID = 404;
     public static final boolean IS_COMPRESSED = false;
-    public static final int NULLABLE_BIT_FIELD_SIZE = 1;
-    public static final int FIXED_BLOCK_SIZE = 41;
+    public static final int NULLABLE_BIT_FIELD_SIZE = 0;
+    public static final int FIXED_BLOCK_SIZE = 40;
     public static final int VARIABLE_FIELD_COUNT = 0;
-    public static final int VARIABLE_BLOCK_START = 41;
-    public static final int MAX_SIZE = 41;
+    public static final int VARIABLE_BLOCK_START = 40;
+    public static final int MAX_SIZE = 40;
 
     @Override
     public int getId() {
@@ -33,8 +33,8 @@ public class BuilderToolStackArea implements Packet, ToServerPacket {
         return NetworkChannel.Default;
     }
 
-    @Nullable public BlockPosition selectionMin;
-    @Nullable public BlockPosition selectionMax;
+    @Nonnull public BlockPosition selectionMin = new BlockPosition();
+    @Nonnull public BlockPosition selectionMax = new BlockPosition();
     public int xNormal;
     public int yNormal;
     public int zNormal;
@@ -43,7 +43,7 @@ public class BuilderToolStackArea implements Packet, ToServerPacket {
     public BuilderToolStackArea() {
     }
 
-    public BuilderToolStackArea(@Nullable BlockPosition selectionMin, @Nullable BlockPosition selectionMax, int xNormal, int yNormal, int zNormal, int numStacks) {
+    public BuilderToolStackArea(@Nonnull BlockPosition selectionMin, @Nonnull BlockPosition selectionMax, int xNormal, int yNormal, int zNormal, int numStacks) {
         this.selectionMin = selectionMin;
         this.selectionMax = selectionMax;
         this.xNormal = xNormal;
@@ -67,28 +67,24 @@ public class BuilderToolStackArea implements Packet, ToServerPacket {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("BuilderToolStackArea", offset, (int) mem.byteSize());
-        long needed = (long) offset + 41;
+        long needed = (long) offset + 40;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("BuilderToolStackArea", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
-    @Nullable
     public static BlockPosition getSelectionMin(MemorySegment mem) {
         return getSelectionMin(mem, 0);
     }
     
-    @Nullable
     public static BlockPosition getSelectionMin(MemorySegment mem, int offset) {
-        return hasSelectionMin(mem, offset) ? BlockPosition.toObject(mem, offset + 1): null;
+        return BlockPosition.toObject(mem, offset + 0);
     }
     
-    @Nullable
     public static BlockPosition getSelectionMax(MemorySegment mem) {
         return getSelectionMax(mem, 0);
     }
     
-    @Nullable
     public static BlockPosition getSelectionMax(MemorySegment mem, int offset) {
-        return hasSelectionMax(mem, offset) ? BlockPosition.toObject(mem, offset + 13): null;
+        return BlockPosition.toObject(mem, offset + 12);
     }
     
     public static int getXNormal(MemorySegment mem) {
@@ -96,7 +92,9 @@ public class BuilderToolStackArea implements Packet, ToServerPacket {
     }
     
     public static int getXNormal(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_INT, offset + 25);
+        var value = mem.get(PacketIO.PROTO_INT, offset + 24);
+        if (value < -1 || value > 1) throw ProtocolException.valueOutOfRange("XNormal", value, -1, 1);
+        return value;
     }
     
     public static int getYNormal(MemorySegment mem) {
@@ -104,7 +102,9 @@ public class BuilderToolStackArea implements Packet, ToServerPacket {
     }
     
     public static int getYNormal(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_INT, offset + 29);
+        var value = mem.get(PacketIO.PROTO_INT, offset + 28);
+        if (value < -1 || value > 1) throw ProtocolException.valueOutOfRange("YNormal", value, -1, 1);
+        return value;
     }
     
     public static int getZNormal(MemorySegment mem) {
@@ -112,7 +112,9 @@ public class BuilderToolStackArea implements Packet, ToServerPacket {
     }
     
     public static int getZNormal(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_INT, offset + 33);
+        var value = mem.get(PacketIO.PROTO_INT, offset + 32);
+        if (value < -1 || value > 1) throw ProtocolException.valueOutOfRange("ZNormal", value, -1, 1);
+        return value;
     }
     
     public static int getNumStacks(MemorySegment mem) {
@@ -120,18 +122,12 @@ public class BuilderToolStackArea implements Packet, ToServerPacket {
     }
     
     public static int getNumStacks(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_INT, offset + 37);
+        var value = mem.get(PacketIO.PROTO_INT, offset + 36);
+        if (value < 0 || value > 20000) throw ProtocolException.valueOutOfRange("NumStacks", value, 0, 20000);
+        return value;
     }
     
-    public static boolean hasSelectionMin(MemorySegment mem, int offset) {
-        var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
-        return (b & 0x01) != 0;
-    }
     
-    public static boolean hasSelectionMax(MemorySegment mem, int offset) {
-        var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
-        return (b & 0x02) != 0;
-    }
     
     
     
@@ -151,52 +147,50 @@ public class BuilderToolStackArea implements Packet, ToServerPacket {
     public static BuilderToolStackArea toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
+        int v2 = mem.get(PacketIO.PROTO_INT, offset + 24);
+        if (v2 < -1 || v2 > 1) throw ProtocolException.valueOutOfRange("XNormal", v2, -1, 1);
+        
+        int v3 = mem.get(PacketIO.PROTO_INT, offset + 28);
+        if (v3 < -1 || v3 > 1) throw ProtocolException.valueOutOfRange("YNormal", v3, -1, 1);
+        
+        int v4 = mem.get(PacketIO.PROTO_INT, offset + 32);
+        if (v4 < -1 || v4 > 1) throw ProtocolException.valueOutOfRange("ZNormal", v4, -1, 1);
+        
+        int v5 = mem.get(PacketIO.PROTO_INT, offset + 36);
+        if (v5 < 0 || v5 > 20000) throw ProtocolException.valueOutOfRange("NumStacks", v5, 0, 20000);
         var result = new BuilderToolStackArea(
-            hasSelectionMin(mem, offset) ? BlockPosition.toObject(mem, offset + 1) : null,
-            hasSelectionMax(mem, offset) ? BlockPosition.toObject(mem, offset + 13) : null,
-            mem.get(PacketIO.PROTO_INT, offset + 25),
-            mem.get(PacketIO.PROTO_INT, offset + 29),
-            mem.get(PacketIO.PROTO_INT, offset + 33),
-            mem.get(PacketIO.PROTO_INT, offset + 37)
+            BlockPosition.toObject(mem, offset + 0),
+            BlockPosition.toObject(mem, offset + 12),
+            v2,
+            v3,
+            v4,
+            v5
         );
-        if (cursor != null) cursor.position = offset + 41;
+        if (cursor != null) cursor.position = offset + 40;
         return result;
     }
     @Override
     public int serialize(@Nonnull MemorySegment mem, int offset) {
-        byte nullBits;
-        nullBits = 0;
-        if (this.selectionMin != null) nullBits |= 0x01;
-        if (this.selectionMax != null) nullBits |= 0x02;
-        mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         
-        if (this.selectionMin != null) {
-            this.selectionMin.serialize(mem, offset + 1);
-        } else {
-            mem.asSlice(offset + 1, 12).fill((byte) 0); 
-        }
-        if (this.selectionMax != null) {
-            this.selectionMax.serialize(mem, offset + 13);
-        } else {
-            mem.asSlice(offset + 13, 12).fill((byte) 0); 
-        }
-        mem.set(PacketIO.PROTO_INT, offset + 25, this.xNormal);
-        mem.set(PacketIO.PROTO_INT, offset + 29, this.yNormal);
-        mem.set(PacketIO.PROTO_INT, offset + 33, this.zNormal);
-        mem.set(PacketIO.PROTO_INT, offset + 37, this.numStacks);
+        this.selectionMin.serialize(mem, offset + 0);
+        this.selectionMax.serialize(mem, offset + 12);
+        if (this.xNormal < -1 || this.xNormal > 1) throw ProtocolException.valueOutOfRange("XNormal", this.xNormal, -1, 1); mem.set(PacketIO.PROTO_INT, offset + 24, this.xNormal);
+        if (this.yNormal < -1 || this.yNormal > 1) throw ProtocolException.valueOutOfRange("YNormal", this.yNormal, -1, 1); mem.set(PacketIO.PROTO_INT, offset + 28, this.yNormal);
+        if (this.zNormal < -1 || this.zNormal > 1) throw ProtocolException.valueOutOfRange("ZNormal", this.zNormal, -1, 1); mem.set(PacketIO.PROTO_INT, offset + 32, this.zNormal);
+        if (this.numStacks < 0 || this.numStacks > 20000) throw ProtocolException.valueOutOfRange("NumStacks", this.numStacks, 0, 20000); mem.set(PacketIO.PROTO_INT, offset + 36, this.numStacks);
         
         
     
-       return 41;
+       return 40;
     }
     public int computeSize() {
-        return 41;
+        return 40;
     }
 
     public BuilderToolStackArea clone() {
         BuilderToolStackArea copy = new BuilderToolStackArea();
-        copy.selectionMin = this.selectionMin != null ? this.selectionMin.clone() : null;
-        copy.selectionMax = this.selectionMax != null ? this.selectionMax.clone() : null;
+        copy.selectionMin = this.selectionMin.clone();
+        copy.selectionMax = this.selectionMax.clone();
         copy.xNormal = this.xNormal;
         copy.yNormal = this.yNormal;
         copy.zNormal = this.zNormal;

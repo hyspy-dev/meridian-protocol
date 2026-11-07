@@ -18,9 +18,9 @@ public class UpdateBossBar implements Packet, ToClientPacket {
     public static final int PACKET_ID = 236;
     public static final boolean IS_COMPRESSED = false;
     public static final int NULLABLE_BIT_FIELD_SIZE = 1;
-    public static final int FIXED_BLOCK_SIZE = 6;
+    public static final int FIXED_BLOCK_SIZE = 10;
     public static final int VARIABLE_FIELD_COUNT = 1;
-    public static final int VARIABLE_BLOCK_START = 6;
+    public static final int VARIABLE_BLOCK_START = 10;
     public static final int MAX_SIZE = 1677721600;
 
     @Override
@@ -37,15 +37,17 @@ public class UpdateBossBar implements Packet, ToClientPacket {
     @Nullable public FormattedMessage name;
     public boolean hide;
     public boolean hardMode;
+    @Nullable public Float progress;
 
     public UpdateBossBar() {
     }
 
-    public UpdateBossBar(int entityNetworkId, @Nullable FormattedMessage name, boolean hide, boolean hardMode) {
+    public UpdateBossBar(int entityNetworkId, @Nullable FormattedMessage name, boolean hide, boolean hardMode, @Nullable Float progress) {
         this.entityNetworkId = entityNetworkId;
         this.name = name;
         this.hide = hide;
         this.hardMode = hardMode;
+        this.progress = progress;
     }
 
     public UpdateBossBar(@Nonnull UpdateBossBar other) {
@@ -53,6 +55,7 @@ public class UpdateBossBar implements Packet, ToClientPacket {
         this.name = other.name;
         this.hide = other.hide;
         this.hardMode = other.hardMode;
+        this.progress = other.progress;
     }
 
     /**
@@ -61,7 +64,7 @@ public class UpdateBossBar implements Packet, ToClientPacket {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("UpdateBossBar", offset, (int) mem.byteSize());
-        long needed = (long) offset + 6;
+        long needed = (long) offset + 10;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("UpdateBossBar", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -80,7 +83,7 @@ public class UpdateBossBar implements Packet, ToClientPacket {
     
     @Nullable
     public static FormattedMessage getName(MemorySegment mem, int offset) {
-        return hasName(mem, offset) ? FormattedMessage.toObject(mem, offset + 6): null;
+        return hasName(mem, offset) ? FormattedMessage.toObject(mem, offset + 10): null;
     }
     
     public static boolean getHide(MemorySegment mem) {
@@ -99,9 +102,27 @@ public class UpdateBossBar implements Packet, ToClientPacket {
         return (mem.get(PacketIO.PROTO_BYTE, offset + 5) & 0x02) != 0;
     }
     
-    public static boolean hasName(MemorySegment mem, int offset) {
+    @Nullable
+    public static Float getProgress(MemorySegment mem) {
+        return getProgress(mem, 0);
+    }
+    
+    @Nullable
+    public static Float getProgress(MemorySegment mem, int offset) {
+        if (!hasProgress(mem, offset)) return null;
+        var value = PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 6), "Progress");
+        if (value < 0 || value > 1) throw ProtocolException.valueOutOfRange("Progress", value, 0, 1);
+        return value;
+    }
+    
+    public static boolean hasProgress(MemorySegment mem, int offset) {
         var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
         return (b & 0x01) != 0;
+    }
+    
+    public static boolean hasName(MemorySegment mem, int offset) {
+        var b = mem.get(PacketIO.PROTO_BYTE, offset + 0);
+        return (b & 0x02) != 0;
     }
     
     
@@ -122,7 +143,7 @@ public class UpdateBossBar implements Packet, ToClientPacket {
     public static UpdateBossBar toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
-        var varBase = offset + 6;
+        var varBase = offset + 10;
         var varPos = 0;
         var walkCursor = cursor != null ? cursor : new ReadCursor();
         FormattedMessage v1 = null;
@@ -130,11 +151,19 @@ public class UpdateBossBar implements Packet, ToClientPacket {
             v1 = FormattedMessage.toObject(mem, varBase + varPos, walkCursor);
             varPos = walkCursor.position - varBase;
         }
+        
+        Float v4 = null;
+        if (hasProgress(mem, offset)) {
+            var v4Value = PacketIO.requireFinite(mem.get(PacketIO.PROTO_FLOAT, offset + 6), "Progress");
+            if (v4Value < 0 || v4Value > 1) throw ProtocolException.valueOutOfRange("Progress", v4Value, 0, 1);
+            v4 = v4Value;
+        }
         var result = new UpdateBossBar(
             mem.get(PacketIO.PROTO_INT, offset + 1),
             v1,
             (mem.get(PacketIO.PROTO_BYTE, offset + 5) & 0x01) != 0,
-            (mem.get(PacketIO.PROTO_BYTE, offset + 5) & 0x02) != 0
+            (mem.get(PacketIO.PROTO_BYTE, offset + 5) & 0x02) != 0,
+            v4
         );
         if (cursor != null) cursor.position = varBase + varPos;
         return result;
@@ -143,7 +172,8 @@ public class UpdateBossBar implements Packet, ToClientPacket {
     public int serialize(@Nonnull MemorySegment mem, int offset) {
         byte nullBits;
         nullBits = 0;
-        if (this.name != null) nullBits |= 0x01;
+        if (this.progress != null) nullBits |= 0x01;
+        if (this.name != null) nullBits |= 0x02;
         mem.set(PacketIO.PROTO_BYTE, offset + 0, nullBits);
         
         mem.set(PacketIO.PROTO_INT, offset + 1, this.entityNetworkId);
@@ -151,7 +181,12 @@ public class UpdateBossBar implements Packet, ToClientPacket {
         if (this.hide) boolBits0_0 |= 0x01;
         if (this.hardMode) boolBits0_0 |= 0x02;
         mem.set(PacketIO.PROTO_BYTE, offset + 5 + 0, boolBits0_0);
-        var varOffset = offset + 6;
+        if (this.progress != null) {
+            if (this.progress < 0 || this.progress > 1) throw ProtocolException.valueOutOfRange("Progress", this.progress, 0, 1); PacketIO.requireFinite(this.progress, "Progress"); mem.set(PacketIO.PROTO_FLOAT, offset + 6, this.progress);
+        } else {
+            mem.asSlice(offset + 6, 4).fill((byte) 0); 
+        }
+        var varOffset = offset + 10;
         if (this.name != null) {
             
             varOffset += this.name.serialize(mem, varOffset);
@@ -160,7 +195,7 @@ public class UpdateBossBar implements Packet, ToClientPacket {
        return varOffset - offset;
     }
     public int computeSize() {
-        int size = 6;
+        int size = 10;
         if (name != null) size += name.computeSize();
 
         return size;
@@ -172,6 +207,7 @@ public class UpdateBossBar implements Packet, ToClientPacket {
         copy.name = this.name != null ? this.name.clone() : null;
         copy.hide = this.hide;
         copy.hardMode = this.hardMode;
+        copy.progress = this.progress;
         return copy;
     }
 
@@ -180,12 +216,12 @@ public class UpdateBossBar implements Packet, ToClientPacket {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof UpdateBossBar other)) return false;
-        return this.entityNetworkId == other.entityNetworkId && java.util.Objects.equals(this.name, other.name) && this.hide == other.hide && this.hardMode == other.hardMode;
+        return this.entityNetworkId == other.entityNetworkId && java.util.Objects.equals(this.name, other.name) && this.hide == other.hide && this.hardMode == other.hardMode && java.util.Objects.equals(this.progress, other.progress);
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(entityNetworkId, name, hide, hardMode);
+        return java.util.Objects.hash(entityNetworkId, name, hide, hardMode, progress);
     }
 
 }

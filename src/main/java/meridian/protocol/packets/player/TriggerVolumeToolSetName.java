@@ -21,7 +21,7 @@ public class TriggerVolumeToolSetName implements Packet, ToServerPacket {
     public static final int FIXED_BLOCK_SIZE = 1;
     public static final int VARIABLE_FIELD_COUNT = 2;
     public static final int VARIABLE_BLOCK_START = 9;
-    public static final int MAX_SIZE = 32768019;
+    public static final int MAX_SIZE = 16385043;
 
     @Override
     public int getId() {
@@ -74,7 +74,7 @@ public class TriggerVolumeToolSetName implements Packet, ToServerPacket {
     
     @Nullable
     public static String getName(MemorySegment mem, int offset) {
-        return hasName(mem, offset) ? PacketIO.readVarString("Name", mem, offset + getValidatedOffset(mem, offset, 5, 9, "Name"), 4096000): null;
+        return hasName(mem, offset) ? PacketIO.readVarString("Name", mem, offset + getValidatedOffset(mem, offset, 5, 9, "Name"), 256): null;
     }
     
     public static boolean hasName(MemorySegment mem, int offset) {
@@ -131,7 +131,7 @@ public class TriggerVolumeToolSetName implements Packet, ToServerPacket {
             requireSlot(mem, offset + 5, varPos, "Name");
             var off = varBase + varPos;
             var sp = VarInt.getWithLength(mem, off);
-            v1 = PacketIO.readVarString("Name", mem, off, 0, 4096000, sp);
+            v1 = PacketIO.readVarString("Name", mem, off, 0, 256, sp);
             varPos += (int) sp + (int) (sp >>> 32);
         } else {
             requireSlot(mem, offset + 5, -1, "Name");
@@ -156,7 +156,7 @@ public class TriggerVolumeToolSetName implements Packet, ToServerPacket {
         varOffset += PacketIO.writeVarString(mem, varOffset, this.volumeId, 4096000);
         if (this.name != null) {
             mem.set(PacketIO.PROTO_INT, offset + 5, varOffset - offset - 9);
-            varOffset += PacketIO.writeVarString(mem, varOffset, this.name, 4096000);
+            varOffset += PacketIO.writeVarString(mem, varOffset, this.name, 256);
         } else {
             mem.set(PacketIO.PROTO_INT, offset + 5, -1);
         }

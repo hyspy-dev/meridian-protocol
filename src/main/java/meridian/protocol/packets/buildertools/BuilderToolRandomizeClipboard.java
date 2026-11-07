@@ -76,7 +76,9 @@ public class BuilderToolRandomizeClipboard implements Packet, ToServerPacket {
     }
     
     public static int getDeltaX(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_INT, offset + 0);
+        var value = mem.get(PacketIO.PROTO_INT, offset + 0);
+        if (value < 0 || value > 359) throw ProtocolException.valueOutOfRange("DeltaX", value, 0, 359);
+        return value;
     }
     
     public static int getDeltaY(MemorySegment mem) {
@@ -84,7 +86,9 @@ public class BuilderToolRandomizeClipboard implements Packet, ToServerPacket {
     }
     
     public static int getDeltaY(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_INT, offset + 4);
+        var value = mem.get(PacketIO.PROTO_INT, offset + 4);
+        if (value < 0 || value > 359) throw ProtocolException.valueOutOfRange("DeltaY", value, 0, 359);
+        return value;
     }
     
     public static int getDeltaZ(MemorySegment mem) {
@@ -92,7 +96,9 @@ public class BuilderToolRandomizeClipboard implements Packet, ToServerPacket {
     }
     
     public static int getDeltaZ(MemorySegment mem, int offset) {
-        return mem.get(PacketIO.PROTO_INT, offset + 8);
+        var value = mem.get(PacketIO.PROTO_INT, offset + 8);
+        if (value < 0 || value > 359) throw ProtocolException.valueOutOfRange("DeltaZ", value, 0, 359);
+        return value;
     }
     
     public static boolean getFlipX(MemorySegment mem) {
@@ -139,10 +145,18 @@ public class BuilderToolRandomizeClipboard implements Packet, ToServerPacket {
     public static BuilderToolRandomizeClipboard toObject(MemorySegment mem, int offset, @Nullable ReadCursor cursor) {
         // Checking the whole fixed block up front lets the JIT elide the per-field bound checks.
         requireBounds(mem, offset);
+        int v0 = mem.get(PacketIO.PROTO_INT, offset + 0);
+        if (v0 < 0 || v0 > 359) throw ProtocolException.valueOutOfRange("DeltaX", v0, 0, 359);
+        
+        int v1 = mem.get(PacketIO.PROTO_INT, offset + 4);
+        if (v1 < 0 || v1 > 359) throw ProtocolException.valueOutOfRange("DeltaY", v1, 0, 359);
+        
+        int v2 = mem.get(PacketIO.PROTO_INT, offset + 8);
+        if (v2 < 0 || v2 > 359) throw ProtocolException.valueOutOfRange("DeltaZ", v2, 0, 359);
         var result = new BuilderToolRandomizeClipboard(
-            mem.get(PacketIO.PROTO_INT, offset + 0),
-            mem.get(PacketIO.PROTO_INT, offset + 4),
-            mem.get(PacketIO.PROTO_INT, offset + 8),
+            v0,
+            v1,
+            v2,
             (mem.get(PacketIO.PROTO_BYTE, offset + 12) & 0x01) != 0,
             (mem.get(PacketIO.PROTO_BYTE, offset + 12) & 0x02) != 0,
             (mem.get(PacketIO.PROTO_BYTE, offset + 12) & 0x04) != 0
@@ -153,9 +167,9 @@ public class BuilderToolRandomizeClipboard implements Packet, ToServerPacket {
     @Override
     public int serialize(@Nonnull MemorySegment mem, int offset) {
         
-        mem.set(PacketIO.PROTO_INT, offset + 0, this.deltaX);
-        mem.set(PacketIO.PROTO_INT, offset + 4, this.deltaY);
-        mem.set(PacketIO.PROTO_INT, offset + 8, this.deltaZ);
+        if (this.deltaX < 0 || this.deltaX > 359) throw ProtocolException.valueOutOfRange("DeltaX", this.deltaX, 0, 359); mem.set(PacketIO.PROTO_INT, offset + 0, this.deltaX);
+        if (this.deltaY < 0 || this.deltaY > 359) throw ProtocolException.valueOutOfRange("DeltaY", this.deltaY, 0, 359); mem.set(PacketIO.PROTO_INT, offset + 4, this.deltaY);
+        if (this.deltaZ < 0 || this.deltaZ > 359) throw ProtocolException.valueOutOfRange("DeltaZ", this.deltaZ, 0, 359); mem.set(PacketIO.PROTO_INT, offset + 8, this.deltaZ);
         byte boolBits0_0 = 0;
         if (this.flipX) boolBits0_0 |= 0x01;
         if (this.flipY) boolBits0_0 |= 0x02;

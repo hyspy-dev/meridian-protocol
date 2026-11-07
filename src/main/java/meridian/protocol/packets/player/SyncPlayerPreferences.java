@@ -20,10 +20,10 @@ public class SyncPlayerPreferences implements Packet, ToServerPacket {
     public static final int PACKET_ID = 116;
     public static final boolean IS_COMPRESSED = false;
     public static final int NULLABLE_BIT_FIELD_SIZE = 0;
-    public static final int FIXED_BLOCK_SIZE = 14;
+    public static final int FIXED_BLOCK_SIZE = 15;
     public static final int VARIABLE_FIELD_COUNT = 0;
-    public static final int VARIABLE_BLOCK_START = 14;
-    public static final int MAX_SIZE = 14;
+    public static final int VARIABLE_BLOCK_START = 15;
+    public static final int MAX_SIZE = 15;
 
     @Override
     public int getId() {
@@ -56,11 +56,12 @@ public class SyncPlayerPreferences implements Packet, ToServerPacket {
     public boolean voiceChat;
     public boolean voiceInput;
     @Nonnull public VoiceInputMode voiceInputMode = VoiceInputMode.VoiceActivity;
+    public boolean autoRefillHotbar;
 
     public SyncPlayerPreferences() {
     }
 
-    public SyncPlayerPreferences(boolean showEntityMarkers, @Nonnull PickupLocation armorItemsPreferredPickupLocation, @Nonnull PickupLocation weaponAndToolItemsPreferredPickupLocation, @Nonnull PickupLocation usableItemsItemsPreferredPickupLocation, @Nonnull PickupLocation solidBlockItemsPreferredPickupLocation, @Nonnull PickupLocation miscItemsPreferredPickupLocation, boolean allowNPCDetection, boolean respondToHit, boolean hideHelmet, boolean hideCuirass, boolean hideGauntlets, boolean hidePants, @Nonnull PlaceMode placeMode, int creativeInteractionDistance, boolean showBuilderToolNotifications, boolean noPhysics, boolean eraserEnabled, boolean activateTriggerVolumes, boolean voiceChat, boolean voiceInput, @Nonnull VoiceInputMode voiceInputMode) {
+    public SyncPlayerPreferences(boolean showEntityMarkers, @Nonnull PickupLocation armorItemsPreferredPickupLocation, @Nonnull PickupLocation weaponAndToolItemsPreferredPickupLocation, @Nonnull PickupLocation usableItemsItemsPreferredPickupLocation, @Nonnull PickupLocation solidBlockItemsPreferredPickupLocation, @Nonnull PickupLocation miscItemsPreferredPickupLocation, boolean allowNPCDetection, boolean respondToHit, boolean hideHelmet, boolean hideCuirass, boolean hideGauntlets, boolean hidePants, @Nonnull PlaceMode placeMode, int creativeInteractionDistance, boolean showBuilderToolNotifications, boolean noPhysics, boolean eraserEnabled, boolean activateTriggerVolumes, boolean voiceChat, boolean voiceInput, @Nonnull VoiceInputMode voiceInputMode, boolean autoRefillHotbar) {
         this.showEntityMarkers = showEntityMarkers;
         this.armorItemsPreferredPickupLocation = armorItemsPreferredPickupLocation;
         this.weaponAndToolItemsPreferredPickupLocation = weaponAndToolItemsPreferredPickupLocation;
@@ -82,6 +83,7 @@ public class SyncPlayerPreferences implements Packet, ToServerPacket {
         this.voiceChat = voiceChat;
         this.voiceInput = voiceInput;
         this.voiceInputMode = voiceInputMode;
+        this.autoRefillHotbar = autoRefillHotbar;
     }
 
     public SyncPlayerPreferences(@Nonnull SyncPlayerPreferences other) {
@@ -106,6 +108,7 @@ public class SyncPlayerPreferences implements Packet, ToServerPacket {
         this.voiceChat = other.voiceChat;
         this.voiceInput = other.voiceInput;
         this.voiceInputMode = other.voiceInputMode;
+        this.autoRefillHotbar = other.autoRefillHotbar;
     }
 
     /**
@@ -114,7 +117,7 @@ public class SyncPlayerPreferences implements Packet, ToServerPacket {
      */
     public static void requireBounds(MemorySegment mem, int offset) {
         if (offset < 0) throw ProtocolException.invalidOffset("SyncPlayerPreferences", offset, (int) mem.byteSize());
-        long needed = (long) offset + 14;
+        long needed = (long) offset + 15;
         if (needed > mem.byteSize()) throw ProtocolException.bufferTooSmall("SyncPlayerPreferences", (int) java.lang.Math.min(needed, Integer.MAX_VALUE), (int) mem.byteSize());
     }
     
@@ -286,6 +289,14 @@ public class SyncPlayerPreferences implements Packet, ToServerPacket {
         return VoiceInputMode.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 13));
     }
     
+    public static boolean getAutoRefillHotbar(MemorySegment mem) {
+        return getAutoRefillHotbar(mem, 0);
+    }
+    
+    public static boolean getAutoRefillHotbar(MemorySegment mem, int offset) {
+        return mem.get(PacketIO.PROTO_BOOL, offset + 14);
+    }
+    
     
     
     
@@ -327,9 +338,10 @@ public class SyncPlayerPreferences implements Packet, ToServerPacket {
             (mem.get(PacketIO.PROTO_BYTE, offset + 12) & 0x08) != 0,
             (mem.get(PacketIO.PROTO_BYTE, offset + 12) & 0x10) != 0,
             (mem.get(PacketIO.PROTO_BYTE, offset + 12) & 0x20) != 0,
-            VoiceInputMode.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 13))
+            VoiceInputMode.fromValue(mem.get(PacketIO.PROTO_BYTE, offset + 13)),
+            mem.get(PacketIO.PROTO_BOOL, offset + 14)
         );
-        if (cursor != null) cursor.position = offset + 14;
+        if (cursor != null) cursor.position = offset + 15;
         return result;
     }
     @Override
@@ -360,13 +372,14 @@ public class SyncPlayerPreferences implements Packet, ToServerPacket {
         if (this.voiceInput) boolBits1_0 |= 0x20;
         mem.set(PacketIO.PROTO_BYTE, offset + 12 + 0, boolBits1_0);
         mem.set(PacketIO.PROTO_BYTE, offset + 13, (byte) this.voiceInputMode.getValue());
+        mem.set(PacketIO.PROTO_BOOL, offset + 14, this.autoRefillHotbar);
         
         
     
-       return 14;
+       return 15;
     }
     public int computeSize() {
-        return 14;
+        return 15;
     }
 
     public SyncPlayerPreferences clone() {
@@ -392,6 +405,7 @@ public class SyncPlayerPreferences implements Packet, ToServerPacket {
         copy.voiceChat = this.voiceChat;
         copy.voiceInput = this.voiceInput;
         copy.voiceInputMode = this.voiceInputMode;
+        copy.autoRefillHotbar = this.autoRefillHotbar;
         return copy;
     }
 
@@ -400,12 +414,12 @@ public class SyncPlayerPreferences implements Packet, ToServerPacket {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof SyncPlayerPreferences other)) return false;
-        return this.showEntityMarkers == other.showEntityMarkers && java.util.Objects.equals(this.armorItemsPreferredPickupLocation, other.armorItemsPreferredPickupLocation) && java.util.Objects.equals(this.weaponAndToolItemsPreferredPickupLocation, other.weaponAndToolItemsPreferredPickupLocation) && java.util.Objects.equals(this.usableItemsItemsPreferredPickupLocation, other.usableItemsItemsPreferredPickupLocation) && java.util.Objects.equals(this.solidBlockItemsPreferredPickupLocation, other.solidBlockItemsPreferredPickupLocation) && java.util.Objects.equals(this.miscItemsPreferredPickupLocation, other.miscItemsPreferredPickupLocation) && this.allowNPCDetection == other.allowNPCDetection && this.respondToHit == other.respondToHit && this.hideHelmet == other.hideHelmet && this.hideCuirass == other.hideCuirass && this.hideGauntlets == other.hideGauntlets && this.hidePants == other.hidePants && java.util.Objects.equals(this.placeMode, other.placeMode) && this.creativeInteractionDistance == other.creativeInteractionDistance && this.showBuilderToolNotifications == other.showBuilderToolNotifications && this.noPhysics == other.noPhysics && this.eraserEnabled == other.eraserEnabled && this.activateTriggerVolumes == other.activateTriggerVolumes && this.voiceChat == other.voiceChat && this.voiceInput == other.voiceInput && java.util.Objects.equals(this.voiceInputMode, other.voiceInputMode);
+        return this.showEntityMarkers == other.showEntityMarkers && java.util.Objects.equals(this.armorItemsPreferredPickupLocation, other.armorItemsPreferredPickupLocation) && java.util.Objects.equals(this.weaponAndToolItemsPreferredPickupLocation, other.weaponAndToolItemsPreferredPickupLocation) && java.util.Objects.equals(this.usableItemsItemsPreferredPickupLocation, other.usableItemsItemsPreferredPickupLocation) && java.util.Objects.equals(this.solidBlockItemsPreferredPickupLocation, other.solidBlockItemsPreferredPickupLocation) && java.util.Objects.equals(this.miscItemsPreferredPickupLocation, other.miscItemsPreferredPickupLocation) && this.allowNPCDetection == other.allowNPCDetection && this.respondToHit == other.respondToHit && this.hideHelmet == other.hideHelmet && this.hideCuirass == other.hideCuirass && this.hideGauntlets == other.hideGauntlets && this.hidePants == other.hidePants && java.util.Objects.equals(this.placeMode, other.placeMode) && this.creativeInteractionDistance == other.creativeInteractionDistance && this.showBuilderToolNotifications == other.showBuilderToolNotifications && this.noPhysics == other.noPhysics && this.eraserEnabled == other.eraserEnabled && this.activateTriggerVolumes == other.activateTriggerVolumes && this.voiceChat == other.voiceChat && this.voiceInput == other.voiceInput && java.util.Objects.equals(this.voiceInputMode, other.voiceInputMode) && this.autoRefillHotbar == other.autoRefillHotbar;
     }
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(showEntityMarkers, armorItemsPreferredPickupLocation, weaponAndToolItemsPreferredPickupLocation, usableItemsItemsPreferredPickupLocation, solidBlockItemsPreferredPickupLocation, miscItemsPreferredPickupLocation, allowNPCDetection, respondToHit, hideHelmet, hideCuirass, hideGauntlets, hidePants, placeMode, creativeInteractionDistance, showBuilderToolNotifications, noPhysics, eraserEnabled, activateTriggerVolumes, voiceChat, voiceInput, voiceInputMode);
+        return java.util.Objects.hash(showEntityMarkers, armorItemsPreferredPickupLocation, weaponAndToolItemsPreferredPickupLocation, usableItemsItemsPreferredPickupLocation, solidBlockItemsPreferredPickupLocation, miscItemsPreferredPickupLocation, allowNPCDetection, respondToHit, hideHelmet, hideCuirass, hideGauntlets, hidePants, placeMode, creativeInteractionDistance, showBuilderToolNotifications, noPhysics, eraserEnabled, activateTriggerVolumes, voiceChat, voiceInput, voiceInputMode, autoRefillHotbar);
     }
 
 }
